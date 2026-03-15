@@ -1,0 +1,52 @@
+{
+  "name": "@smartproject/frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "cypress run",
+    "test:open": "cypress open",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "zustand": "^4.5.2",
+    "swr": "^2.2.5",
+    "axios": "^1.6.8",
+    "recharts": "^2.12.0",
+    "stripe": "^14.21.0",
+    "@stripe/stripe-js": "^3.0.0",
+    "lucide-react": "^0.356.0",
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.2.2",
+    "date-fns": "^3.6.0",
+    "react-hot-toast": "^2.4.1",
+    "react-markdown": "^9.0.1",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-tooltip": "^1.0.7",
+    "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-badge": "^1.0.0",
+    "@radix-ui/react-progress": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0",
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "cypress": "^13.7.0",
+    "@testing-library/react": "^15.0.0",
+    "@testing-library/jest-dom": "^6.4.2"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@smartproject/shared",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./utils.ts",
+  "types": "./utils.ts"
+}
