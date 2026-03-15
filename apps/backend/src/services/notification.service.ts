@@ -1,173 +1,179 @@
-import { sgMail, FROM_EMAIL, FROM_NAME } from "../clients/sendgrid.client";
-import { twilioClient, TWILIO_PHONE } from "../clients/twilio.client";
-import { prisma } from "../lib/prisma";
-import { logger } from "../lib/logger";
+import sgMail from '@sendgrid/mail';
+import twilio from '../clients/twilio.client';
+import prisma from '../lib/prisma';
+import logger from '../lib/logger';
 
-// ─── Email Templates ──────────────────────────────────────────────────────────
-export async function sendWelcomeEmail(to: string, name: string): Promise<void> {
+// ─── Email: Welcome ────────────────────────────────────────────────────────
+
+export async function sendWelcomeEmail(email: string, name: string): Promise<void> {
   try {
     await sgMail.send({
-      to,
-      from: { email: FROM_EMAIL, name: FROM_NAME },
-      subject: "Bienvenue sur SmartProject AI ! 🚀",
+      to: email,
+      from: process.env.SENDGRID_FROM_EMAIL!,
+      subject: '🏃 Bienvenue sur Fit & Travel — Ton aventure commence !',
       html: `
-        <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #6366f1;">Bienvenue, ${name} !</h1>
-          <p>Nous sommes ravis de vous accueillir sur <strong>SmartProject AI</strong>.</p>
-          <p>Vous pouvez dès maintenant :</p>
-          <ul>
-            <li>Créer vos premiers projets</li>
-            <li>Utiliser l'IA pour planifier et organiser</li>
-            <li>Collaborer avec votre équipe</li>
-          </ul>
-          <a href="${process.env.FRONTEND_URL}/dashboard"
-             style="display: inline-block; background: #6366f1; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 16px;">
-            Accéder au Dashboard
-          </a>
-          <p style="color: #64748b; font-size: 14px; margin-top: 32px;">
-            L'équipe SmartProject AI
-          </p>
-        </div>
-      `,
+        <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;background:#030712;color:#f8fafc;border-radius:16px;overflow:hidden;">
+          <div style="background:linear-gradient(135deg,#7c3aed,#06b6d4);padding:40px;text-align:center;">
+            <h1 style="margin:0;font-size:28px;font-weight:900;">🌍 Fit & Travel</h1>
+            <p style="margin:8px 0 0;opacity:0.9;">Coaching sportif intelligent pour voyageurs</p>
+          </div>
+          <div style="padding:40px;">
+            <h2 style="color:#a78bfa;">Salut ${name} ! 👋</h2>
+            <p style="color:#94a3b8;line-height:1.7;">Bienvenue dans la communauté Fit & Travel. Tu peux maintenant :</p>
+            <ul style="color:#94a3b8;line-height:2;">
+              <li>🗺️ Générer des parcours de sport sécurisés dans n'importe quelle ville</li>
+              <li>🍽️ Obtenir des recommandations de plats locaux adaptés à tes objectifs</li>
+              <li>📊 Suivre tes performances semaine après semaine</li>
+              <li>🤖 Consulter ton coach IA 24/7</li>
+            </ul>
+            <a href="${process.env.FRONTEND_URL}/dashboard" style="display:inline-block;margin-top:24px;background:linear-gradient(135deg,#7c3aed,#06b6d4);color:white;padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:700;">
+              🚀 Démarrer mon premier run
+            </a>
+          </div>
+        </div>`,
     });
-    logger.info(`Welcome email sent to ${to}`);
   } catch (err) {
-    logger.error("Failed to send welcome email:", err);
+    logger.error('sendWelcomeEmail failed', err);
   }
 }
 
-export async function sendPasswordResetEmail(to: string, name: string, resetUrl: string): Promise<void> {
+// ─── Email: Weekly performance recap ──────────────────────────────────────
+
+export async function sendWeeklyRecapEmail(
+  email: string,
+  name: string,
+  stats: { distanceKm: number; durationMin: number; calories: number; sessions: number; bestWorkout?: string }
+): Promise<void> {
   try {
     await sgMail.send({
-      to,
-      from: { email: FROM_EMAIL, name: FROM_NAME },
-      subject: "Réinitialisation de votre mot de passe",
+      to: email,
+      from: process.env.SENDGRID_FROM_EMAIL!,
+      subject: `📊 Ton bilan fitness de la semaine — ${stats.distanceKm.toFixed(1)}km parcourus !`,
       html: `
-        <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2>Réinitialisation du mot de passe</h2>
-          <p>Bonjour ${name},</p>
-          <p>Vous avez demandé la réinitialisation de votre mot de passe.</p>
-          <a href="${resetUrl}"
-             style="display: inline-block; background: #6366f1; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none;">
-            Réinitialiser le mot de passe
-          </a>
-          <p style="color: #64748b; font-size: 14px; margin-top: 16px;">
-            Ce lien expire dans 1 heure. Si vous n'avez pas fait cette demande, ignorez cet email.
-          </p>
-        </div>
-      `,
+        <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;background:#030712;color:#f8fafc;border-radius:16px;overflow:hidden;">
+          <div style="background:linear-gradient(135deg,#7c3aed,#06b6d4);padding:32px;text-align:center;">
+            <h1 style="margin:0;font-size:22px;">📊 Bilan de la semaine</h1>
+          </div>
+          <div style="padding:32px;">
+            <h2 style="color:#a78bfa;">Bravo ${name} ! 💪</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0;">
+              <div style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);border-radius:12px;padding:20px;text-align:center;">
+                <div style="font-size:28px;font-weight:800;color:#a78bfa;">${stats.distanceKm.toFixed(1)}</div>
+                <div style="color:#64748b;font-size:13px;">km parcourus</div>
+              </div>
+              <div style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:12px;padding:20px;text-align:center;">
+                <div style="font-size:28px;font-weight:800;color:#22d3ee;">${stats.sessions}</div>
+                <div style="color:#64748b;font-size:13px;">séances réalisées</div>
+              </div>
+              <div style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.2);border-radius:12px;padding:20px;text-align:center;">
+                <div style="font-size:28px;font-weight:800;color:#fb7185;">${stats.calories}</div>
+                <div style="color:#64748b;font-size:13px;">calories brûlées</div>
+              </div>
+              <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:12px;padding:20px;text-align:center;">
+                <div style="font-size:28px;font-weight:800;color:#34d399;">${Math.floor(stats.durationMin / 60)}h${(stats.durationMin % 60).toString().padStart(2,'0')}</div>
+                <div style="color:#64748b;font-size:13px;">en mouvement</div>
+              </div>
+            </div>
+            <a href="${process.env.FRONTEND_URL}/dashboard" style="display:inline-block;background:linear-gradient(135deg,#7c3aed,#06b6d4);color:white;padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:700;">
+              Voir mon tableau de bord →
+            </a>
+          </div>
+        </div>`,
     });
   } catch (err) {
-    logger.error("Failed to send password reset email:", err);
+    logger.error('sendWeeklyRecapEmail failed', err);
   }
 }
+
+// ─── Email: Billing ────────────────────────────────────────────────────────
 
 export async function sendBillingEmail(
-  to: string,
+  email: string,
   name: string,
-  type: "upgrade" | "downgrade" | "renewal" | "failed",
+  event: 'upgrade' | 'downgrade' | 'renewal' | 'payment_failed',
   plan?: string
 ): Promise<void> {
   const subjects: Record<string, string> = {
-    upgrade: `🎉 Votre abonnement ${plan} est actif !`,
-    downgrade: "Modification de votre abonnement",
-    renewal: "Votre abonnement a été renouvelé",
-    failed: "⚠️ Problème avec votre paiement",
+    upgrade: `🎉 Bienvenue sur ${plan} — Fit & Travel`,
+    downgrade: `Modification de ton abonnement Fit & Travel`,
+    renewal: `✅ Abonnement ${plan} renouvelé`,
+    payment_failed: `⚠️ Problème de paiement — Action requise`,
   };
-
-  const bodies: Record<string, string> = {
-    upgrade: `<p>Bravo ${name} ! Votre abonnement <strong>${plan}</strong> est maintenant actif. Profitez de toutes les fonctionnalités avancées.</p>`,
-    downgrade: `<p>Votre abonnement a été modifié. Les changements prendront effet à la fin de la période actuelle.</p>`,
-    renewal: `<p>Votre abonnement <strong>${plan}</strong> a été renouvelé avec succès.</p>`,
-    failed: `<p>Nous n'avons pas pu traiter votre paiement. Veuillez mettre à jour vos informations de paiement.</p><a href="${process.env.FRONTEND_URL}/billing">Mettre à jour</a>`,
-  };
-
   try {
     await sgMail.send({
-      to,
-      from: { email: FROM_EMAIL, name: FROM_NAME },
-      subject: subjects[type],
-      html: `<div style="font-family: Inter, sans-serif; max-width: 600px;">${bodies[type]}</div>`,
+      to: email,
+      from: process.env.SENDGRID_FROM_EMAIL!,
+      subject: subjects[event] ?? 'Mise à jour de ton abonnement',
+      html: `<p>Bonjour ${name},</p><p>${subjects[event]}</p><a href="${process.env.FRONTEND_URL}/billing">Gérer mon abonnement</a>`,
     });
   } catch (err) {
-    logger.error("Failed to send billing email:", err);
+    logger.error('sendBillingEmail failed', err);
   }
 }
 
-// ─── SMS via Twilio ───────────────────────────────────────────────────────────
-export async function sendSMSDeadlineReminder(
-  phone: string,
-  taskTitle: string,
-  projectName: string,
-  dueDate: Date
-): Promise<void> {
+// ─── SMS: Daily run reminder ───────────────────────────────────────────────
+
+export async function sendRunReminderSMS(phone: string, name: string, city: string): Promise<void> {
   try {
-    await twilioClient.messages.create({
-      from: TWILIO_PHONE,
+    await twilio.messages.create({
       to: phone,
-      body: `⏰ SmartProject AI : La tâche "${taskTitle}" du projet "${projectName}" est due le ${dueDate.toLocaleDateString("fr-FR")}. Connectez-vous pour gérer.`,
+      from: process.env.TWILIO_PHONE_NUMBER!,
+      body: `🏃 Fit & Travel : Salut ${name} ! Prêt pour ton run à ${city} ce matin ? Ton coach IA t'a préparé un nouveau parcours 🗺️`,
     });
-    logger.info(`SMS deadline reminder sent to ${phone}`);
   } catch (err) {
-    logger.error("Failed to send SMS:", err);
+    logger.error('sendRunReminderSMS failed', err);
   }
 }
 
-// ─── In-App Notifications ─────────────────────────────────────────────────────
+// ─── In-app notification ───────────────────────────────────────────────────
+
 export async function createInAppNotification(
   userId: string,
   type: string,
   title: string,
   body: string,
-  metadata?: object
+  metadata?: Record<string, unknown>
 ): Promise<void> {
-  await prisma.notification.create({
-    data: { userId, type, title, body, metadata: metadata as any },
-  });
+  await prisma.notification.create({ data: { userId, type, title, body, metadata } });
 }
 
-// ─── Send Deadline Reminders (Cron-triggered) ────────────────────────────────
-export async function sendDeadlineReminders(): Promise<void> {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  tomorrow.setHours(23, 59, 59, 999);
+// ─── Cron: Send weekly recaps every Monday ─────────────────────────────────
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const dueTasks = await prisma.task.findMany({
-    where: {
-      dueDate: { gte: today, lte: tomorrow },
-      status: { notIn: ["DONE", "CANCELLED"] },
-    },
-    include: {
-      assignee: { select: { phone: true, email: true, name: true } },
-      project: { select: { name: true } },
-    },
+export async function sendWeeklyRecaps(): Promise<void> {
+  const users = await prisma.user.findMany({
+    where: { isActive: true, emailVerified: true },
+    include: { subscription: true },
   });
 
-  for (const task of dueTasks) {
-    if (!task.assignee) continue;
+  const currentWeek = getISOWeek(new Date());
+  const currentYear = new Date().getFullYear();
+  const prevWeek = currentWeek - 1;
 
-    // In-app notification
-    await createInAppNotification(
-      task.assigneeId!,
-      "task.due",
-      "Tâche bientôt due",
-      `"${task.title}" est due demain dans le projet ${task.project.name}`,
-      { taskId: task.id, projectId: task.projectId }
-    );
+  for (const user of users) {
+    try {
+      const workouts = await prisma.workout.findMany({
+        where: { userId: user.id, weekNumber: prevWeek, yearNumber: currentYear },
+      });
+      if (!workouts.length) continue;
 
-    // SMS if phone available
-    if (task.assignee.phone) {
-      await sendSMSDeadlineReminder(
-        task.assignee.phone,
-        task.title,
-        task.project.name,
-        task.dueDate!
-      );
+      const stats = {
+        distanceKm: workouts.reduce((s, w) => s + w.distanceKm, 0),
+        durationMin: workouts.reduce((s, w) => s + w.durationMin, 0),
+        calories: workouts.reduce((s, w) => s + w.calories, 0),
+        sessions: workouts.length,
+      };
+
+      await sendWeeklyRecapEmail(user.email, user.name ?? 'Sportif', stats);
+    } catch (err) {
+      logger.error(`Weekly recap failed for ${user.email}`, err);
     }
   }
+}
 
-  logger.info(`Sent deadline reminders for ${dueTasks.length} tasks`);
+function getISOWeek(date: Date): number {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
 }

@@ -13,8 +13,8 @@ import { metricsMiddleware } from "./middlewares/metrics.middleware";
 
 // Routes
 import authRoutes from "./routes/auth.routes";
-import projectRoutes from "./routes/projects.routes";
-import taskRoutes from "./routes/tasks.routes";
+import workoutsRouter from "./routes/workouts.routes";
+import routesRouter from "./routes/routes.routes";
 import aiRoutes from "./routes/ai.routes";
 import billingRoutes from "./routes/billing.routes";
 import notificationRoutes from "./routes/notifications.routes";
@@ -53,7 +53,7 @@ app.use(passport.initialize());
 app.get("/health", (_req, res) => {
   res.json({
     status: "ok",
-    service: "SmartProject AI Backend",
+    service: "Fit & Travel Backend",
     version: "1.0.0",
     timestamp: new Date().toISOString(),
   });
@@ -61,8 +61,8 @@ app.get("/health", (_req, res) => {
 
 // ─── API Routes ───────────────────────────────────────────────────────────────
 app.use("/auth", authRoutes);
-app.use("/projects", projectRoutes);
-app.use("/tasks", taskRoutes);
+app.use("/api/workouts", workoutsRouter);
+app.use("/api/routes", routesRouter);
 app.use("/ai", aiRoutes);
 app.use("/billing", billingRoutes);
 app.use("/notifications", notificationRoutes);
@@ -79,7 +79,7 @@ app.use(errorMiddleware);
 
 // ─── Start Server ─────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  logger.info(`🚀 SmartProject AI Backend running on port ${PORT}`);
+  logger.info(`🚀 Fit & Travel Backend running on port ${PORT}`);
   logger.info(`📊 Metrics available at http://localhost:${PORT}/metrics`);
   logger.info(`❤️  Health check at http://localhost:${PORT}/health`);
 });

@@ -1,103 +1,144 @@
-import { PrismaClient, Role, OAuthProvider, ProjectStatus, TaskStatus, TaskPriority, SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
+import { PrismaClient, WorkoutType, FitnessGoal, RouteType, RouteDifficulty } from '@prisma/client';
+import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Seeding database...");
+  console.log('🌱 Seeding Fit & Travel database...');
+
+  const adminHash = await bcrypt.hash('Admin@123!', 12);
+  const userHash  = await bcrypt.hash('User@123!',  12);
+
+  const currentWeek = getISOWeek(new Date());
+  const currentYear = new Date().getFullYear();
 
   // Admin user
   const admin = await prisma.user.upsert({
-    where: { email: "admin@smartproject.ai" },
+    where: { email: 'admin@fittravel.app' },
     update: {},
     create: {
-      email: "admin@smartproject.ai",
-      name: "Admin SmartProject",
-      role: Role.ADMIN,
-      oauthProvider: OAuthProvider.LOCAL,
+      email: 'admin@fittravel.app',
+      name: 'Admin Fit & Travel',
+      role: 'ADMIN',
+      passwordHash: adminHash,
       emailVerified: true,
+      fitnessGoal: FitnessGoal.ENDURANCE,
+      weightKg: 75,
+      heightCm: 178,
+      weeklyTargetKm: 40,
+      currentCity: 'Paris',
+      currentCountry: 'France',
       subscription: {
-        create: {
-          plan: SubscriptionPlan.ENTERPRISE,
-          status: SubscriptionStatus.ACTIVE,
-        },
+        create: { plan: 'PREMIUM_COACH', status: 'ACTIVE' },
       },
     },
   });
 
   // Demo user
-  const user = await prisma.user.upsert({
-    where: { email: "demo@smartproject.ai" },
+  const demo = await prisma.user.upsert({
+    where: { email: 'demo@fittravel.app' },
     update: {},
     create: {
-      email: "demo@smartproject.ai",
-      name: "Demo User",
-      role: Role.USER,
-      oauthProvider: OAuthProvider.LOCAL,
+      email: 'demo@fittravel.app',
+      name: 'Sophie Martin',
+      passwordHash: userHash,
       emailVerified: true,
+      fitnessGoal: FitnessGoal.WEIGHT_LOSS,
+      weightKg: 62,
+      heightCm: 165,
+      weeklyTargetKm: 25,
+      currentCity: 'Barcelona',
+      currentCountry: 'Spain',
       subscription: {
-        create: {
-          plan: SubscriptionPlan.PRO,
-          status: SubscriptionStatus.ACTIVE,
-        },
+        create: { plan: 'FREE', status: 'ACTIVE' },
       },
     },
   });
 
-  // Demo project
-  const project = await prisma.project.upsert({
-    where: { id: "demo-project-001" },
-    update: {},
-    create: {
-      id: "demo-project-001",
-      name: "Lancement Produit Q2",
-      description: "Projet de lancement du produit SmartProject AI pour le Q2 2026",
-      status: ProjectStatus.ACTIVE,
-      startDate: new Date("2026-03-01"),
-      endDate: new Date("2026-06-30"),
-      color: "#6366f1",
-      ownerId: user.id,
-      members: {
-        create: [
-          { userId: user.id, role: "OWNER" },
-          { userId: admin.id, role: "ADMIN" },
-        ],
-      },
+  // Demo travel route
+  const route = await prisma.travelRoute.create({
+    data: {
+      userId: demo.id,
+      city: 'Barcelona',
+      country: 'Spain',
+      name: 'Barceloneta to Parc de la Ciutadella',
+      description: 'A scenic coastal run passing the Gothic Quarter and ending in the beautiful Ciutadella park.',
+      type: RouteType.RUNNING,
+      difficulty: RouteDifficulty.EASY,
+      distanceKm: 6.2,
+      estimatedMinutes: 38,
+      elevationM: 45,
+      safetyScore: 9,
+      bestTimeOfDay: 'morning',
+      safetyNotes: 'Well-lit, flat route. Avoid beach promenade peak hours (11h-17h in summer).',
+      waypoints: [
+        { lat: 41.3764, lng: 2.1899, name: 'Barceloneta Beach', type: 'start' },
+        { lat: 41.3788, lng: 2.1872, name: 'Port Olímpic', type: 'poi' },
+        { lat: 41.3851, lng: 2.1952, name: 'Arc de Triomf', type: 'poi' },
+        { lat: 41.3875, lng: 2.1869, name: 'Parc de la Ciutadella', type: 'end' },
+      ],
+      pointsOfInterest: [
+        { name: 'Barceloneta Beach', type: 'beach', description: 'Start on the iconic Barcelona beach' },
+        { name: 'Port Olímpic', type: 'landmark', description: 'Olympic marina from 1992 Games' },
+        { name: 'Arc de Triomf', type: 'monument', description: 'Stunning triumphal arch (1888)' },
+        { name: 'Parc de la Ciutadella', type: 'park', description: 'Peaceful finish in Barcelona\'s green lung' },
+      ],
+      aiGenerated: true,
     },
   });
 
-  // Tasks
-  const tasks = [
-    { title: "Définir l'architecture technique", status: TaskStatus.DONE, priority: TaskPriority.HIGH },
-    { title: "Implémenter le service Auth", status: TaskStatus.DONE, priority: TaskPriority.HIGH },
-    { title: "Développer le frontend Dashboard", status: TaskStatus.IN_PROGRESS, priority: TaskPriority.HIGH },
-    { title: "Intégrer Stripe Billing", status: TaskStatus.TODO, priority: TaskPriority.MEDIUM },
-    { title: "Configurer Prometheus + Grafana", status: TaskStatus.TODO, priority: TaskPriority.MEDIUM },
-    { title: "Tests E2E Cypress", status: TaskStatus.BACKLOG, priority: TaskPriority.LOW },
+  // Demo workouts (last 3 weeks for chart data)
+  const workoutData = [
+    // Week currentWeek-2
+    { week: currentWeek - 2, distanceKm: 5.2, durationMin: 32, calories: 340, type: WorkoutType.RUN, city: 'Madrid' },
+    { week: currentWeek - 2, distanceKm: 3.8, durationMin: 24, calories: 210, type: WorkoutType.WALK, city: 'Madrid' },
+    { week: currentWeek - 2, distanceKm: 0,   durationMin: 45, calories: 280, type: WorkoutType.GYM,  city: 'Madrid' },
+    // Week currentWeek-1
+    { week: currentWeek - 1, distanceKm: 7.1, durationMin: 43, calories: 470, type: WorkoutType.RUN,  city: 'Barcelona' },
+    { week: currentWeek - 1, distanceKm: 4.5, durationMin: 28, calories: 245, type: WorkoutType.WALK, city: 'Barcelona' },
+    { week: currentWeek - 1, distanceKm: 12,  durationMin: 55, calories: 380, type: WorkoutType.CYCLE, city: 'Barcelona' },
+    // Current week
+    { week: currentWeek, distanceKm: 6.2, durationMin: 38, calories: 420, type: WorkoutType.RUN,  city: 'Barcelona', routeId: route.id },
+    { week: currentWeek, distanceKm: 5.0, durationMin: 30, calories: 310, type: WorkoutType.WALK, city: 'Barcelona' },
   ];
 
-  for (const task of tasks) {
-    await prisma.task.create({
+  for (const w of workoutData) {
+    await prisma.workout.create({
       data: {
-        ...task,
-        projectId: project.id,
-        creatorId: user.id,
-        assigneeId: user.id,
+        userId: demo.id,
+        type: w.type,
+        distanceKm: w.distanceKm,
+        durationMin: w.durationMin,
+        calories: w.calories,
+        city: w.city,
+        country: 'Spain',
+        weekNumber: Math.max(1, w.week),
+        yearNumber: currentYear,
+        completedAt: new Date(),
+        routeId: w.routeId,
       },
     });
   }
 
-  // Activity logs
-  await prisma.activityLog.createMany({
+  // Demo nutrition logs
+  await prisma.nutritionLog.createMany({
     data: [
-      { action: "project.created", userId: user.id, projectId: project.id, metadata: { projectName: project.name } },
-      { action: "task.completed", userId: user.id, projectId: project.id, metadata: { taskTitle: "Définir l'architecture" } },
+      { userId: demo.id, city: 'Barcelona', country: 'Spain', restaurant: 'El Xampanyet', mealName: 'Grilled Sea Bass with Vegetables', caloriesKcal: 420, proteinG: 38, carbsG: 22, fatG: 16, aiRecommended: true, tags: ['high-protein', 'local', 'mediterranean'] },
+      { userId: demo.id, city: 'Barcelona', country: 'Spain', restaurant: 'Boqueria Market', mealName: 'Fresh Fruit Bowl + Greek Yogurt', caloriesKcal: 280, proteinG: 14, carbsG: 48, fatG: 6, aiRecommended: true, tags: ['recovery', 'local', 'light'] },
     ],
   });
 
-  console.log("✅ Seed completed!");
-  console.log(`   Admin: ${admin.email}`);
-  console.log(`   User: ${user.email}`);
-  console.log(`   Project: ${project.name}`);
+  console.log('✅ Fit & Travel database seeded successfully!');
+  console.log(`   Admin: admin@fittravel.app / Admin@123!`);
+  console.log(`   Demo:  demo@fittravel.app / User@123!`);
+}
+
+function getISOWeek(date: Date): number {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
 }
 
 main()

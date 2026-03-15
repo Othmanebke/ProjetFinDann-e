@@ -213,11 +213,11 @@ async function handlePaymentFailed(invoice: Stripe.Invoice): Promise<void> {
 }
 
 function getPlanFromPriceId(priceId: string): SubscriptionPlan {
-  if (priceId === STRIPE_PLANS.PRO_MONTHLY || priceId === STRIPE_PLANS.PRO_YEARLY) {
-    return SubscriptionPlan.PRO;
+  if (priceId === STRIPE_PLANS.PREMIUM_COACH_MONTHLY || priceId === STRIPE_PLANS.PREMIUM_COACH_YEARLY) {
+    return SubscriptionPlan.PREMIUM_COACH;
   }
-  if (priceId === STRIPE_PLANS.ENTERPRISE_MONTHLY || priceId === STRIPE_PLANS.ENTERPRISE_YEARLY) {
-    return SubscriptionPlan.ENTERPRISE;
+  if (priceId === STRIPE_PLANS.PASS_VOYAGEUR_MONTHLY || priceId === STRIPE_PLANS.PASS_VOYAGEUR_YEARLY) {
+    return SubscriptionPlan.PASS_VOYAGEUR;
   }
   return SubscriptionPlan.FREE;
 }

@@ -1,88 +1,192 @@
-// ─── SmartProject AI — Shared TypeScript Types ───────────────────────────────
-
-export type Role = "ADMIN" | "USER";
-export type OAuthProvider = "GOOGLE" | "GITHUB" | "LOCAL";
-export type ProjectStatus = "PLANNING" | "ACTIVE" | "ON_HOLD" | "COMPLETED" | "CANCELLED";
-export type TaskStatus = "BACKLOG" | "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "DONE" | "CANCELLED";
-export type TaskPriority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
-export type SubscriptionPlan = "FREE" | "PRO" | "ENTERPRISE";
-export type SubscriptionStatus = "ACTIVE" | "PAST_DUE" | "CANCELLED" | "TRIALING" | "INCOMPLETE";
+// ─── Auth ──────────────────────────────────────────────────────────────────
 
 export interface User {
   id: string;
   email: string;
-  name: string;
+  name?: string;
   avatarUrl?: string;
-  role: Role;
-  oauthProvider: OAuthProvider;
-  phone?: string;
-  timezone: string;
-  isActive: boolean;
-  emailVerified: boolean;
-  lastLoginAt?: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  subscription?: Subscription;
+  role: 'ADMIN' | 'USER';
+  fitnessGoal?: FitnessGoal;
+  weightKg?: number;
+  heightCm?: number;
+  weeklyTargetKm?: number;
+  preferredActivities?: WorkoutType[];
+  currentCity?: string;
+  currentCountry?: string;
+  createdAt: string;
 }
 
-export interface Project {
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface JWTPayload {
+  sub: string;
+  email: string;
+  role: 'ADMIN' | 'USER';
+  iat?: number;
+  exp?: number;
+}
+
+// ─── Enums ─────────────────────────────────────────────────────────────────
+
+export type WorkoutType = 'RUN' | 'WALK' | 'CYCLE' | 'GYM' | 'HIIT' | 'YOGA' | 'SWIM';
+export type RouteType = 'RUNNING' | 'WALKING' | 'CYCLING';
+export type RouteDifficulty = 'EASY' | 'MODERATE' | 'HARD';
+export type FitnessGoal = 'WEIGHT_LOSS' | 'MUSCLE_GAIN' | 'ENDURANCE' | 'FLEXIBILITY' | 'MAINTENANCE';
+export type SubscriptionPlan = 'FREE' | 'PREMIUM_COACH' | 'PASS_VOYAGEUR';
+export type SubscriptionStatus = 'ACTIVE' | 'PAST_DUE' | 'CANCELLED' | 'TRIALING' | 'INCOMPLETE';
+
+// ─── Workout ───────────────────────────────────────────────────────────────
+
+export interface Workout {
   id: string;
+  userId: string;
+  type: WorkoutType;
+  title?: string;
+  distanceKm: number;
+  durationMin: number;
+  calories: number;
+  heartRateAvg?: number;
+  heartRateMax?: number;
+  paceMinPerKm?: number;
+  elevationM?: number;
+  city?: string;
+  country?: string;
+  routeId?: string;
+  route?: TravelRoute;
+  completedAt: string;
+  weekNumber: number;
+  yearNumber: number;
+  notes?: string;
+  isOutdoor: boolean;
+  weatherInfo?: WeatherInfo;
+  createdAt: string;
+}
+
+export interface WeatherInfo {
+  temp: number;
+  condition: string;
+  humidity: number;
+}
+
+export interface WorkoutStats {
+  totalDistanceKm: number;
+  totalDurationMin: number;
+  totalCalories: number;
+  totalSessions: number;
+  avgPaceMinPerKm?: number;
+  weeklyData: WeeklyStats[];
+}
+
+export interface WeeklyStats {
+  weekNumber: number;
+  yearNumber: number;
+  label: string;
+  distanceKm: number;
+  durationMin: number;
+  calories: number;
+  sessions: number;
+}
+
+// ─── Travel Route ──────────────────────────────────────────────────────────
+
+export interface TravelRoute {
+  id: string;
+  userId: string;
+  city: string;
+  country: string;
   name: string;
   description?: string;
-  status: ProjectStatus;
-  startDate?: Date;
-  endDate?: Date;
-  color: string;
-  ownerId: string;
-  owner?: Pick<User, "id" | "name" | "avatarUrl">;
-  members?: ProjectMember[];
-  tasks?: Task[];
-  _count?: { tasks: number; members: number };
-  createdAt: Date;
-  updatedAt: Date;
+  type: RouteType;
+  difficulty: RouteDifficulty;
+  distanceKm: number;
+  estimatedMinutes: number;
+  elevationM?: number;
+  waypoints: Waypoint[];
+  pointsOfInterest: PointOfInterest[];
+  aiGenerated: boolean;
+  safetyScore?: number;
+  safetyNotes?: string;
+  bestTimeOfDay?: string;
+  isPublic: boolean;
+  savedCount: number;
+  createdAt: string;
 }
 
-export interface ProjectMember {
+export interface Waypoint {
+  lat: number;
+  lng: number;
+  name: string;
+  type: 'start' | 'end' | 'poi' | 'waypoint';
+}
+
+export interface PointOfInterest {
+  name: string;
+  type: string;
+  description: string;
+}
+
+// ─── Nutrition ─────────────────────────────────────────────────────────────
+
+export interface NutritionLog {
   id: string;
-  projectId: string;
   userId: string;
-  user?: Pick<User, "id" | "name" | "avatarUrl" | "email">;
-  role: string;
-  joinedAt: Date;
-}
-
-export interface Task {
-  id: string;
-  title: string;
+  city?: string;
+  country?: string;
+  restaurant?: string;
+  mealName: string;
   description?: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  dueDate?: Date;
-  startDate?: Date;
-  estimatedHours?: number;
-  loggedHours?: number;
+  caloriesKcal: number;
+  proteinG: number;
+  carbsG: number;
+  fatG: number;
+  fiberG?: number;
+  aiRecommended: boolean;
   tags: string[];
-  projectId: string;
-  project?: Pick<Project, "id" | "name" | "color">;
-  assigneeId?: string;
-  assignee?: Pick<User, "id" | "name" | "avatarUrl">;
-  creatorId: string;
-  creator?: Pick<User, "id" | "name">;
-  subTasks?: Task[];
-  createdAt: Date;
-  updatedAt: Date;
+  loggedAt: string;
 }
 
-export interface ActivityLog {
-  id: string;
-  action: string;
-  metadata?: Record<string, any>;
-  userId: string;
-  user?: Pick<User, "id" | "name" | "avatarUrl">;
-  projectId?: string;
-  taskId?: string;
-  createdAt: Date;
+// ─── AI Responses ──────────────────────────────────────────────────────────
+
+export interface AIGeneratedRoute {
+  name: string;
+  description: string;
+  distanceKm: number;
+  estimatedMinutes: number;
+  difficulty: RouteDifficulty;
+  waypoints: Waypoint[];
+  pointsOfInterest: PointOfInterest[];
+  safetyScore: number;
+  safetyNotes: string;
+  bestTimeOfDay: string;
+  tips: string[];
 }
+
+export interface AIRestaurantRecommendation {
+  restaurant: string;
+  mealName: string;
+  description: string;
+  caloriesKcal: number;
+  proteinG: number;
+  carbsG: number;
+  fatG: number;
+  tags: string[];
+  whyRecommended: string;
+  priceRange: '€' | '€€' | '€€€';
+}
+
+export interface AIWorkoutAnalysis {
+  summary: string;
+  performanceTrend: 'improving' | 'stable' | 'declining';
+  strengths: string[];
+  areasToImprove: string[];
+  nextWeekGoal: string;
+  recommendedWorkouts: string[];
+}
+
+// ─── Subscription ──────────────────────────────────────────────────────────
 
 export interface Subscription {
   id: string;
@@ -91,11 +195,12 @@ export interface Subscription {
   status: SubscriptionStatus;
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
-  currentPeriodStart?: Date;
-  currentPeriodEnd?: Date;
+  currentPeriodEnd?: string;
   cancelAtPeriodEnd: boolean;
-  trialEnd?: Date;
+  trialEnd?: string;
 }
+
+// ─── Notification ──────────────────────────────────────────────────────────
 
 export interface Notification {
   id: string;
@@ -104,80 +209,34 @@ export interface Notification {
   title: string;
   body: string;
   isRead: boolean;
-  metadata?: Record<string, any>;
-  createdAt: Date;
+  metadata?: Record<string, unknown>;
+  createdAt: string;
 }
 
-export interface AIChat {
+// ─── Chat ──────────────────────────────────────────────────────────────────
+
+export interface FitChat {
   id: string;
   userId: string;
-  projectId?: string;
   title: string;
-  messages?: AIMessage[];
-  createdAt: Date;
-  updatedAt: Date;
+  messages: FitMessage[];
+  createdAt: string;
 }
 
-export interface AIMessage {
+export interface FitMessage {
   id: string;
   chatId: string;
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   content: string;
-  metadata?: Record<string, any>;
-  createdAt: Date;
+  createdAt: string;
 }
 
-// ─── API Response Types ───────────────────────────────────────────────────────
+// ─── Pagination ────────────────────────────────────────────────────────────
+
 export interface PaginatedResponse<T> {
   data: T[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}
-
-export interface AuthTokens {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
-}
-
-export interface JWTPayload {
-  sub: string;
-  email: string;
-  role: Role;
-  iat?: number;
-  exp?: number;
-}
-
-// ─── AI Response Types ────────────────────────────────────────────────────────
-export interface AIProjectPlan {
-  phases: { name: string; duration: string; tasks: string[] }[];
-  milestones: { name: string; date?: string }[];
-  risks: string[];
-  recommendations: string[];
-  estimatedDuration: string;
-}
-
-export interface AIRiskAnalysis {
-  riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
-  risks: {
-    title: string;
-    severity: string;
-    probability: string;
-    mitigation: string;
-  }[];
-  overallAssessment: string;
-}
-
-export interface AIGeneratedTasks {
-  tasks: {
-    title: string;
-    description: string;
-    priority: TaskPriority;
-    estimatedHours: number;
-    tags: string[];
-  }[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }

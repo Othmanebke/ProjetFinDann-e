@@ -1,5 +1,5 @@
 {
-  "name": "@smartproject/backend",
+  "name": "@fittravel/backend",
   "version": "1.0.0",
   "private": true,
   "main": "dist/index.js",
