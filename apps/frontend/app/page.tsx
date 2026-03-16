@@ -369,8 +369,7 @@ export default function LandingPage() {
               { Icon: Utensils,      label: 'Nutrition',   href: '#features',     desc: 'Plats locaux adaptés à vos macros',       color: '#EA580C' },
               { Icon: BarChart2,     label: 'Performance', href: '#features',     desc: 'Graphiques semaine par semaine',          color: '#0E7490' },
               { Icon: Bot,           label: 'Coach IA',    href: '#features',     desc: 'Conseils personnalisés 24h/24',           color: '#78350F' },
-              { Icon: CreditCard,    label: 'Tarifs',      href: '#pricing',      desc: 'Liberté · Coach Premium · Pass Voyageur', color: '#EA580C' },
-              { Icon: MessageCircle, label: 'Témoignages', href: '#testimonials', desc: 'Ce que disent nos 5 200 utilisateurs',    color: '#047857' },
+              { Icon: Globe,         label: 'Explorer',    href: '#gallery',      desc: 'Découvrez les plus beaux paysages', color: '#047857' },
             ] as {Icon: React.FC<{size?:number;color?:string}>;label:string;href:string;desc:string;color:string}[]).map((item, i) => {
               const NavIcon = item.Icon;
               return (
@@ -587,31 +586,163 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── FEATURES ──────────────────────────────────────────────────────── */}
-      <section id="features" style={{ padding: '100px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+      
+      {/* ── BENTO GRID FEATURES ───────────────────────────────────────────── */}
+      <section id="features" style={{ padding: '120px 24px', maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
         <div className="reveal" style={{ textAlign: 'center', marginBottom: '64px' }}>
-          <span className="badge badge-green" style={{ marginBottom: '16px', display: 'inline-flex' }}>✦ Fonctionnalités</span>
-          <h2 style={{ fontSize: 'clamp(28px,5vw,52px)', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#1C1917', letterSpacing: '-0.03em', margin: '0 0 16px' }}>
-            Tout ce dont vous avez besoin,<br />
-            <span style={{ background: 'linear-gradient(135deg,#EA580C,#D97706)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>où que vous soyez</span>
+          <span className="badge badge-teal" style={{ marginBottom: '16px', display: 'inline-flex' }}>✦ Features</span>
+          <h2 style={{ fontSize: 'clamp(32px,5vw,56px)', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#1C1917', margin: '0 0 20px', letterSpacing: '-0.03em' }}>
+            Courir partout,<br/>
+            <span style={{ color: '#047857' }}>manger local, performer.</span>
           </h2>
-          <p style={{ fontSize: '17px', color: '#57534E', maxWidth: '560px', margin: '0 auto', lineHeight: 1.7 }}>
-            De la génération de parcours à la recommandation nutritionnelle, Élan vous accompagne à chaque étape de votre aventure sportive.
+          <p style={{ fontSize: '18px', color: '#57534E', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
+            Chaque fonctionnalité est pensée pour le sportif voyageur moderne.
           </p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: '20px' }}>
-          {features.map((f, i) => {
-            const FIcon = f.Icon;
-            return (
-              <div key={f.title} className={`feature-card reveal reveal-delay-${(i % 3) + 1}`}>
-                <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: f.bg, border: `1px solid ${f.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px' }}>
-                  <FIcon size={22} color={f.color} />
+
+        <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '24px' }}>
+          
+          {/* COACH IA (Span 8) */}
+          <div className="col-span-12 lg:col-span-8 relative overflow-hidden bg-white border border-[#E5E1D0] rounded-[24px] p-6 lg:p-8 shadow-sm flex flex-col">
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#8B5CF6', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '8px', fontFamily: '"Montserrat",sans-serif' }}>Coach IA</div>
+              <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#1C1917', margin: 0, fontFamily: '"Montserrat",sans-serif' }}>Ton coach fitness & voyage 24/7</h3>
+            </div>
+            
+            {/* Chat Interface */}
+            <div style={{ flex: 1, background: '#FAF8ED', borderRadius: '16px', border: '1px solid #E5E1D0', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', borderBottom: '1px solid #E5E1D0', paddingBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#8B5CF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Bot size={16} color="white"/></div>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#1C1917' }}>AI Assistant</span>
                 </div>
-                <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontSize: '17px', fontWeight: 800, color: '#1C1917', margin: '0 0 10px' }}>{f.title}</h3>
-                <p style={{ fontSize: '14px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>{f.desc}</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#047857', fontWeight: 600 }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#047857', animation: 'pulseRing 2s infinite' }}/>
+                  Live
+                </div>
               </div>
-            );
-          })}
+              
+              {/* Messages w/ Animation */}
+              <style dangerouslySetInnerHTML={{__html: `
+                @keyframes chatInLeft { 0% { opacity: 0; transform: translateY(10px) translateX(-10px); } 100% { opacity: 1; transform: translateY(0) translateX(0); } }
+                @keyframes chatInRight { 0% { opacity: 0; transform: translateY(10px) translateX(10px); } 100% { opacity: 1; transform: translateY(0) translateX(0); } }
+                .msg { animation-fill-mode: both; animation-duration: 0.5s; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+                .msg-r1 { animation-name: chatInRight; animation-delay: 0.5s; }
+                .msg-l1 { animation-name: chatInLeft; animation-delay: 1.5s; }
+                .msg-l2 { animation-name: chatInLeft; animation-delay: 3s; }
+                .msg-r2 { animation-name: chatInRight; animation-delay: 6s; }
+                .msg-l3 { animation-name: chatInLeft; animation-delay: 7.5s; }
+              `}} />
+              
+              <div className="msg msg-r1" style={{ alignSelf: 'flex-end', background: '#8B5CF6', color: 'white', padding: '12px 16px', borderRadius: '16px 16px 4px 16px', fontSize: '13px', maxWidth: '85%', boxShadow: '0 4px 12px rgba(139,92,246,0.2)' }}>
+                Génère un run de 8km à Tokyo passant par les temples
+              </div>
+              
+              <div className="msg msg-l1" style={{ alignSelf: 'flex-start', background: 'white', color: '#57534E', border: '1px solid #E5E1D0', padding: '12px 16px', borderRadius: '16px 16px 16px 4px', fontSize: '13px', maxWidth: '85%' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '16px', height: '16px', border: '2px solid #8B5CF6', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}/>
+                  Analyse des quartiers et points d'intérêt de Tokyo...
+                </span>
+              </div>
+              
+              <div className="msg msg-l2" style={{ alignSelf: 'flex-start', background: 'white', color: '#1C1917', border: '1px solid #E5E1D0', padding: '12px 16px', borderRadius: '16px 16px 16px 4px', fontSize: '13px', maxWidth: '85%', boxShadow: '0 4px 12px rgba(0,0,0,0.02)', lineHeight: 1.5 }}>
+                Parcours prêt ! 8.3km : Sensoji → Ueno Park → Akihabara. Score sécurité : 9/10 🟢
+              </div>
+              
+              <div className="msg msg-r2" style={{ alignSelf: 'flex-end', background: '#8B5CF6', color: 'white', padding: '12px 16px', borderRadius: '16px 16px 4px 16px', fontSize: '13px', maxWidth: '85%', boxShadow: '0 4px 12px rgba(139,92,246,0.2)' }}>
+                Que manger après pour la récupération ?
+              </div>
+              
+              <div className="msg msg-l3" style={{ alignSelf: 'flex-start', background: 'white', color: '#1C1917', border: '1px solid #E5E1D0', padding: '12px 16px', borderRadius: '16px 16px 16px 4px', fontSize: '13px', maxWidth: '85%', boxShadow: '0 4px 12px rgba(0,0,0,0.02)', lineHeight: 1.5 }}>
+                Je recommande le "Chicken Ramen" chez Ichiran Shibuya : 42g protéines, 520 kcal. Parfait pour la récup musculaire post-run ! 🍜
+              </div>
+            </div>
+          </div>
+
+          {/* PARCOURS IA (Span 4) */}
+          <div className="col-span-12 lg:col-span-4 bg-white border border-[#E5E1D0] rounded-[24px] p-6 lg:p-8 shadow-sm flex flex-col">
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#0EA5E9', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '8px', fontFamily: '"Montserrat",sans-serif' }}>Parcours IA</div>
+              <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#1C1917', margin: 0, fontFamily: '"Montserrat",sans-serif', lineHeight: 1.3 }}>Parcours de sport dans n'importe quelle ville</h3>
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
+              {[
+                { city: 'Barcelone', desc: '🏃 Run 6km', score: '9/10', color: '#047857' },
+                { city: 'Tokyo', desc: '🚲 Vélo 12km', score: '8/10', color: '#0EA5E9' },
+                { city: 'Lisbonne', desc: '🚶 Marche 4km', score: '10/10', color: '#047857' }
+              ].map(p => (
+                <div key={p.city} style={{ background: '#FAF8ED', border: '1px solid #E5E1D0', borderRadius: '16px', padding: '14px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontWeight: 800, color: '#1C1917', fontSize: '15px' }}>{p.city}</div>
+                    <div style={{ color: '#57534E', fontSize: '13px', marginTop: '2px' }}>{p.desc}</div>
+                  </div>
+                  <div style={{ background: 'white', padding: '6px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 800, color: p.color, display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid #E5E1D0', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                    <MapPin size={12} color={p.color}/> {p.score}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* SUIVI PERFORMANCE (Span 4) */}
+          <div className="col-span-12 lg:col-span-4 bg-white border border-[#E5E1D0] rounded-[24px] p-6 lg:p-8 shadow-sm">
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#047857', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '8px', fontFamily: '"Montserrat",sans-serif' }}>Suivi Performance</div>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1C1917', margin: 0, fontFamily: '"Montserrat",sans-serif', lineHeight: 1.3 }}>Graphiques semaine par semaine</h3>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F5F3E7', paddingBottom: '12px' }}>
+                  <span style={{ color: '#57534E', fontSize: '14px', fontWeight: 600 }}>Km cette semaine</span>
+                  <span style={{ color: '#047857', fontSize: '18px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif' }}>23km</span>
+               </div>
+               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F5F3E7', paddingBottom: '12px' }}>
+                  <span style={{ color: '#57534E', fontSize: '14px', fontWeight: 600 }}>Calories brûlées</span>
+                  <span style={{ color: '#EA580C', fontSize: '18px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif' }}>1840</span>
+               </div>
+               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#57534E', fontSize: '14px', fontWeight: 600 }}>Score progression</span>
+                  <span style={{ color: '#EAB308', fontSize: '18px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif' }}>4.9★</span>
+               </div>
+            </div>
+          </div>
+
+          {/* NUTRITION LOCALE (Span 4) */}
+          <div className="col-span-12 lg:col-span-4 bg-white border border-[#E5E1D0] rounded-[24px] p-6 lg:p-8 shadow-sm">
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#EA580C', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '8px', fontFamily: '"Montserrat",sans-serif' }}>Nutrition Locale</div>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1C1917', margin: 0, fontFamily: '"Montserrat",sans-serif', lineHeight: 1.3 }}>Plats locaux adaptés à tes macros</h3>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+               {[
+                 { icon: '🇯🇵', name: 'Tokyo' }, { icon: '🇦🇷', name: 'Buenos Aires' }, { icon: '🇫🇷', name: 'Paris' },
+                 { icon: '🇹🇭', name: 'Bangkok' }, { icon: '🇲🇦', name: 'Marrakech' }, { icon: '🇮🇹', name: 'Rome' }
+               ].map(city => (
+                 <div key={city.name} style={{ background: '#FAF8ED', border: '1px solid #E5E1D0', padding: '8px 14px', borderRadius: '999px', fontSize: '13px', fontWeight: 700, color: '#1C1917', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                   <span style={{ fontSize: '16px' }}>{city.icon}</span> {city.name}
+                 </div>
+               ))}
+            </div>
+          </div>
+
+          {/* SÉCURITÉ GARANTIE (Span 4) */}
+          <div className="col-span-12 lg:col-span-4 bg-white border border-[#E5E1D0] rounded-[24px] p-6 lg:p-8 shadow-sm flex flex-col justify-center">
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#6366F1', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '8px', fontFamily: '"Montserrat",sans-serif' }}>Sécurité Garantie</div>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1C1917', margin: 0, fontFamily: '"Montserrat",sans-serif', lineHeight: 1.3 }}>Score de sécurité sur chaque parcours</h3>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {['Score sécurité interactif', 'Meilleure heure de départ', 'Éclairage public évalué', 'Zones à éviter identifiées'].map(item => (
+                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#57534E', fontSize: '14px', fontWeight: 500 }}>
+                   <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(99,102,241,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                     <Shield size={12} color="#6366F1" />
+                   </div>
+                   {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -738,113 +869,65 @@ export default function LandingPage() {
         </div>{/* /tall wrapper */}
       </section>
 
-      {/* ── COMPARISON ────────────────────────────────────────────────────── */}
-      <section style={{ padding: '100px 24px', maxWidth: '1000px', margin: '0 auto' }}>
-        <div className="reveal" style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <span className="badge badge-teal" style={{ marginBottom: '16px', display: 'inline-flex' }}>✦ Comparaison</span>
-          <h2 style={{ fontSize: 'clamp(24px,4vw,42px)', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#1C1917', margin: 0, letterSpacing: '-0.02em' }}>
-            Pourquoi choisir <span style={{ background: 'linear-gradient(135deg,#EA580C,#D97706)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Élan</span> ?
-          </h2>
-        </div>
-        <div className="reveal" style={{ background: 'white', border: '1px solid #E5E1D0', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(28,25,23,0.06)' }}>
-          {/* Header */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: '0', background: '#F5F3E7', borderBottom: '1px solid #E5E1D0', padding: '16px 24px', alignItems: 'center' }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, fontFamily: '"Montserrat",sans-serif', color: '#A8A29E' }}>Fonctionnalité</span>
-            {[{name:'Élan',color:'#EA580C',featured:true},{name:'Strava',color:'#57534E',featured:false},{name:'Garmin',color:'#57534E',featured:false}].map(({name,color,featured}) => (
-              <div key={name} style={{ textAlign: 'center', padding: '8px 20px', background: featured ? 'rgba(234,88,12,0.08)' : 'transparent', borderRadius: featured ? '10px' : '0', border: featured ? '1px solid rgba(234,88,12,0.2)' : 'none' }}>
-                <span style={{ fontSize: '13px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif', color: color }}>{name}</span>
-              </div>
-            ))}
+            {/* ── LANDSCAPES GALLERY ──────────────────────────────────────────── */}
+      <section id="gallery" style={{ padding: '80px 24px 120px', background: '#FAF8ED', position: 'relative' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div className="reveal" style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <span className="badge badge-earth" style={{ marginBottom: '16px', display: 'inline-flex', padding: '6px 16px', borderRadius: '999px', background: 'rgba(4,120,87,0.1)', color: '#047857', fontWeight: 800, fontSize: '13px' }}>✦ Explorer le monde</span>
+            <h2 style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#1C1917', margin: 0, lineHeight: 1.1, letterSpacing: '-0.03em' }}>
+              Courez dans les plus beaux<br/>
+              <span style={{ color: '#047857' }}>paysages du monde</span>
+            </h2>
+            <p style={{ color: '#57534E', fontSize: '18px', maxWidth: '600px', margin: '24px auto 0', lineHeight: 1.6 }}>
+              Où que vous soyez, Élan vous guide à travers des panoramas à couper le souffle, pour que chaque course soit une aventure inoubliable.
+            </p>
           </div>
-          {comparisons.map((row, i) => (
-            <div key={row.feature} style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: '0', padding: '14px 24px', borderBottom: i < comparisons.length - 1 ? '1px solid #F5F3E7' : 'none', alignItems: 'center' }}>
-              <span style={{ fontSize: '14px', color: '#1C1917', fontWeight: 500 }}>{row.feature}</span>
-              <div style={{ textAlign: 'center', padding: '0 20px', background: 'rgba(234,88,12,0.04)' }}>{c(row.elan)}</div>
-              <div style={{ textAlign: 'center', padding: '0 20px' }}>{c(row.strava)}</div>
-              <div style={{ textAlign: 'center', padding: '0 20px' }}>{c(row.garmin)}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── PRICING ───────────────────────────────────────────────────────── */}
-      <section id="pricing" style={{ background: '#F5F3E7', borderTop: '1px solid #E5E1D0', padding: '100px 24px' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div className="reveal" style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <span className="badge badge-orange" style={{ marginBottom: '16px', display: 'inline-flex' }}>✦ Tarifs</span>
-            <h2 style={{ fontSize: 'clamp(26px,4vw,44px)', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#1C1917', margin: '0 0 16px', letterSpacing: '-0.03em' }}>Simple, transparent, honnête</h2>
-            {/* Toggle */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', background: 'white', border: '1px solid #E5E1D0', borderRadius: '999px', padding: '6px 20px', boxShadow: '0 1px 4px rgba(28,25,23,0.07)' }}>
-              <span style={{ fontSize: '13px', fontWeight: 600, color: !billingYearly ? '#1C1917' : '#A8A29E' }}>Mensuel</span>
-              <button onClick={() => setBillingYearly(y => !y)} style={{ width: '44px', height: '24px', borderRadius: '999px', background: billingYearly ? '#EA580C' : '#E5E1D0', border: 'none', cursor: 'pointer', position: 'relative', transition: 'background 0.25s ease' }}>
-                <span style={{ position: 'absolute', top: '3px', left: billingYearly ? '23px' : '3px', width: '18px', height: '18px', borderRadius: '50%', background: 'white', transition: 'left 0.25s ease', boxShadow: '0 1px 4px rgba(0,0,0,0.15)' }} />
-              </button>
-              <span style={{ fontSize: '13px', fontWeight: 600, color: billingYearly ? '#1C1917' : '#A8A29E' }}>Annuel</span>
-              {billingYearly && <span className="badge badge-green" style={{ fontSize: '10px', padding: '2px 8px' }}>-20%</span>}
-            </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: '20px' }}>
-            {plans.map((plan) => (
-              <div key={plan.name} className={`pricing-card reveal${plan.featured ? ' featured' : ''}`}>
-                {plan.featured && (
-                  <div style={{ background: '#EA580C', color: 'white', fontSize: '11px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif', padding: '4px 14px', borderRadius: '999px', display: 'inline-flex', marginBottom: '16px', letterSpacing: '0.06em', alignItems: 'center', gap: '5px' }}><Star size={11} fill="white" color="white" /> LE PLUS POPULAIRE</div>
-                )}
-                <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 900, fontSize: '20px', color: '#1C1917', margin: '0 0 4px' }}>{plan.name}</h3>
-                <p style={{ fontSize: '13px', color: '#57534E', margin: '0 0 20px' }}>{plan.desc}</p>
-                <div style={{ marginBottom: '24px' }}>
-                  <span style={{ fontSize: '48px', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: plan.featured ? '#EA580C' : '#1C1917', letterSpacing: '-0.04em' }}>{plan.price === 0 ? 'Gratuit' : `${plan.price}€`}</span>
-                  {plan.price > 0 && <span style={{ fontSize: '14px', color: '#A8A29E', marginLeft: '4px' }}>/mois</span>}
-                  {billingYearly && plan.price > 0 && <div style={{ fontSize: '12px', color: '#047857', fontWeight: 600, marginTop: '4px' }}>soit {plan.yearlyPrice}€/an</div>}
-                </div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {plan.features.map(f => (
-                    <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#57534E' }}>
-                      <span className="comparison-check">✓</span> {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/login" style={{ display: 'block' }}>
-                  <button style={{ width: '100%', padding: '13px', borderRadius: '12px', fontFamily: '"Montserrat",sans-serif', fontWeight: 700, fontSize: '14px', cursor: 'pointer', border: plan.featured ? 'none' : '2px solid #EA580C', background: plan.featured ? '#EA580C' : 'transparent', color: plan.featured ? 'white' : '#EA580C', transition: 'all 0.2s ease' } as React.CSSProperties}
-                    onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.transform = 'translateY(-2px)'; b.style.boxShadow = plan.featured ? '0 8px 24px rgba(234,88,12,0.35)' : '0 4px 16px rgba(234,88,12,0.15)'; }}
-                    onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.transform = 'none'; b.style.boxShadow = 'none'; }}
-                  >
-                    {plan.cta}
-                  </button>
-                </Link>
+          <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '16px', gridAutoRows: '280px' }}>
+            {/* Image 1 */}
+            <div className="col-span-12 md:col-span-8 md:row-span-2 group card-hover rounded-[24px] overflow-hidden relative shadow-lg">
+              <img src="https://images.unsplash.com/photo-1502224562085-639556652f33?auto=format&fit=crop&q=80&w=1600" alt="Running path" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', padding: '32px', color: 'white' }}>
+                <div style={{ fontSize: '24px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif' }}>Les routes de l\'Atlas</div>
+                <div style={{ fontSize: '14px', opacity: 0.8, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>Maroc 🇲🇦</div>
               </div>
-            ))}
+            </div>
+            {/* Image 2 */}
+            <div className="col-span-12 md:col-span-4 md:row-span-1 group card-hover rounded-[24px] overflow-hidden relative shadow-lg">
+              <img src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=800" alt="Mountain runner" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', padding: '24px', color: 'white' }}>
+                <div style={{ fontSize: '18px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif' }}>Sentiers Alpins</div>
+                <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>Suisse 🇨🇭</div>
+              </div>
+            </div>
+            {/* Image 3 */}
+            <div className="col-span-12 md:col-span-4 md:row-span-1 group card-hover rounded-[24px] overflow-hidden relative shadow-lg">
+              <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&q=80&w=800" alt="Trail running" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', padding: '24px', color: 'white' }}>
+                <div style={{ fontSize: '18px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif' }}>Forêts de Yosemite</div>
+                <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>États-Unis 🇺🇸</div>
+              </div>
+            </div>
+            {/* Image 4 */}
+            <div className="col-span-12 md:col-span-6 md:row-span-1 group card-hover rounded-[24px] overflow-hidden relative shadow-lg">
+              <img src="https://images.unsplash.com/photo-1530143311094-34d807799e8f?auto=format&fit=crop&q=80&w=1200" alt="City sunrise" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', padding: '24px', color: 'white' }}>
+                <div style={{ fontSize: '20px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif' }}>Côte d\'Azur au lever</div>
+                <div style={{ fontSize: '13px', opacity: 0.8, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>France 🇫🇷</div>
+              </div>
+            </div>
+            {/* Image 5 */}
+            <div className="col-span-12 md:col-span-6 md:row-span-1 group card-hover rounded-[24px] overflow-hidden relative shadow-lg">
+              <img src="https://images.unsplash.com/photo-1486822735123-60345b51c1d8?auto=format&fit=crop&q=80&w=1200" alt="Nature trail" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', padding: '24px', color: 'white' }}>
+                <div style={{ fontSize: '20px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif' }}>Vallées verdoyantes</div>
+                <div style={{ fontSize: '13px', opacity: 0.8, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>Nouvelle-Zélande 🇳🇿</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ──────────────────────────────────────────────────── */}
-      <section id="testimonials" style={{ padding: '100px 24px', maxWidth: '1100px', margin: '0 auto' }}>
-        <div className="reveal" style={{ textAlign: 'center', marginBottom: '56px' }}>
-          <span className="badge badge-earth" style={{ marginBottom: '16px', display: 'inline-flex' }}>✦ Témoignages</span>
-          <h2 style={{ fontSize: 'clamp(26px,4vw,44px)', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#1C1917', margin: 0, letterSpacing: '-0.03em' }}>
-            Ils courent le monde avec <span style={{ background: 'linear-gradient(135deg,#EA580C,#D97706)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Élan</span>
-          </h2>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: '20px' }}>
-          {testimonials.map((t, i) => (
-            <div key={t.name} className={`card card-hover reveal reveal-delay-${i + 1}`} style={{ padding: '28px' }}>
-              <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
-                {Array(t.rating).fill(0).map((_, j) => <Star key={j} size={14} style={{ fill: '#EA580C', color: '#EA580C' }} />)}
-              </div>
-              <p style={{ fontSize: '15px', color: '#1C1917', lineHeight: 1.75, margin: '0 0 20px', fontStyle: 'italic' }}>"{t.quote}"</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingTop: '16px', borderTop: '1px solid #F5F3E7' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg,#EA580C,#047857)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, color: 'white', fontFamily: '"Montserrat",sans-serif', flexShrink: 0 }}>{t.avatar}</div>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: '14px', color: '#1C1917', fontFamily: '"Montserrat",sans-serif' }}>{t.name}</div>
-                  <div style={{ fontSize: '12px', color: '#A8A29E' }}>{t.role} · {t.city}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── FAQ ───────────────────────────────────────────────────────────── */}
+{/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <section id="faq" style={{ background: '#F5F3E7', borderTop: '1px solid #E5E1D0', padding: '100px 24px' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
           <div className="reveal" style={{ textAlign: 'center', marginBottom: '52px' }}>
@@ -877,36 +960,54 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── FOOTER ────────────────────────────────────────────────────────── */}
-      <footer style={{ background: '#1C1917', color: '#A8A29E', padding: '60px 24px 32px' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '48px', marginBottom: '48px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                <ElanLogo size={34} />
-                <span style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 900, fontSize: '18px', color: 'white' }}>élan</span>
+                  {/* ── FOOTER ────────────────────────────────────────────────────────── */}
+      <footer className="relative mt-24 mb-12 mx-6 lg:mx-12 reveal">
+        {/* Decorative Top Border */}
+        <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-[80%] max-w-2xl h-[1px] bg-gradient-to-r from-transparent via-[#EA580C] to-transparent opacity-50" />
+        
+        {/* Main Footer Card */}
+        <div className="bg-[#1C1917] rounded-[32px] md:rounded-[48px] overflow-hidden relative shadow-2xl border border-[rgba(234,88,12,0.15)]">
+          {/* Subtle Glows */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#047857] opacity-10 blur-[100px] pointer-events-none rounded-full translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#EA580C] opacity-10 blur-[100px] pointer-events-none rounded-full -translate-x-1/2 translate-y-1/2" />
+
+          {/* Topography Pattern */}
+          <div className="topo-bg absolute inset-0 opacity-[0.03] pointer-events-none" />
+
+          <div className="relative z-10 px-8 py-16 md:px-16 md:py-24 max-w-6xl mx-auto flex flex-col items-center text-center">
+            
+            <div className="flex flex-col items-center gap-6 mb-12">
+              <div className="bg-white/5 p-4 rounded-3xl backdrop-blur-sm border border-white/10 shadow-[0_0_30px_rgba(234,88,12,0.1)]">
+                <ElanLogo size={42} />
               </div>
-              <p style={{ fontSize: '14px', lineHeight: 1.7, marginBottom: '20px', maxWidth: '260px' }}>L'application de coaching sportif et nutritionnel pour les voyageurs du monde entier.</p>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                {['GDPR', 'SOC2', '4.9 / 5'].map(b => <span key={b} style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '6px', background: 'rgba(255,255,255,0.06)', color: '#A8A29E', fontWeight: 600 }}>{b}</span>)}
+              <h3 className="text-3xl md:text-5xl font-black font-montserrat text-white tracking-tight">
+                Vivez le monde <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#EA580C] to-[#F59E0B]">en courant.</span>
+              </h3>
+              <p className="text-[#A8A29E] text-lg max-w-md mx-auto leading-relaxed">
+                Rejoignez la ligne de départ et redéfinissez vos limites de Tokyo à New York.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-3 mb-16">
+              {['Instagram', 'Strava Club', 'Twitter', 'TikTok'].map(s => (
+                <button key={s} className="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-sm font-semibold text-[#D6CDB8] hover:bg-[#EA580C] hover:text-white hover:border-[#EA580C] transition-all duration-300 ease-out shadow-sm">
+                  {s}
+                </button>
+              ))}
+            </div>
+
+            {/* Bottom Bar inside Card */}
+            <div className="w-full pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex gap-6 text-[13px] font-medium text-[#A8A29E]">
+                <a href="#" className="hover:text-[#EA580C] transition-colors">Confidentialité</a>
+                <a href="#" className="hover:text-[#EA580C] transition-colors">CGU</a>
+                <a href="#" className="hover:text-[#EA580C] transition-colors">Contact</a>
+              </div>
+              <div className="text-[13px] text-[#A8A29E] flex items-center gap-2">
+                © {new Date().getFullYear()} <span className="font-bold text-white">élan</span>. Tous droits réservés.
               </div>
             </div>
-            {[
-              { title: 'Produit', links: ['Parcours IA', 'Nutrition', 'Suivi performance', 'Coach IA', 'Tarifs'] },
-              { title: 'Entreprise', links: ['À propos', 'Blog', 'Presse', 'Recrutement', 'Contact'] },
-              { title: 'Légal', links: ['Confidentialité', 'CGU', 'Cookies', 'Mentions légales'] },
-            ].map(col => (
-              <div key={col.title}>
-                <div style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '13px', color: 'white', marginBottom: '16px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{col.title}</div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {col.links.map(l => <li key={l} style={{ fontSize: '14px', cursor: 'pointer', transition: 'color 0.2s ease' }} onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#EA580C'} onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#A8A29E'}>{l}</li>)}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-            <span style={{ fontSize: '13px' }}>© 2026 Élan. Tous droits réservés.</span>
-            <span style={{ fontSize: '12px' }}>Fait avec ❤️ pour les sportifs voyageurs</span>
+
           </div>
         </div>
       </footer>
