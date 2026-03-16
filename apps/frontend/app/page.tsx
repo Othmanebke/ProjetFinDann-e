@@ -97,32 +97,61 @@ function ScrollPathOverlay({ progress }: { progress: number }) {
       if (l > 0) setLen(l);
     }
   }, []);
-  const offset = len * (1 - Math.min(progress, 100) / 100);
+
+  // Démarre après le hero (~12% scroll) et s'arrête avant le footer (~90%)
+  const eff = Math.max(0, Math.min(100, (progress - 12) / (90 - 12) * 100));
+  const offset = len * (1 - eff / 100);
+
+  // Waypoints : cercles qui apparaissent au fil du tracé
+  const waypoints = [
+    { cx: 1360, cy: 195, r: 22, c: '#F97316' },
+    { cx: 100,  cy: 490, r: 26, c: '#EA580C' },
+    { cx: 1360, cy: 685, r: 22, c: '#F97316' },
+    { cx: 720,  cy: 858, r: 18, c: '#16A34A' },
+  ];
+  const thresholds = [16, 45, 68, 85];
+
   return (
     <svg
-      style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 40, overflow: 'visible' }}
+      style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 2, overflow: 'visible', mixBlendMode: 'multiply' } as React.CSSProperties}
       viewBox="0 0 1440 900"
       preserveAspectRatio="none"
       aria-hidden="true"
     >
       <defs>
         <linearGradient id="trailGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#EA580C" />
-          <stop offset="60%" stopColor="#D97706" />
-          <stop offset="100%" stopColor="#047857" />
+          <stop offset="0%" stopColor="#F97316" />
+          <stop offset="45%" stopColor="#EA580C" />
+          <stop offset="100%" stopColor="#16A34A" />
         </linearGradient>
       </defs>
+
+      {/* Ruban principal — large, arrondi, vivid */}
       <path
         ref={pathRef}
-        d="M -80,160 C 200,50 680,30 1530,150 C 2080,260 280,360 -80,450 C -280,520 950,590 1530,660 C 1920,720 180,800 -80,880"
+        d="M 100,40 C 420,100 1060,55 1360,195 C 1660,335 440,425 100,490 C -240,545 890,618 1360,685 C 1830,752 380,838 100,900"
         stroke="url(#trailGrad)"
-        strokeWidth="2.5"
+        strokeWidth="16"
         fill="none"
         strokeLinecap="round"
+        strokeLinejoin="round"
         strokeDasharray={len}
         strokeDashoffset={offset}
-        opacity="0.22"
+        opacity="0.48"
       />
+
+      {/* Waypoints : double anneau + point central */}
+      {waypoints.map((wp, i) => {
+        const t = thresholds[i];
+        const op = eff > t ? Math.min(1, (eff - t) / 10) * 0.6 : 0;
+        return (
+          <g key={i} style={{ opacity: op, transition: 'opacity 0.5s ease' }}>
+            <circle cx={wp.cx} cy={wp.cy} r={wp.r + 14} stroke={wp.c} strokeWidth="1.2" fill="none" opacity="0.35" />
+            <circle cx={wp.cx} cy={wp.cy} r={wp.r}      stroke={wp.c} strokeWidth="2.8" fill="none" />
+            <circle cx={wp.cx} cy={wp.cy} r={5.5}        fill={wp.c} />
+          </g>
+        );
+      })}
     </svg>
   );
 }
