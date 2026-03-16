@@ -87,6 +87,46 @@ function useCounter(target: number, duration = 2000, startOnVisible = true) {
   return { val, ref };
 }
 
+/* ─── SCROLL PATH OVERLAY ─────────────────────────────────────────── */
+function ScrollPathOverlay({ progress }: { progress: number }) {
+  const pathRef = useRef<SVGPathElement>(null);
+  const [len, setLen] = useState(5000);
+  useEffect(() => {
+    if (pathRef.current) {
+      const l = pathRef.current.getTotalLength();
+      if (l > 0) setLen(l);
+    }
+  }, []);
+  const offset = len * (1 - Math.min(progress, 100) / 100);
+  return (
+    <svg
+      style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 40, overflow: 'visible' }}
+      viewBox="0 0 1440 900"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id="trailGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#EA580C" />
+          <stop offset="60%" stopColor="#D97706" />
+          <stop offset="100%" stopColor="#047857" />
+        </linearGradient>
+      </defs>
+      <path
+        ref={pathRef}
+        d="M -80,160 C 200,50 680,30 1530,150 C 2080,260 280,360 -80,450 C -280,520 950,590 1530,660 C 1920,720 180,800 -80,880"
+        stroke="url(#trailGrad)"
+        strokeWidth="2.5"
+        fill="none"
+        strokeLinecap="round"
+        strokeDasharray={len}
+        strokeDashoffset={offset}
+        opacity="0.22"
+      />
+    </svg>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════
    LOGO SVG
 ══════════════════════════════════════════════════════════════════ */
@@ -141,6 +181,15 @@ export default function LandingPage() {
   const scrollProgress = useScrollProgress();
   const [menuOpen, setMenuOpen] = useState(false);
   const [billingYearly, setBillingYearly] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const [wideScreen, setWideScreen] = useState(false);
+  useEffect(() => {
+    const check = () => setWideScreen(window.innerWidth >= 1280);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const heroWord = useTypewriter(['partout dans le monde.', 'en toute sécurité.', 'à votre rythme.', 'avec l\'IA à vos côtés.'], 60, 2400);
   const km = useCounter(2840000, 2200);
@@ -212,6 +261,7 @@ export default function LandingPage() {
   return (
     <div style={{ background: '#FAF8ED', minHeight: '100vh', color: '#1C1917' }}>
       <div className="progress-bar" style={{ width: `${scrollProgress}%` }} />
+      <ScrollPathOverlay progress={scrollProgress} />
 
       {/* ── NAVBAR PILL ─────────────────────────────────────────────────── */}
       <div style={{ position: 'fixed', top: '16px', left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
@@ -386,6 +436,67 @@ export default function LandingPage() {
         <div style={{ position: 'absolute', top: '-80px', left: '-80px', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(234,88,12,0.12),transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '-60px', right: '-60px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(4,120,87,0.1),transparent 70%)', pointerEvents: 'none' }} />
 
+        {/* LEFT floating card — Live activity */}
+        {wideScreen && (
+          <div style={{ position: 'absolute', left: '28px', top: '50%', animation: 'floatY 5s ease-in-out infinite', zIndex: 2, pointerEvents: 'none' }}>
+            <div style={{ background: 'white', border: '1px solid #E5E1D0', borderRadius: '20px', padding: '20px', boxShadow: '0 12px 40px rgba(28,25,23,0.12)', width: '190px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '12px' }}>
+                <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#EA580C', boxShadow: '0 0 6px rgba(234,88,12,0.7)', display: 'inline-block', animation: 'pulseRing 2s ease-out infinite', flexShrink: 0 }} />
+                <span style={{ fontSize: '10px', fontWeight: 700, fontFamily: '"Montserrat",sans-serif', color: '#EA580C', letterSpacing: '0.06em' }}>EN COURS</span>
+              </div>
+              <div style={{ fontSize: '11px', color: '#A8A29E', marginBottom: '4px' }}>Sophie M. · 🇯🇵 Tokyo</div>
+              <div style={{ fontSize: '28px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: '#1C1917', letterSpacing: '-0.03em' }}>4.2 km</div>
+              <svg width="100%" height="28" viewBox="0 0 160 28" style={{ display: 'block', margin: '10px 0 8px' }}>
+                <polyline points="0,24 30,16 60,18 90,8 120,10 160,3" stroke="#EA580C" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <div style={{ display: 'flex', gap: '10px', fontSize: '11px', color: '#57534E' }}>
+                <span>⏱ 24:10</span>
+                <span>❤️ 148 bpm</span>
+              </div>
+              <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid #F5F3E7' }}>
+                <div style={{ fontSize: '10px', color: '#A8A29E', marginBottom: '6px', fontWeight: 600 }}>PROGRESSION</div>
+                <div style={{ height: '5px', borderRadius: '999px', background: '#F5F3E7', overflow: 'hidden' }}>
+                  <div style={{ width: '68%', height: '100%', borderRadius: '999px', background: 'linear-gradient(90deg,#EA580C,#D97706)', transition: 'width 1s ease' }} />
+                </div>
+                <div style={{ fontSize: '10px', color: '#57534E', marginTop: '4px' }}>68% de l'objectif journalier</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* RIGHT floating card — AI route preview */}
+        {wideScreen && (
+          <div style={{ position: 'absolute', right: '28px', top: '46%', animation: 'floatY2 5.8s ease-in-out infinite 0.6s', zIndex: 2, pointerEvents: 'none' }}>
+            <div style={{ background: 'white', border: '1px solid #E5E1D0', borderRadius: '20px', padding: '20px', boxShadow: '0 12px 40px rgba(28,25,23,0.12)', width: '202px' }}>
+              <div style={{ fontSize: '10px', fontWeight: 700, fontFamily: '"Montserrat",sans-serif', color: '#047857', marginBottom: '12px', letterSpacing: '0.06em', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#047857', display: 'inline-block' }} />
+                PARCOURS GÉNÉRÉ · IA
+              </div>
+              <div style={{ height: '74px', borderRadius: '12px', background: 'linear-gradient(135deg,#F0FDF4,#ECFDF5)', border: '1px solid rgba(4,120,87,0.15)', overflow: 'hidden', marginBottom: '12px', position: 'relative' }}>
+                <svg style={{ width: '100%', height: '100%' }} viewBox="0 0 180 74">
+                  <path d="M 15,56 Q 55,22 90,38 Q 130,55 165,22" stroke="#047857" strokeWidth="2.5" fill="none" strokeDasharray="6 3" strokeLinecap="round" />
+                  <circle cx="15" cy="56" r="4.5" fill="#047857" />
+                  <circle cx="165" cy="22" r="4.5" fill="#EA580C" />
+                  <circle cx="90" cy="38" r="3" fill="white" stroke="#047857" strokeWidth="1.5" />
+                  <text x="17" y="52" fontSize="9" fill="#047857">🏖</text>
+                  <text x="88" y="34" fontSize="9" fill="#047857">⛪</text>
+                </svg>
+                <div style={{ position: 'absolute', top: '6px', right: '8px', fontSize: '9px', fontWeight: 700, background: 'rgba(4,120,87,0.12)', border: '1px solid rgba(4,120,87,0.2)', color: '#047857', padding: '2px 7px', borderRadius: '999px', fontFamily: '"Montserrat",sans-serif' }}>🛡️ 9/10</div>
+              </div>
+              <div style={{ fontSize: '13px', fontWeight: 700, fontFamily: '"Montserrat",sans-serif', color: '#1C1917', marginBottom: '6px' }}>Marais → Bastille</div>
+              <div style={{ display: 'flex', gap: '10px', fontSize: '11px', color: '#57534E', marginBottom: '10px' }}>
+                <span>📏 7.1 km</span>
+                <span>⏱ 42 min</span>
+              </div>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                {['⛪ Cathédrale', '🌳 Jardin'].map(p => (
+                  <span key={p} style={{ fontSize: '10px', padding: '3px 8px', borderRadius: '999px', background: 'rgba(4,120,87,0.08)', border: '1px solid rgba(4,120,87,0.15)', color: '#047857', fontWeight: 600, fontFamily: '"Montserrat",sans-serif' }}>{p}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Badge */}
         <div className="reveal" style={{ marginBottom: '28px' }}>
           <span className="badge badge-orange" style={{ fontSize: '12px', padding: '6px 16px', gap: '8px', display: 'inline-flex', alignItems: 'center' }}>
@@ -508,27 +619,105 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ──────────────────────────────────────────────────── */}
-      <section id="how" style={{ background: '#F5F3E7', borderTop: '1px solid #E5E1D0', borderBottom: '1px solid #E5E1D0', padding: '100px 24px' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <div className="reveal" style={{ textAlign: 'center', marginBottom: '64px' }}>
+      {/* ── HOW IT WORKS — CAROUSEL ───────────────────────────────────────── */}
+      <section id="how" style={{ background: '#F5F3E7', borderTop: '1px solid #E5E1D0', borderBottom: '1px solid #E5E1D0', padding: '100px 0' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div className="reveal" style={{ textAlign: 'center', marginBottom: '56px', padding: '0 24px' }}>
             <span className="badge badge-orange" style={{ marginBottom: '16px', display: 'inline-flex' }}>✦ Comment ça marche</span>
             <h2 style={{ fontSize: 'clamp(26px,4vw,44px)', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#1C1917', margin: '0', letterSpacing: '-0.03em' }}>3 étapes vers l'aventure</h2>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-            {[
-              { n: '01', icon: '📍', title: 'Dites-nous où vous êtes', desc: 'Entrez votre ville actuelle ou laissez Élan vous géolocaliser. Précisez votre type d\'activité préférée et votre niveau.' },
-              { n: '02', icon: '🗺️', title: 'L\'IA génère votre parcours', desc: 'En quelques secondes, votre itinéraire passe par les monuments locaux, avec un score de sécurité et les meilleures heures.' },
-              { n: '03', icon: '📊', title: 'Suivez vos progrès', desc: 'Chaque séance est enregistrée. Comparez vos performances semaine par semaine et ajustez avec votre coach IA.' },
-            ].map((step, i) => (
-              <div key={step.n} className={`reveal reveal-delay-${i + 1}`} style={{ display: 'flex', gap: '28px', padding: '32px 0', borderBottom: i < 2 ? '1px solid #E5E1D0' : 'none', alignItems: 'flex-start' }}>
-                <div style={{ fontSize: '11px', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#EA580C', letterSpacing: '0.1em', marginTop: '6px', flexShrink: 0, minWidth: '28px' }}>{step.n}</div>
-                <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'white', border: '1px solid #E5E1D0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0, boxShadow: '0 2px 8px rgba(28,25,23,0.07)' }}>{step.icon}</div>
+
+          {/* Carousel track */}
+          <div
+            ref={carouselRef}
+            onScroll={() => {
+              if (!carouselRef.current) return;
+              const el = carouselRef.current;
+              const cardW = ((el.children[0] as HTMLElement)?.offsetWidth ?? 400) + 20;
+              setActiveStep(Math.min(Math.round(el.scrollLeft / cardW), 2));
+            }}
+            style={{ display: 'flex', gap: '20px', overflowX: 'auto', scrollSnapType: 'x mandatory', scrollBehavior: 'smooth', padding: '8px 24px 16px', scrollbarWidth: 'none' } as React.CSSProperties}
+          >
+            {/* Step 01 */}
+            <div style={{ flexShrink: 0, width: 'min(400px, calc(85vw))', scrollSnapAlign: 'start', background: 'white', border: '1px solid rgba(234,88,12,0.2)', borderRadius: '28px', padding: '36px', boxShadow: '0 4px 28px rgba(234,88,12,0.07)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>📍</div>
                 <div>
-                  <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '18px', color: '#1C1917', margin: '0 0 8px' }}>{step.title}</h3>
-                  <p style={{ fontSize: '15px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>{step.desc}</p>
+                  <div style={{ fontSize: '10px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: '#EA580C', letterSpacing: '0.1em' }}>ÉTAPE 01</div>
+                  <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '18px', color: '#1C1917', margin: '3px 0 0', lineHeight: 1.2 }}>Dites-nous où vous êtes</h3>
                 </div>
               </div>
+              <div style={{ background: '#FAF8ED', border: '1px solid #E5E1D0', borderRadius: '14px', padding: '18px', marginBottom: '24px' }}>
+                <div style={{ fontSize: '11px', color: '#A8A29E', marginBottom: '8px', fontWeight: 600 }}>📍 Localisation détectée</div>
+                <div style={{ fontSize: '16px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif', color: '#1C1917', marginBottom: '12px' }}>Tokyo, Japon 🇯🇵</div>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {['🏃 Course', '🚴 Vélo', '🚶 Marche'].map((t, ti) => (
+                    <span key={t} style={{ fontSize: '11px', padding: '5px 12px', borderRadius: '999px', background: ti === 0 ? '#EA580C' : '#F5F3E7', color: ti === 0 ? 'white' : '#57534E', fontWeight: 600, fontFamily: '"Montserrat",sans-serif' }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+              <p style={{ fontSize: '15px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>Entrez votre ville actuelle ou laissez Élan vous géolocaliser. Précisez votre type d'activité préférée et votre niveau.</p>
+            </div>
+
+            {/* Step 02 */}
+            <div style={{ flexShrink: 0, width: 'min(400px, calc(85vw))', scrollSnapAlign: 'start', background: 'white', border: '1px solid rgba(4,120,87,0.2)', borderRadius: '28px', padding: '36px', boxShadow: '0 4px 28px rgba(4,120,87,0.07)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(4,120,87,0.06)', border: '1px solid rgba(4,120,87,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>🗺️</div>
+                <div>
+                  <div style={{ fontSize: '10px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: '#047857', letterSpacing: '0.1em' }}>ÉTAPE 02</div>
+                  <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '18px', color: '#1C1917', margin: '3px 0 0', lineHeight: 1.2 }}>L'IA génère votre parcours</h3>
+                </div>
+              </div>
+              <div style={{ height: '90px', borderRadius: '14px', background: 'linear-gradient(135deg,#F0FDF4,#ECFDF5)', border: '1px solid rgba(4,120,87,0.15)', overflow: 'hidden', marginBottom: '24px', position: 'relative' }}>
+                <svg style={{ width: '100%', height: '100%' }} viewBox="0 0 300 90">
+                  <path d="M 20,65 Q 80,25 140,44 Q 200,65 265,28" stroke="#047857" strokeWidth="3" fill="none" strokeDasharray="8 4" strokeLinecap="round" />
+                  <circle cx="20" cy="65" r="6" fill="#047857" />
+                  <circle cx="265" cy="28" r="6" fill="#EA580C" />
+                  <circle cx="140" cy="44" r="4" fill="white" stroke="#047857" strokeWidth="2" />
+                  <text x="22" y="60" fontSize="9" fill="#047857">🏖</text>
+                  <text x="138" y="40" fontSize="9" fill="#047857">⛪</text>
+                </svg>
+                <div style={{ position: 'absolute', bottom: '8px', right: '10px', fontSize: '10px', fontWeight: 700, background: 'rgba(4,120,87,0.12)', border: '1px solid rgba(4,120,87,0.2)', color: '#047857', padding: '3px 8px', borderRadius: '999px', fontFamily: '"Montserrat",sans-serif' }}>🛡️ Score 9.2/10</div>
+              </div>
+              <p style={{ fontSize: '15px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>En quelques secondes, votre itinéraire passe par les monuments locaux, avec un score de sécurité et les meilleures heures.</p>
+            </div>
+
+            {/* Step 03 */}
+            <div style={{ flexShrink: 0, width: 'min(400px, calc(85vw))', scrollSnapAlign: 'start', background: 'white', border: '1px solid rgba(14,116,144,0.2)', borderRadius: '28px', padding: '36px', boxShadow: '0 4px 28px rgba(14,116,144,0.07)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(14,116,144,0.06)', border: '1px solid rgba(14,116,144,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>📊</div>
+                <div>
+                  <div style={{ fontSize: '10px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: '#0E7490', letterSpacing: '0.1em' }}>ÉTAPE 03</div>
+                  <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '18px', color: '#1C1917', margin: '3px 0 0', lineHeight: 1.2 }}>Suivez vos progrès</h3>
+                </div>
+              </div>
+              <div style={{ marginBottom: '24px' }}>
+                <div style={{ fontSize: '11px', color: '#A8A29E', marginBottom: '8px', fontWeight: 600, fontFamily: '"Montserrat",sans-serif' }}>DISTANCE · 8 DERNIÈRES SEMAINES</div>
+                <svg width="100%" height="54" viewBox="0 0 300 54">
+                  <defs><linearGradient id="stepAreaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#0E7490" stopOpacity="0.15"/><stop offset="100%" stopColor="#0E7490" stopOpacity="0"/></linearGradient></defs>
+                  <path d="M0 44 L37 37 L75 34 L112 39 L150 27 L187 23 L225 17 L262 11 L300 14 L300 54 L0 54Z" fill="url(#stepAreaGrad)" />
+                  <path d="M0 44 L37 37 L75 34 L112 39 L150 27 L187 23 L225 17 L262 11 L300 14" stroke="#0E7490" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#A8A29E', marginTop: '6px', fontFamily: '"Montserrat",sans-serif' }}>
+                  {['S45','S46','S47','S48','S49','S50','S51','S52'].map(s => <span key={s}>{s}</span>)}
+                </div>
+              </div>
+              <p style={{ fontSize: '15px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>Chaque séance est enregistrée. Comparez vos performances semaine par semaine et ajustez avec votre coach IA.</p>
+            </div>
+          </div>
+
+          {/* Navigation dots */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '20px' }}>
+            {[0, 1, 2].map(i => (
+              <button
+                key={i}
+                onClick={() => {
+                  if (!carouselRef.current) return;
+                  const card = carouselRef.current.children[i] as HTMLElement;
+                  if (card) { carouselRef.current.scrollTo({ left: card.offsetLeft - 24, behavior: 'smooth' }); setActiveStep(i); }
+                }}
+                style={{ width: activeStep === i ? '28px' : '8px', height: '8px', borderRadius: '4px', background: activeStep === i ? '#EA580C' : '#D6CDB8', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }}
+              />
             ))}
           </div>
         </div>

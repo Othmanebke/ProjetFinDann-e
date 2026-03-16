@@ -387,3 +387,5 @@
 @keyframes glowPulse { 0%,100% { opacity:0.7; } 50% { opacity:1; } }
 @keyframes borderGlow { 0%,100% { border-color:rgba(234,88,12,0.3); } 50% { border-color:rgba(234,88,12,0.7); } }
 @keyframes rotateGlow { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
+@keyframes floatY  { 0%,100% { transform:translateY(-50%); }  50% { transform:translateY(calc(-50% - 14px)); } }
+@keyframes floatY2 { 0%,100% { transform:translateY(-46%); }  50% { transform:translateY(calc(-46% - 12px)); } }
