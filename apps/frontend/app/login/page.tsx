@@ -1,45 +1,52 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LoginButtons } from "@/components/auth/LoginButtons";
+import Image from "next/image";
 
 export const metadata: Metadata = { title: "Connexion — Élan" };
 
 export default function LoginPage() {
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#FAF8ED' }}>
-      {/* Left — Branding */}
-      <div style={{
-        display: 'none',
-        background: 'linear-gradient(135deg,#EA580C,#047857)',
-        flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        padding: '48px', position: 'relative', overflow: 'hidden',
-      }} className="lg:flex lg:w-1/2">
-        {/* Topo overlay */}
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.1)' stroke-width='0.8'%3E%3Cellipse cx='400' cy='400' rx='380' ry='200'/%3E%3Cellipse cx='400' cy='400' rx='300' ry='150'/%3E%3Cellipse cx='400' cy='400' rx='220' ry='100'/%3E%3Cellipse cx='400' cy='400' rx='140' ry='60'/%3E%3C/g%3E%3C/svg%3E\")", backgroundSize: '500px 500px', backgroundPosition: 'center', pointerEvents: 'none' }} />
+    <div className="flex min-h-screen bg-stone-50">
+      {/* Left — Image & Branding */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-stone-900 overflow-hidden text-white">
+        {/* Background Image */}
+        <Image
+          src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=2070&auto=format&fit=crop"
+          alt="Runner in a beautiful landscape"
+          fill
+          className="object-cover opacity-60 mix-blend-overlay"
+          priority
+        />
+        
+        {/* Gradient Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10 z-10" />
 
-        <div style={{ maxWidth: '380px', textAlign: 'center', position: 'relative', zIndex: 1, color: 'white' }}>
+        <div className="relative z-20 flex flex-col justify-end p-12 h-full w-full max-w-2xl mx-auto">
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '32px' }}>
-            <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>🏃</div>
-            <span style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 900, fontSize: '28px', letterSpacing: '-0.04em' }}>élan</span>
+          <div className="flex items-center gap-3 mb-8">
+             <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl shadow-xl shadow-orange-500/20">🏃</div>
+             <span className="font-montserrat font-black text-3xl tracking-tight">élan</span>
           </div>
 
-          <h1 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 900, fontSize: '32px', letterSpacing: '-0.03em', marginBottom: '16px', lineHeight: 1.1 }}>
-            Sport & Voyage,<br />sans compromis
+          <h1 className="font-montserrat font-black text-4xl lg:text-5xl tracking-tight mb-4 leading-tight">
+            Votre routine sportive,<br />
+            <span className="text-orange-500">sans frontières.</span>
           </h1>
-          <p style={{ fontSize: '16px', opacity: 0.85, lineHeight: 1.7, marginBottom: '40px' }}>
-            Parcours IA sécurisés dans 127+ villes. Nutrition locale. Coach IA 24/7.
+          
+          <p className="text-stone-300 text-lg max-w-md mb-12 leading-relaxed">
+            Découvrez des parcours optimisés par l'IA dans plus de 127 villes à travers le monde. Maintenez vos objectifs où que vous soyez.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
+          <div className="grid grid-cols-3 gap-6">
             {[
-              { value: "127+", label: "Villes" },
-              { value: "4.9/5", label: "Satisfaction" },
-              { value: "5 200+", label: "Sportifs" },
+              { value: "127+", label: "Villes actives" },
+              { value: "4.9/5", label: "Note voyageurs" },
+              { value: "10k+", label: "Parcours générés" },
             ].map((stat) => (
-              <div key={stat.label} style={{ background: 'rgba(255,255,255,0.12)', borderRadius: '12px', padding: '16px 8px', backdropFilter: 'blur(8px)' }}>
-                <div style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 900, fontSize: '22px', letterSpacing: '-0.03em' }}>{stat.value}</div>
-                <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '2px', fontWeight: 600 }}>{stat.label}</div>
+              <div key={stat.label} className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/10">
+                <div className="font-montserrat font-black text-2xl lg:text-3xl tracking-tight text-white mb-1">{stat.value}</div>
+                <div className="text-stone-400 text-xs font-semibold uppercase tracking-wider">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -47,37 +54,37 @@ export default function LoginPage() {
       </div>
 
       {/* Right — Login form */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px' }}>
-        <div style={{ width: '100%', maxWidth: '380px' }}>
-          <div style={{ marginBottom: '32px' }}>
-            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#57534E', fontSize: '13px', textDecoration: 'none', marginBottom: '28px', fontWeight: 600, transition: 'color 0.2s ease' }}
-              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = '#EA580C')}
-              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = '#57534E')}
-            >
-              ← Accueil
-            </Link>
-            {/* Brand */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'linear-gradient(135deg,#EA580C,#047857)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🏃</div>
-              <span style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 900, fontSize: '20px', color: '#1C1917', letterSpacing: '-0.03em' }}>élan</span>
-            </div>
-            <h2 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 900, fontSize: '26px', color: '#1C1917', margin: '0 0 8px', letterSpacing: '-0.03em' }}>
+      <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+        <div className="mx-auto w-full max-w-sm lg:w-96">
+          
+          <Link 
+            href="/" 
+            className="group inline-flex items-center gap-2 text-sm font-semibold text-stone-500 hover:text-orange-600 transition-colors mb-12"
+          >
+            <span className="text-lg transition-transform group-hover:-translate-x-1">←</span>
+            Retour à l'accueil
+          </Link>
+          
+          <div className="mb-8">
+            <h2 className="font-montserrat font-black text-3xl text-stone-900 tracking-tight mb-2">
               Bienvenue !
             </h2>
-            <p style={{ fontSize: '14px', color: '#57534E', margin: 0, lineHeight: 1.6 }}>
-              Connectez-vous pour accéder à votre espace Élan.
+            <p className="text-stone-500 text-sm leading-relaxed">
+              Connectez-vous pour accéder à votre espace personnalisé et découvrir vos prochains parcours.
             </p>
           </div>
 
-          <LoginButtons />
+          <div className="mt-8">
+            <LoginButtons />
+          </div>
 
-          <p style={{ marginTop: '24px', textAlign: 'center', fontSize: '12px', color: '#A8A29E', lineHeight: 1.6 }}>
+          <p className="mt-10 text-center text-xs text-stone-500 leading-relaxed">
             En vous connectant, vous acceptez nos{" "}
-            <Link href="/legal/terms" style={{ color: '#EA580C', textDecoration: 'underline' }}>
-              CGU
+            <Link href="/legal/terms" className="text-orange-600 hover:text-orange-500 font-semibold transition-colors">
+              Conditions Générales
             </Link>{" "}
             et notre{" "}
-            <Link href="/legal/privacy" style={{ color: '#EA580C', textDecoration: 'underline' }}>
+            <Link href="/legal/privacy" className="text-orange-600 hover:text-orange-500 font-semibold transition-colors">
               Politique de confidentialité
             </Link>.
           </p>

@@ -18,6 +18,32 @@ export async function generateRoute(
   difficulty: string,
   userProfile?: { fitnessGoal?: string; weightKg?: number }
 ): Promise<AIGeneratedRoute> {
+  // --- MOCK FALLBACK SI PAS DE CLÉ OPENAI ---
+  if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.includes("...")) {
+    console.log("⚠️ Using mock AI route generation (No valid OpenAI API Key)");
+    return {
+      name: `Parcours Découverte - ${city}`,
+      description: `Un superbe itinéraire de ${distanceKm}km à travers les plus beaux coins de ${city}.`,
+      distanceKm: distanceKm,
+      estimatedMinutes: distanceKm * 6,
+      difficulty: difficulty as any,
+      waypoints: [
+        { lat: 48.8566, lng: 2.3522, name: "Départ Centre-Ville", type: "start" },
+        { lat: 48.8584, lng: 2.3488, name: "Monument Historique", type: "poi" },
+        { lat: 48.8606, lng: 2.3376, name: "Parc Principal", type: "poi" },
+        { lat: 48.8566, lng: 2.3522, name: "Retour", type: "end" }
+      ],
+      pointsOfInterest: [
+        { name: "Monument Historique", type: "monument", description: "Un lieu chargé d'histoire." },
+        { name: "Parc Principal", type: "park", description: "Idéal pour une pause nature." }
+      ],
+      safetyScore: 9,
+      safetyNotes: "Quartiers très sûrs, forte affluence en journée.",
+      bestTimeOfDay: "morning",
+      tips: ["Prenez une gourde", "Attention aux pavés au kilomètre 2"]
+    };
+  }
+
   const completion = await openai.chat.completions.create({
     model: 'gpt-4o',
     response_format: { type: 'json_object' },
@@ -62,6 +88,37 @@ export async function recommendRestaurants(
   fitnessGoal: string,
   restrictions?: string[]
 ): Promise<AIRestaurantRecommendation[]> {
+  // --- MOCK FALLBACK SI PAS DE CLÉ OPENAI ---
+  if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.includes("...")) {
+    console.log("⚠️ Using mock AI restaurant recommendations (No valid OpenAI API Key)");
+    return [
+      {
+        restaurant: `Brasserie Locale de ${city}`,
+        mealName: "Poulet grillé et légumes de saison",
+        description: "Un plat riche en protéines, parfaitement cuit au feu de bois avec des herbes typiques.",
+        caloriesKcal: targetCalories - 50,
+        proteinG: 45,
+        carbsG: 30,
+        fatG: 12,
+        tags: ["local", "high-protein", "healthy"],
+        whyRecommended: `Idéal pour votre objectif : ${fitnessGoal}. Faible en graisses saturées.`,
+        priceRange: "€€"
+      },
+      {
+        restaurant: "Salad Bar du Marché",
+        mealName: "Bol Quinoa & Avocat",
+        description: "Un repas végétarien frais, plein de bons nutriments pour la récupération.",
+        caloriesKcal: targetCalories + 20,
+        proteinG: 20,
+        carbsG: 65,
+        fatG: 18,
+        tags: ["vegetarian", "recovery", "local"],
+        whyRecommended: "Excellente source de glucides lents après un effort.",
+        priceRange: "€"
+      }
+    ];
+  }
+
   const completion = await openai.chat.completions.create({
     model: 'gpt-4o',
     response_format: { type: 'json_object' },

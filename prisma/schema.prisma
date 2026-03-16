@@ -17,6 +17,7 @@ enum Role {
 enum OAuthProvider {
   GOOGLE
   GITHUB
+  MICROSOFT
   STRAVA
   LOCAL
 }

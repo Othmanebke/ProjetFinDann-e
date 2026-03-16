@@ -16,6 +16,14 @@ export function LoginButtons() {
     window.location.href = `${API_URL}/auth/github`;
   };
 
+  const loginWithMicrosoft = () => {
+    window.location.href = `${API_URL}/auth/microsoft`;
+  };
+
+  const loginWithDemo = () => {
+    window.location.href = `${API_URL}/auth/demo`;
+  };
+
   return (
     <div className="space-y-4">
       {error && (
@@ -40,6 +48,19 @@ export function LoginButtons() {
       </button>
 
       <button
+        onClick={loginWithMicrosoft}
+        className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+      >
+        <svg className="h-5 w-5" viewBox="0 0 21 21">
+          <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+          <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+          <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+          <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+        </svg>
+        Continuer avec Outlook
+      </button>
+
+      <button
         onClick={loginWithGitHub}
         className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
       >
@@ -54,11 +75,18 @@ export function LoginButtons() {
           <div className="w-full border-t border-slate-200 dark:border-slate-700" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-2 text-slate-400 dark:bg-slate-950">Connexion sécurisée</span>
+          <span className="bg-white px-2 text-slate-400 dark:bg-slate-950">Accès Développeur / Test</span>
         </div>
       </div>
 
-      <p className="text-center text-xs text-slate-400">
+      <button
+        onClick={loginWithDemo}
+        className="flex w-full items-center justify-center gap-3 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-bold text-orange-700 shadow-sm hover:bg-orange-100 transition-all"
+      >
+        🚀 Connexion Rapide (Mode Démo)
+      </button>
+
+      <p className="text-center text-xs text-slate-400 mt-4">
         🔒 Vos données sont protégées par OAuth2 + JWT
       </p>
     </div>

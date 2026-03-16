@@ -9,6 +9,40 @@ import { prisma } from "../lib/prisma";
 import { AppError } from "../middlewares/error.middleware";
 
 // ─── OAuth Initiate ───────────────────────────────────────────────────────────
+export const demoLogin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const email = "demo@fittravel.app";
+    let user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email,
+          name: "Charles Démo",
+          emailVerified: true,
+          role: "USER",
+          oauthProvider: "LOCAL",
+          subscription: { create: { plan: "PASS_VOYAGEUR" } }, // Give user PREMIUM to test routes
+        },
+      });
+    }
+
+    const tokens = await createAuthTokens(
+      user,
+      req.ip || undefined,
+      req.headers["user-agent"] || undefined
+    );
+
+    const params = new URLSearchParams({
+      access_token: tokens.accessToken,
+      refresh_token: tokens.refreshToken,
+    });
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?${params}`);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const googleLogin = passport.authenticate("google", {
   scope: ["profile", "email"],
   session: false,
@@ -16,6 +50,12 @@ export const googleLogin = passport.authenticate("google", {
 
 export const githubLogin = passport.authenticate("github", {
   scope: ["user:email"],
+  session: false,
+});
+
+export const microsoftLogin = passport.authenticate("microsoft", {
+  scope: ["user.read"],
+  prompt: "select_account",
   session: false,
 });
 
@@ -44,6 +84,28 @@ export async function googleCallback(req: Request, res: Response, next: NextFunc
 
 export async function githubCallback(req: Request, res: Response, next: NextFunction): Promise<void> {
   passport.authenticate("github", { session: false }, async (err: any, user: any) => {
+    if (err || !user) {
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_failed`);
+    }
+    try {
+      const tokens = await createAuthTokens(
+        user,
+        req.ip || undefined,
+        req.headers["user-agent"] || undefined
+      );
+      const params = new URLSearchParams({
+        access_token: tokens.accessToken,
+        refresh_token: tokens.refreshToken,
+      });
+      res.redirect(`${process.env.FRONTEND_URL}/auth/callback?${params}`);
+    } catch (error) {
+      next(error);
+    }
+  })(req, res, next);
+}
+
+export async function microsoftCallback(req: Request, res: Response, next: NextFunction): Promise<void> {
+  passport.authenticate("microsoft", { session: false }, async (err: any, user: any) => {
     if (err || !user) {
       return res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_failed`);
     }

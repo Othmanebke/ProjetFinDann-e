@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
-import api from '@/lib/api';
+import { api } from '@/lib/api';
 import { Activity, Map, Flame, Clock, TrendingUp, Plus, Zap } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import Link from 'next/link';

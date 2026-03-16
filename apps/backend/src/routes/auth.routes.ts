@@ -1,9 +1,12 @@
 import { Router } from "express";
 import {
+  demoLogin,
   googleLogin,
   googleCallback,
   githubLogin,
   githubCallback,
+  microsoftLogin,
+  microsoftCallback,
   refresh,
   logout,
   me,
@@ -14,11 +17,16 @@ import { authRateLimit } from "../middlewares/rate-limit.middleware";
 
 const router = Router();
 
+// Dev/Mock 
+router.get("/demo", demoLogin);
+
 // OAuth2 flows
 router.get("/google", authRateLimit, googleLogin);
 router.get("/google/callback", googleCallback);
 router.get("/github", authRateLimit, githubLogin);
 router.get("/github/callback", githubCallback);
+router.get("/microsoft", authRateLimit, microsoftLogin);
+router.get("/microsoft/callback", microsoftCallback);
 
 // Token management
 router.post("/refresh", authRateLimit, refresh);

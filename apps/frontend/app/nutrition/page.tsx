@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
-import api from '@/lib/api';
+import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { Utensils, Sparkles } from 'lucide-react';
 

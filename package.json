@@ -19,13 +19,16 @@
     "db:seed": "npx ts-node prisma/seed.ts"
   },
   "devDependencies": {
-    "turbo": "^2.0.0",
+    "@types/node": "^20.0.0",
+    "@types/passport-microsoft": "^2.1.1",
     "prettier": "^3.2.0",
-    "typescript": "^5.4.0",
-    "@types/node": "^20.0.0"
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0"
   },
   "dependencies": {
     "@prisma/client": "^5.10.0",
+    "cors": "^2.8.6",
+    "passport-microsoft": "^2.1.0",
     "prisma": "^5.10.0"
   },
   "engines": {
