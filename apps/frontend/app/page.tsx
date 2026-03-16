@@ -612,162 +612,183 @@ export default function LandingPage() {
   );
 
   return (
-    <div style={{ background: '#030712', minHeight: '100vh', color: '#f8fafc' }}>
+    <div style={{ background: '#050d08', minHeight: '100vh', color: '#f0fdf4' }}>
 
       {/* SCROLL PROGRESS BAR */}
       <div className="progress-bar" style={{ width: `${scrollProgress}%` }} />
 
-      {/* ── NAVBAR ─────────────────────────────────────────────────────── */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
-        style={{ backdropFilter: 'blur(20px)', background: 'rgba(3,7,18,0.85)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      {/* ── NAVBAR PILL FLOTTANT ────────────────────────────────────────── */}
+      <div style={{ position: 'fixed', top: '20px', left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+        <nav style={{
+          pointerEvents: 'all',
+          display: 'flex', alignItems: 'center', gap: '20px',
+          padding: '10px 12px 10px 20px',
+          background: 'rgba(5,13,8,0.82)',
+          backdropFilter: 'blur(28px)',
+          WebkitBackdropFilter: 'blur(28px)',
+          border: '1px solid rgba(34,197,94,0.18)',
+          borderRadius: '999px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,197,94,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
+        }}>
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center glow-purple" style={{ background: 'linear-gradient(135deg, #7c3aed, #06b6d4)' }}>
-              <Sparkles size={16} className="text-white" />
-            </div>
-            <span className="font-black text-lg text-white">Fit & <span className="gradient-text-purple">Travel</span></span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+            <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'linear-gradient(135deg,#16a34a,#f97316)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', boxShadow: '0 0 12px rgba(34,197,94,0.4)', flexShrink: 0 }}>🏃</div>
+            <span style={{ fontWeight: 900, fontSize: '15px', color: '#f0fdf4', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+              Fit <span style={{ background: 'linear-gradient(135deg,#4ade80,#f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>&</span> Travel
+            </span>
           </div>
 
-          {/* Hamburger button */}
+          {/* Divider */}
+          <div style={{ width: '1px', height: '20px', background: 'rgba(34,197,94,0.15)', flexShrink: 0 }} />
+
+          {/* Live badge */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px rgba(34,197,94,0.8)', display: 'inline-block' }} />
+            <span style={{ fontSize: '11px', color: '#4ade80', fontWeight: 600 }}>5,200+ sportifs</span>
+          </div>
+
+          {/* Hamburger */}
           <button
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
-            style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px',
-              padding: '10px 12px',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '5px',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(139,92,246,0.5)'; (e.currentTarget as HTMLButtonElement).style.background = 'rgba(139,92,246,0.1)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.05)'; }}
+            style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 14px', background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)', borderRadius: '999px', cursor: 'pointer', transition: 'all 0.25s ease', color: '#f0fdf4' }}
+            onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.background = 'rgba(34,197,94,0.2)'; b.style.borderColor = 'rgba(34,197,94,0.5)'; b.style.boxShadow = '0 0 16px rgba(34,197,94,0.2)'; }}
+            onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.background = 'rgba(34,197,94,0.1)'; b.style.borderColor = 'rgba(34,197,94,0.25)'; b.style.boxShadow = 'none'; }}
           >
-            <span style={{ display: 'block', width: '22px', height: '2px', background: '#f8fafc', borderRadius: '2px' }} />
-            <span style={{ display: 'block', width: '16px', height: '2px', background: '#a78bfa', borderRadius: '2px' }} />
-            <span style={{ display: 'block', width: '22px', height: '2px', background: '#f8fafc', borderRadius: '2px' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <span style={{ display: 'block', width: '18px', height: '1.5px', background: '#f0fdf4', borderRadius: '2px' }} />
+              <span style={{ display: 'block', width: '12px', height: '1.5px', background: '#4ade80', borderRadius: '2px' }} />
+              <span style={{ display: 'block', width: '18px', height: '1.5px', background: '#f0fdf4', borderRadius: '2px' }} />
+            </div>
+            <span style={{ fontSize: '12px', fontWeight: 600, color: '#86efac' }}>Menu</span>
           </button>
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* ── FULL-PAGE MENU OVERLAY ──────────────────────────────────────── */}
       <div
         style={{
           position: 'fixed', inset: 0, zIndex: 9999,
-          background: 'rgba(3,7,18,0.97)',
-          backdropFilter: 'blur(32px)',
-          WebkitBackdropFilter: 'blur(32px)',
+          background: 'rgba(5,13,8,0.97)',
+          backdropFilter: 'blur(40px)',
+          WebkitBackdropFilter: 'blur(40px)',
           display: 'flex', flexDirection: 'column',
-          transition: 'opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1)',
+          transition: 'opacity 0.45s cubic-bezier(0.16,1,0.3,1), transform 0.45s cubic-bezier(0.16,1,0.3,1)',
           opacity: menuOpen ? 1 : 0,
-          transform: menuOpen ? 'translateY(0)' : 'translateY(-20px)',
+          transform: menuOpen ? 'scale(1)' : 'scale(1.04)',
           pointerEvents: menuOpen ? 'all' : 'none',
         }}
       >
-        {/* Orbs inside overlay */}
+        {/* Background orbs */}
         <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-          <div className="orb orb-purple" style={{ width: 500, height: 500, top: '-100px', left: '-100px', opacity: 0.3 }} />
-          <div className="orb orb-cyan" style={{ width: 400, height: 400, bottom: '-100px', right: '-50px', opacity: 0.2 }} />
+          <div className="orb orb-purple" style={{ width: 600, height: 600, top: '-150px', right: '-100px', opacity: 0.25 }} />
+          <div className="orb orb-cyan" style={{ width: 400, height: 400, bottom: 0, left: '-80px', opacity: 0.18 }} />
         </div>
 
-        {/* Close button + Logo row */}
-        <div className="flex items-center justify-between px-8 pt-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '24px' }}>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center glow-purple" style={{ background: 'linear-gradient(135deg, #7c3aed, #06b6d4)' }}>
-              <Sparkles size={16} className="text-white" />
-            </div>
-            <span className="font-black text-lg text-white">Fit & <span className="gradient-text-purple">Travel</span></span>
+        {/* TOP BAR */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 32px', borderBottom: '1px solid rgba(34,197,94,0.08)', position: 'relative', zIndex: 2 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg,#16a34a,#f97316)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', boxShadow: '0 0 16px rgba(34,197,94,0.4)' }}>🏃</div>
+            <span style={{ fontWeight: 900, fontSize: '17px', color: '#f0fdf4' }}>Fit <span style={{ background: 'linear-gradient(135deg,#4ade80,#f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>&</span> Travel</span>
           </div>
           <button
             onClick={() => setMenuOpen(false)}
-            aria-label="Close menu"
-            style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px',
-              width: '44px', height: '44px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', color: '#f8fafc', fontSize: '20px',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(244,63,94,0.5)'; (e.currentTarget as HTMLButtonElement).style.background = 'rgba(244,63,94,0.1)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.05)'; }}
-          >
-            ✕
-          </button>
+            style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#94a3b8', fontSize: '18px', transition: 'all 0.2s ease' }}
+            onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.background = 'rgba(249,115,22,0.12)'; b.style.borderColor = 'rgba(249,115,22,0.4)'; b.style.color = '#fb923c'; }}
+            onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.background = 'rgba(255,255,255,0.04)'; b.style.borderColor = 'rgba(255,255,255,0.1)'; b.style.color = '#94a3b8'; }}
+          >✕</button>
         </div>
 
-        {/* Nav links — big */}
-        <div className="flex flex-col justify-center flex-1 px-8 md:px-20" style={{ gap: '8px' }}>
-          {[
-            { label: 'Features',      href: '#features',      desc: 'Discover all AI-powered tools', color: '#a78bfa' },
-            { label: 'Pricing',       href: '#pricing',       desc: 'Simple, transparent plans',     color: '#22d3ee' },
-            { label: 'Integrations',  href: '#integrations',  desc: 'Connect your favourite apps',   color: '#f472b6' },
-            { label: 'How it works',  href: '#how',           desc: 'From chaos to clarity in 3 steps', color: '#34d399' },
-            { label: 'Testimonials',  href: '#testimonials',  desc: 'What our users say',            color: '#fb923c' },
-            { label: 'FAQ',           href: '#faq',           desc: 'Got questions? We have answers',color: '#818cf8' },
-          ].map((item, i) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '18px 24px', borderRadius: '16px',
-                textDecoration: 'none',
-                transition: 'all 0.2s ease',
-                border: '1px solid transparent',
-                animation: menuOpen ? `fadeInUp 0.4s ease ${i * 0.06}s both` : 'none',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.background = 'rgba(255,255,255,0.03)';
-                el.style.borderColor = `${item.color}33`;
-                el.style.transform = 'translateX(8px)';
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.background = 'transparent';
-                el.style.borderColor = 'transparent';
-                el.style.transform = 'translateX(0)';
-              }}
-            >
-              <div>
-                <div style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 900, letterSpacing: '-0.03em', color: '#f8fafc', lineHeight: 1.1 }}>
-                  {item.label}
-                </div>
-                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>{item.desc}</div>
+        {/* SPLIT LAYOUT */}
+        <div style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative', zIndex: 2 }}>
+
+          {/* LEFT — Activity showcase */}
+          <div style={{ width: '38%', padding: '40px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px', borderRight: '1px solid rgba(34,197,94,0.07)' }}>
+
+            {/* Route preview card */}
+            <div style={{ background: 'rgba(34,197,94,0.05)', border: '1px solid rgba(34,197,94,0.15)', borderRadius: '20px', padding: '22px', animation: menuOpen ? 'fadeInUp 0.5s ease 0.1s both' : 'none' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#4ade80', letterSpacing: '0.08em', textTransform: 'uppercase' }}>🗺️ Parcours IA · Barcelone</span>
+                <span style={{ fontSize: '10px', padding: '3px 8px', borderRadius: '999px', background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.2)', color: '#4ade80' }}>EASY</span>
               </div>
-              <div style={{
-                width: '40px', height: '40px', borderRadius: '50%',
-                background: `${item.color}18`,
-                border: `1px solid ${item.color}33`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: item.color, fontSize: '18px',
-                flexShrink: 0,
-              }}>→</div>
-            </a>
-          ))}
+              <div style={{ height: '90px', borderRadius: '12px', background: 'linear-gradient(135deg,rgba(5,25,10,0.9),rgba(10,30,15,0.9))', border: '1px solid rgba(34,197,94,0.12)', position: 'relative', overflow: 'hidden', marginBottom: '14px' }}>
+                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 30% 60%,rgba(34,197,94,0.15) 0%,transparent 60%),radial-gradient(circle at 70% 30%,rgba(249,115,22,0.1) 0%,transparent 50%)' }} />
+                <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} viewBox="0 0 300 90">
+                  <path d="M 30 65 Q 80 30 120 50 Q 160 70 200 35 Q 240 10 270 45" stroke="#22c55e" strokeWidth="2" fill="none" strokeDasharray="6 3" opacity="0.7" />
+                  <circle cx="30" cy="65" r="4" fill="#4ade80" />
+                  <circle cx="270" cy="45" r="4" fill="#f97316" />
+                  <circle cx="120" cy="50" r="2.5" fill="rgba(255,255,255,0.4)" />
+                  <circle cx="200" cy="35" r="2.5" fill="rgba(255,255,255,0.4)" />
+                </svg>
+              </div>
+              <div style={{ display: 'flex', gap: '12px', fontSize: '12px', color: '#4b7a5a' }}>
+                <span>📏 <b style={{ color: '#86efac' }}>6.2km</b></span>
+                <span>⏱ <b style={{ color: '#86efac' }}>38min</b></span>
+                <span>🛡️ <b style={{ color: '#86efac' }}>9/10</b></span>
+              </div>
+            </div>
+
+            {/* Weekly stats */}
+            <div style={{ background: 'rgba(249,115,22,0.05)', border: '1px solid rgba(249,115,22,0.12)', borderRadius: '16px', padding: '18px 20px', animation: menuOpen ? 'fadeInUp 0.5s ease 0.18s both' : 'none' }}>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: '#fb923c', marginBottom: '12px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>📊 Cette semaine</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                {([['23.4km','Distance'],['2h14','Temps'],['1,840','kcal']] as [string,string][]).map(([v,l]) => (
+                  <div key={l} style={{ textAlign: 'center' }}>
+                    <div style={{ fontWeight: 800, fontSize: '16px', color: '#f0fdf4', letterSpacing: '-0.03em' }}>{v}</div>
+                    <div style={{ fontSize: '10px', color: '#4b7a5a', marginTop: '2px' }}>{l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Live */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', animation: menuOpen ? 'fadeInUp 0.5s ease 0.24s both' : 'none' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px rgba(34,197,94,0.8)', display: 'inline-block', flexShrink: 0 }} />
+              <span style={{ fontSize: '12px', color: '#4b7a5a' }}><b style={{ color: '#86efac' }}>142</b> sportifs en mouvement · 38 villes</span>
+            </div>
+          </div>
+
+          {/* RIGHT — Nav links */}
+          <div style={{ flex: 1, padding: '32px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', overflowY: 'auto' }}>
+            {([
+              { emoji: '🗺️', label: 'Parcours',      href: '#features',     desc: 'Parcours IA dans 50+ villes',          color: '#22c55e' },
+              { emoji: '🍽️', label: 'Nutrition',      href: '#features',     desc: 'Plats locaux & macros sur mesure',     color: '#f97316' },
+              { emoji: '📊', label: 'Performance',    href: '#features',     desc: 'Suivi semaine par semaine',            color: '#06b6d4' },
+              { emoji: '🤖', label: 'Coach IA',       href: '#features',     desc: 'Conseils personnalisés 24/7',          color: '#a78bfa' },
+              { emoji: '💰', label: 'Tarifs',         href: '#pricing',      desc: 'FREE · Premium Coach · Pass Voyageur', color: '#f59e0b' },
+              { emoji: '💬', label: 'Témoignages',    href: '#testimonials', desc: 'Ce que disent nos sportifs',           color: '#34d399' },
+            ] as {emoji:string;label:string;href:string;desc:string;color:string}[]).map((item, i) => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 20px', borderRadius: '14px', textDecoration: 'none', border: '1px solid transparent', transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)', animation: menuOpen ? `fadeInUp 0.4s ease ${0.08 + i * 0.055}s both` : 'none', cursor: 'pointer' }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = `${item.color}0d`; el.style.borderColor = `${item.color}30`; el.style.transform = 'translateX(6px)'; }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'transparent'; el.style.borderColor = 'transparent'; el.style.transform = 'translateX(0)'; }}
+              >
+                <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: `${item.color}12`, border: `1px solid ${item.color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>
+                  {item.emoji}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 'clamp(18px,3vw,26px)', fontWeight: 800, color: '#f0fdf4', letterSpacing: '-0.02em', lineHeight: 1.15 }}>{item.label}</div>
+                  <div style={{ fontSize: '12px', color: '#4b7a5a', marginTop: '2px' }}>{item.desc}</div>
+                </div>
+                <div style={{ color: item.color, fontSize: '18px', opacity: 0.5, flexShrink: 0 }}>→</div>
+              </a>
+            ))}
+          </div>
         </div>
 
-        {/* Bottom CTA row */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 px-8 md:px-20 pb-10 pt-6" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <Link href="/login" style={{ width: '100%', maxWidth: '240px' }} onClick={() => setMenuOpen(false)}>
-            <button className="btn-glass w-full" style={{ width: '100%', textAlign: 'center', padding: '14px' }}>Sign in</button>
-          </Link>
-          <Link href="/login" style={{ width: '100%', maxWidth: '240px' }} onClick={() => setMenuOpen(false)}>
-            <button className="btn-glow w-full" style={{ width: '100%', textAlign: 'center', padding: '14px', borderRadius: '12px' }}>
-              Get started free →
-            </button>
-          </Link>
-          <div style={{ color: '#64748b', fontSize: '13px', marginLeft: 'auto' }}>
-            No credit card required · Free forever plan
+        {/* BOTTOM CTA BAR */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 32px', borderTop: '1px solid rgba(34,197,94,0.08)', position: 'relative', zIndex: 2, flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ fontSize: '12px', color: '#4b7a5a' }}>🌍 Disponible dans <b style={{ color: '#86efac' }}>50+ villes</b> · Aucune CB requise</div>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <Link href="/login" onClick={() => setMenuOpen(false)}>
+              <button className="btn-glass" style={{ padding: '10px 22px', fontSize: '13px', borderRadius: '999px' }}>Se connecter</button>
+            </Link>
+            <Link href="/login" onClick={() => setMenuOpen(false)}>
+              <button className="btn-glow" style={{ padding: '10px 22px', fontSize: '13px', borderRadius: '999px', display: 'flex', alignItems: 'center', gap: '6px' }}>🏃 Commencer gratuitement</button>
+            </Link>
           </div>
         </div>
       </div>
