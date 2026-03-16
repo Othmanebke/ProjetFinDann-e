@@ -102,18 +102,18 @@ function ScrollPathOverlay({ progress }: { progress: number }) {
   const eff = Math.max(0, Math.min(100, (progress - 12) / (90 - 12) * 100));
   const offset = len * (1 - eff / 100);
 
-  // Waypoints : cercles qui apparaissent au fil du tracé
+  // Waypoints GPS : A → B → C → D
   const waypoints = [
-    { cx: 1360, cy: 195, r: 22, c: '#F97316' },
-    { cx: 100,  cy: 490, r: 26, c: '#EA580C' },
-    { cx: 1360, cy: 685, r: 22, c: '#F97316' },
-    { cx: 720,  cy: 858, r: 18, c: '#16A34A' },
+    { cx: 1360, cy: 195, r: 24, c: '#F97316', label: 'A' },
+    { cx: 100,  cy: 490, r: 28, c: '#EA580C', label: 'B' },
+    { cx: 1360, cy: 685, r: 24, c: '#F97316', label: 'C' },
+    { cx: 720,  cy: 858, r: 20, c: '#16A34A', label: 'D' },
   ];
   const thresholds = [16, 45, 68, 85];
 
   return (
     <svg
-      style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 2, overflow: 'visible', mixBlendMode: 'multiply' } as React.CSSProperties}
+      style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: -1, overflow: 'visible' } as React.CSSProperties}
       viewBox="0 0 1440 900"
       preserveAspectRatio="none"
       aria-hidden="true"
@@ -126,29 +126,42 @@ function ScrollPathOverlay({ progress }: { progress: number }) {
         </linearGradient>
       </defs>
 
-      {/* Ruban principal — large, arrondi, vivid */}
+      {/* Ruban principal */}
       <path
         ref={pathRef}
         d="M 100,40 C 420,100 1060,55 1360,195 C 1660,335 440,425 100,490 C -240,545 890,618 1360,685 C 1830,752 380,838 100,900"
         stroke="url(#trailGrad)"
-        strokeWidth="16"
+        strokeWidth="18"
         fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeDasharray={len}
         strokeDashoffset={offset}
-        opacity="0.48"
+        opacity="0.32"
       />
 
-      {/* Waypoints : double anneau + point central */}
+      {/* Waypoints GPS avec lettre (A → B → C → D) */}
       {waypoints.map((wp, i) => {
         const t = thresholds[i];
-        const op = eff > t ? Math.min(1, (eff - t) / 10) * 0.6 : 0;
+        const op = eff > t ? Math.min(1, (eff - t) / 10) : 0;
         return (
-          <g key={i} style={{ opacity: op, transition: 'opacity 0.5s ease' }}>
-            <circle cx={wp.cx} cy={wp.cy} r={wp.r + 14} stroke={wp.c} strokeWidth="1.2" fill="none" opacity="0.35" />
-            <circle cx={wp.cx} cy={wp.cy} r={wp.r}      stroke={wp.c} strokeWidth="2.8" fill="none" />
-            <circle cx={wp.cx} cy={wp.cy} r={5.5}        fill={wp.c} />
+          <g key={i} style={{ opacity: op, transition: 'opacity 0.6s ease' }}>
+            {/* Halo extérieur pointillé */}
+            <circle cx={wp.cx} cy={wp.cy} r={wp.r + 18} stroke={wp.c} strokeWidth="1" strokeDasharray="4 5" fill="none" opacity="0.3" />
+            {/* Anneau principal */}
+            <circle cx={wp.cx} cy={wp.cy} r={wp.r}      stroke={wp.c} strokeWidth="2.5" fill={wp.c} fillOpacity="0.12" />
+            {/* Point central plein */}
+            <circle cx={wp.cx} cy={wp.cy} r={7}          fill={wp.c} />
+            {/* Lettre GPS */}
+            <text
+              x={wp.cx} y={wp.cy - wp.r - 10}
+              textAnchor="middle"
+              fontSize="13"
+              fontWeight="800"
+              fontFamily="Montserrat, sans-serif"
+              fill={wp.c}
+              letterSpacing="0.04em"
+            >{wp.label}</text>
           </g>
         );
       })}
@@ -302,7 +315,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div style={{ background: '#FAF8ED', minHeight: '100vh', color: '#1C1917' }}>
+    <div style={{ minHeight: '100vh', color: '#1C1917' }}>
       <div className="progress-bar" style={{ width: `${scrollProgress}%` }} />
       <ScrollPathOverlay progress={scrollProgress} />
 
