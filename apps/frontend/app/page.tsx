@@ -88,86 +88,6 @@ function useCounter(target: number, duration = 2000, startOnVisible = true) {
 }
 
 /* ─── SCROLL PATH OVERLAY ─────────────────────────────────────────── */
-function ScrollPathOverlay({ progress }: { progress: number }) {
-  const pathRef = useRef<SVGPathElement>(null);
-  const [len, setLen] = useState(5000);
-  useEffect(() => {
-    if (pathRef.current) {
-      const l = pathRef.current.getTotalLength();
-      if (l > 0) setLen(l);
-    }
-  }, []);
-
-  // Démarre après le hero (~12% scroll) et s'arrête avant le footer (~90%)
-  const eff = Math.max(0, Math.min(100, (progress - 12) / (90 - 12) * 100));
-  const offset = len * (1 - eff / 100);
-
-  // Waypoints GPS : A → B → C → D
-  const waypoints = [
-    { cx: 1360, cy: 195, r: 24, c: '#F97316', label: 'A' },
-    { cx: 100,  cy: 490, r: 28, c: '#EA580C', label: 'B' },
-    { cx: 1360, cy: 685, r: 24, c: '#F97316', label: 'C' },
-    { cx: 720,  cy: 858, r: 20, c: '#16A34A', label: 'D' },
-  ];
-  const thresholds = [16, 45, 68, 85];
-
-  return (
-    <svg
-      style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: -1, overflow: 'visible' } as React.CSSProperties}
-      viewBox="0 0 1440 900"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
-      <defs>
-        <linearGradient id="trailGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#F97316" />
-          <stop offset="45%" stopColor="#EA580C" />
-          <stop offset="100%" stopColor="#16A34A" />
-        </linearGradient>
-      </defs>
-
-      {/* Ruban principal */}
-      <path
-        ref={pathRef}
-        d="M 100,40 C 420,100 1060,55 1360,195 C 1660,335 440,425 100,490 C -240,545 890,618 1360,685 C 1830,752 380,838 100,900"
-        stroke="url(#trailGrad)"
-        strokeWidth="18"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeDasharray={len}
-        strokeDashoffset={offset}
-        opacity="0.32"
-      />
-
-      {/* Waypoints GPS avec lettre (A → B → C → D) */}
-      {waypoints.map((wp, i) => {
-        const t = thresholds[i];
-        const op = eff > t ? Math.min(1, (eff - t) / 10) : 0;
-        return (
-          <g key={i} style={{ opacity: op, transition: 'opacity 0.6s ease' }}>
-            {/* Halo extérieur pointillé */}
-            <circle cx={wp.cx} cy={wp.cy} r={wp.r + 18} stroke={wp.c} strokeWidth="1" strokeDasharray="4 5" fill="none" opacity="0.3" />
-            {/* Anneau principal */}
-            <circle cx={wp.cx} cy={wp.cy} r={wp.r}      stroke={wp.c} strokeWidth="2.5" fill={wp.c} fillOpacity="0.12" />
-            {/* Point central plein */}
-            <circle cx={wp.cx} cy={wp.cy} r={7}          fill={wp.c} />
-            {/* Lettre GPS */}
-            <text
-              x={wp.cx} y={wp.cy - wp.r - 10}
-              textAnchor="middle"
-              fontSize="13"
-              fontWeight="800"
-              fontFamily="Montserrat, sans-serif"
-              fill={wp.c}
-              letterSpacing="0.04em"
-            >{wp.label}</text>
-          </g>
-        );
-      })}
-    </svg>
-  );
-}
 
 /* ═══════════════════════════════════════════════════════════════
    LOGO SVG
@@ -317,7 +237,6 @@ export default function LandingPage() {
   return (
     <div style={{ minHeight: '100vh', color: '#1C1917' }}>
       <div className="progress-bar" style={{ width: `${scrollProgress}%` }} />
-      <ScrollPathOverlay progress={scrollProgress} />
 
       {/* ── NAVBAR PILL ─────────────────────────────────────────────────── */}
       <div style={{ position: 'fixed', top: '16px', left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
