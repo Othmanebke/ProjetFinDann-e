@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Activity, Map, Utensils, Bot, TrendingUp, ArrowRight, Check, ChevronDown, Star, Zap, Shield, Globe, ChevronRight, Minus } from 'lucide-react';
+import { Map, Utensils, Bot, TrendingUp, ArrowRight, ChevronDown, Star, Shield, Globe, ChevronRight, BarChart2, MapPin, Navigation, CreditCard, MessageCircle, Lock, Leaf } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════════
    HOOKS
@@ -220,19 +220,33 @@ export default function LandingPage() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
+  // Sticky steps scroll tracking
+  useEffect(() => {
+    const onScroll = () => {
+      if (!carouselRef.current) return;
+      const rect = carouselRef.current.getBoundingClientRect();
+      const total = carouselRef.current.offsetHeight - window.innerHeight;
+      if (total <= 0) return;
+      const scrolled = Math.max(0, -rect.top);
+      setActiveStep(Math.min(2, Math.floor((scrolled / total) * 3)));
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const heroWord = useTypewriter(['partout dans le monde.', 'en toute sécurité.', 'à votre rythme.', 'avec l\'IA à vos côtés.'], 60, 2400);
   const km = useCounter(2840000, 2200);
   const cities = useCounter(127, 1800);
   const users = useCounter(5200, 2000);
 
   const features = [
-    { icon: '🗺️', color: '#047857', bg: 'rgba(4,120,87,0.08)', border: 'rgba(4,120,87,0.15)', title: 'Parcours IA', desc: 'Itinéraires générés en temps réel passant par les monuments, musées et parcs locaux. Score de sécurité, meilleure heure de départ.' },
-    { icon: '🍽️', color: '#EA580C', bg: 'rgba(234,88,12,0.08)', border: 'rgba(234,88,12,0.15)', title: 'Nutrition Locale', desc: 'Recommandations de plats locaux adaptés à vos macros et objectifs. La gastronomie au service de la performance.' },
-    { icon: '📊', color: '#0E7490', bg: 'rgba(14,116,144,0.08)', border: 'rgba(14,116,144,0.15)', title: 'Suivi Performance', desc: 'Tableau de bord semaine par semaine. Comparez vos distances, durées et calories pour mesurer votre progression.' },
-    { icon: '🤖', color: '#78350F', bg: 'rgba(120,53,15,0.08)', border: 'rgba(120,53,15,0.15)', title: 'Coach IA 24/7', desc: 'Assistant conversationnel spécialisé sport & voyage. Conseils récupération, adaptation météo, programmes sur mesure.' },
-    { icon: '🛡️', color: '#047857', bg: 'rgba(4,120,87,0.08)', border: 'rgba(4,120,87,0.15)', title: 'Sécurité Garantie', desc: 'Chaque parcours est analysé : éclairage, fréquentation, météo, qualité du sol. Courez l\'esprit tranquille.' },
-    { icon: '🌍', color: '#0E7490', bg: 'rgba(14,116,144,0.08)', border: 'rgba(14,116,144,0.15)', title: '127+ Villes', desc: 'De Barcelone à Tokyo, de Lisbonne à New York. Notre base de données s\'enrichit chaque semaine.' },
-  ];
+    { Icon: Map,       color: '#047857', bg: 'rgba(4,120,87,0.08)',   border: 'rgba(4,120,87,0.15)',   title: 'Parcours IA',       desc: 'Itinéraires générés en temps réel passant par les monuments, musées et parcs locaux. Score de sécurité, meilleure heure de départ.' },
+    { Icon: Utensils,  color: '#EA580C', bg: 'rgba(234,88,12,0.08)',  border: 'rgba(234,88,12,0.15)',  title: 'Nutrition Locale',  desc: 'Recommandations de plats locaux adaptés à vos macros et objectifs. La gastronomie au service de la performance.' },
+    { Icon: BarChart2, color: '#0E7490', bg: 'rgba(14,116,144,0.08)', border: 'rgba(14,116,144,0.15)', title: 'Suivi Performance', desc: 'Tableau de bord semaine par semaine. Comparez vos distances, durées et calories pour mesurer votre progression.' },
+    { Icon: Bot,       color: '#78350F', bg: 'rgba(120,53,15,0.08)',  border: 'rgba(120,53,15,0.15)',  title: 'Coach IA 24/7',     desc: 'Assistant conversationnel spécialisé sport & voyage. Conseils récupération, adaptation météo, programmes sur mesure.' },
+    { Icon: Shield,    color: '#047857', bg: 'rgba(4,120,87,0.08)',   border: 'rgba(4,120,87,0.15)',   title: 'Sécurité Garantie', desc: 'Chaque parcours est analysé : éclairage, fréquentation, météo, qualité du sol. Courez l\'esprit tranquille.' },
+    { Icon: Globe,     color: '#0E7490', bg: 'rgba(14,116,144,0.08)', border: 'rgba(14,116,144,0.15)', title: '127+ Villes',       desc: 'De Barcelone à Tokyo, de Lisbonne à New York. Notre base de données s\'enrichit chaque semaine.' },
+  ] as { Icon: React.FC<{size?:number;color?:string}>, color:string, bg:string, border:string, title:string, desc:string }[];
 
   const plans = [
     {
@@ -398,7 +412,7 @@ export default function LandingPage() {
 
             {/* Weekly stats */}
             <div style={{ background: 'white', border: '1px solid rgba(234,88,12,0.15)', borderRadius: '16px', padding: '18px 20px', animation: menuOpen ? 'fadeInUp 0.5s ease 0.17s both' : 'none' }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, fontFamily: '"Montserrat",sans-serif', color: '#EA580C', marginBottom: '12px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>📊 Semaine en cours</div>
+              <div style={{ fontSize: '11px', fontWeight: 700, fontFamily: '"Montserrat",sans-serif', color: '#EA580C', marginBottom: '12px', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '5px' }}><BarChart2 size={11} color="#EA580C" /> Semaine en cours</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
                 {([['23.4km','Distance'],['2h14','Temps'],['1 840','kcal']] as [string,string][]).map(([v,l]) => (
                   <div key={l} style={{ textAlign: 'center' }}>
@@ -419,39 +433,46 @@ export default function LandingPage() {
           {/* RIGHT — Links */}
           <div style={{ flex: 1, padding: '32px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px' }}>
             {([
-              { emoji: '🗺️', label: 'Parcours',     href: '#features', desc: 'Itinéraires IA dans 127+ villes',         color: '#047857' },
-              { emoji: '🍽️', label: 'Nutrition',     href: '#features', desc: 'Plats locaux adaptés à vos macros',       color: '#EA580C' },
-              { emoji: '📊', label: 'Performance',   href: '#features', desc: 'Graphiques semaine par semaine',          color: '#0E7490' },
-              { emoji: '🤖', label: 'Coach IA',      href: '#features', desc: 'Conseils personnalisés 24h/24',           color: '#78350F' },
-              { emoji: '💰', label: 'Tarifs',        href: '#pricing',  desc: 'Liberté · Coach Premium · Pass Voyageur', color: '#EA580C' },
-              { emoji: '💬', label: 'Témoignages',   href: '#testimonials', desc: 'Ce que disent nos 5 200 utilisateurs', color: '#047857' },
-            ] as {emoji:string;label:string;href:string;desc:string;color:string}[]).map((item, i) => (
-              <a key={item.label} href={item.href} onClick={() => setMenuOpen(false)}
-                style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 18px', borderRadius: '14px', textDecoration: 'none', border: '1px solid transparent', transition: 'all 0.2s ease', animation: menuOpen ? `fadeInUp 0.4s ease ${0.08 + i * 0.05}s both` : 'none' }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = `${item.color}0a`; el.style.borderColor = `${item.color}25`; el.style.transform = 'translateX(6px)'; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'transparent'; el.style.borderColor = 'transparent'; el.style.transform = 'none'; }}
-              >
-                <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: `${item.color}0f`, border: `1px solid ${item.color}22`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>{item.emoji}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 'clamp(18px,3vw,26px)', fontWeight: 800, fontFamily: '"Montserrat",sans-serif', color: '#1C1917', letterSpacing: '-0.02em' }}>{item.label}</div>
-                  <div style={{ fontSize: '12px', color: '#A8A29E', marginTop: '2px' }}>{item.desc}</div>
-                </div>
-                <ChevronRight size={16} style={{ color: item.color, opacity: 0.5, flexShrink: 0 }} />
-              </a>
-            ))}
+              { Icon: Map,           label: 'Parcours',    href: '#features',     desc: 'Itinéraires IA dans 127+ villes',         color: '#047857' },
+              { Icon: Utensils,      label: 'Nutrition',   href: '#features',     desc: 'Plats locaux adaptés à vos macros',       color: '#EA580C' },
+              { Icon: BarChart2,     label: 'Performance', href: '#features',     desc: 'Graphiques semaine par semaine',          color: '#0E7490' },
+              { Icon: Bot,           label: 'Coach IA',    href: '#features',     desc: 'Conseils personnalisés 24h/24',           color: '#78350F' },
+              { Icon: CreditCard,    label: 'Tarifs',      href: '#pricing',      desc: 'Liberté · Coach Premium · Pass Voyageur', color: '#EA580C' },
+              { Icon: MessageCircle, label: 'Témoignages', href: '#testimonials', desc: 'Ce que disent nos 5 200 utilisateurs',    color: '#047857' },
+            ] as {Icon: React.FC<{size?:number;color?:string}>;label:string;href:string;desc:string;color:string}[]).map((item, i) => {
+              const NavIcon = item.Icon;
+              return (
+                <a key={item.label} href={item.href} onClick={() => setMenuOpen(false)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 18px', borderRadius: '14px', textDecoration: 'none', border: '1px solid transparent', transition: 'all 0.2s ease', animation: menuOpen ? `fadeInUp 0.4s ease ${0.08 + i * 0.05}s both` : 'none' }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = `${item.color}0a`; el.style.borderColor = `${item.color}25`; el.style.transform = 'translateX(6px)'; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'transparent'; el.style.borderColor = 'transparent'; el.style.transform = 'none'; }}
+                >
+                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: `${item.color}0f`, border: `1px solid ${item.color}22`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <NavIcon size={20} color={item.color} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 'clamp(18px,3vw,26px)', fontWeight: 800, fontFamily: '"Montserrat",sans-serif', color: '#1C1917', letterSpacing: '-0.02em' }}>{item.label}</div>
+                    <div style={{ fontSize: '12px', color: '#A8A29E', marginTop: '2px' }}>{item.desc}</div>
+                  </div>
+                  <ChevronRight size={16} style={{ color: item.color, opacity: 0.5, flexShrink: 0 }} />
+                </a>
+              );
+            })}
           </div>
         </div>
 
         {/* BOTTOM BAR */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 32px', borderTop: '1px solid #E5E1D0', position: 'relative', zIndex: 2, flexWrap: 'wrap', gap: '12px' }}>
-          <span style={{ fontSize: '12px', color: '#A8A29E' }}>🌍 127 villes · Aucune CB pour l'essai</span>
+          <span style={{ fontSize: '12px', color: '#A8A29E', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Globe size={13} color="#A8A29E" /> 127 villes · Aucune CB pour l'essai
+          </span>
           <div style={{ display: 'flex', gap: '10px' }}>
             <Link href="/login" onClick={() => setMenuOpen(false)}>
               <button className="btn-secondary" style={{ padding: '9px 20px', fontSize: '13px', borderRadius: '999px' }}>Se connecter</button>
             </Link>
             <Link href="/login" onClick={() => setMenuOpen(false)}>
               <button className="btn-primary" style={{ padding: '9px 20px', fontSize: '13px', borderRadius: '999px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                🏃 Commencer gratuitement
+                Commencer gratuitement <ArrowRight size={13} />
               </button>
             </Link>
           </div>
@@ -561,8 +582,14 @@ export default function LandingPage() {
 
         {/* Trust badges */}
         <div className="reveal reveal-delay-3" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '60px' }}>
-          {['🔒 SOC2 Certifié', '🌿 GDPR Conforme', '⭐ 4.9/5 — 800+ avis'].map(b => (
-            <span key={b} style={{ fontSize: '13px', color: '#57534E', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>{b}</span>
+          {([
+            { icon: Lock,  label: 'SOC2 Certifié' },
+            { icon: Leaf,  label: 'GDPR Conforme' },
+            { icon: Star,  label: '4.9/5 — 800+ avis' },
+          ] as { icon: React.FC<{size?:number;color?:string}>, label: string }[]).map(({ icon: TrustIcon, label }) => (
+            <span key={label} style={{ fontSize: '13px', color: '#57534E', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <TrustIcon size={13} color="#EA580C" /> {label}
+            </span>
           ))}
         </div>
 
@@ -600,8 +627,11 @@ export default function LandingPage() {
       <div style={{ background: '#1C1917', padding: '16px 0', overflow: 'hidden' }}>
         <div className="marquee-wrapper">
           <div className="marquee-track">
-            {Array(2).fill(['🏃 Course à pied', '🚴 Vélo urbain', '🚶 Marche nordique', '🌍 127 villes', '🗺️ Parcours IA', '🍽️ Nutrition locale', '📊 Suivi performance', '🤖 Coach IA', '⭐ 4.9/5', '🛡️ Sécurité garantie']).flat().map((t, i) => (
-              <span key={i} style={{ fontSize: '13px', fontWeight: 700, fontFamily: '"Montserrat",sans-serif', color: i % 2 === 0 ? '#EA580C' : '#F5F3E7', whiteSpace: 'nowrap' }}>{t}</span>
+            {Array(2).fill(['Course à pied', 'Vélo urbain', 'Marche nordique', '127 villes', 'Parcours IA', 'Nutrition locale', 'Suivi performance', 'Coach IA', '4.9 / 5', 'Sécurité garantie']).flat().map((t, i) => (
+              <span key={i} style={{ fontSize: '13px', fontWeight: 700, fontFamily: '"Montserrat",sans-serif', color: i % 2 === 0 ? '#EA580C' : '#F5F3E7', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: i % 2 === 0 ? '#EA580C' : 'rgba(245,243,231,0.4)', display: 'inline-block', flexShrink: 0 }} />
+                {t}
+              </span>
             ))}
           </div>
         </div>
@@ -638,118 +668,142 @@ export default function LandingPage() {
           </p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: '20px' }}>
-          {features.map((f, i) => (
-            <div key={f.title} className={`feature-card reveal reveal-delay-${(i % 3) + 1}`}>
-              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: f.bg, border: `1px solid ${f.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '18px' }}>{f.icon}</div>
-              <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontSize: '17px', fontWeight: 800, color: '#1C1917', margin: '0 0 10px' }}>{f.title}</h3>
-              <p style={{ fontSize: '14px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>{f.desc}</p>
-            </div>
-          ))}
+          {features.map((f, i) => {
+            const FIcon = f.Icon;
+            return (
+              <div key={f.title} className={`feature-card reveal reveal-delay-${(i % 3) + 1}`}>
+                <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: f.bg, border: `1px solid ${f.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px' }}>
+                  <FIcon size={22} color={f.color} />
+                </div>
+                <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontSize: '17px', fontWeight: 800, color: '#1C1917', margin: '0 0 10px' }}>{f.title}</h3>
+                <p style={{ fontSize: '14px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>{f.desc}</p>
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* ── HOW IT WORKS — CAROUSEL ───────────────────────────────────────── */}
-      <section id="how" style={{ background: '#F5F3E7', borderTop: '1px solid #E5E1D0', borderBottom: '1px solid #E5E1D0', padding: '100px 0' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div className="reveal" style={{ textAlign: 'center', marginBottom: '56px', padding: '0 24px' }}>
-            <span className="badge badge-orange" style={{ marginBottom: '16px', display: 'inline-flex' }}>✦ Comment ça marche</span>
-            <h2 style={{ fontSize: 'clamp(26px,4vw,44px)', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#1C1917', margin: '0', letterSpacing: '-0.03em' }}>3 étapes vers l'aventure</h2>
-          </div>
+      {/* ── HOW IT WORKS — STICKY SCROLL ─────────────────────────────────── */}
+      <section id="how" style={{ position: 'relative' }}>
+        {/* Tall wrapper — 3 scroll "pages" */}
+        <div ref={carouselRef} style={{ height: '310vh', background: '#F5F3E7', borderTop: '1px solid #E5E1D0', borderBottom: '1px solid #E5E1D0', position: 'relative' }}>
+          {/* Sticky inner viewport */}
+          <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 24px' }}>
 
-          {/* Carousel track */}
-          <div
-            ref={carouselRef}
-            onScroll={() => {
-              if (!carouselRef.current) return;
-              const el = carouselRef.current;
-              const cardW = ((el.children[0] as HTMLElement)?.offsetWidth ?? 400) + 20;
-              setActiveStep(Math.min(Math.round(el.scrollLeft / cardW), 2));
-            }}
-            style={{ display: 'flex', gap: '20px', overflowX: 'auto', scrollSnapType: 'x mandatory', scrollBehavior: 'smooth', padding: '8px 24px 16px', scrollbarWidth: 'none' } as React.CSSProperties}
-          >
-            {/* Step 01 */}
-            <div style={{ flexShrink: 0, width: 'min(400px, calc(85vw))', scrollSnapAlign: 'start', background: 'white', border: '1px solid rgba(234,88,12,0.2)', borderRadius: '28px', padding: '36px', boxShadow: '0 4px 28px rgba(234,88,12,0.07)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
-                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>📍</div>
-                <div>
-                  <div style={{ fontSize: '10px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: '#EA580C', letterSpacing: '0.1em' }}>ÉTAPE 01</div>
-                  <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '18px', color: '#1C1917', margin: '3px 0 0', lineHeight: 1.2 }}>Dites-nous où vous êtes</h3>
-                </div>
+            {/* Section title */}
+            <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+              <span className="badge badge-orange" style={{ marginBottom: '12px', display: 'inline-flex' }}>✦ Comment ça marche</span>
+              <h2 style={{ fontSize: 'clamp(26px,4vw,44px)', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#1C1917', margin: '0 0 20px', letterSpacing: '-0.03em' }}>3 étapes vers l'aventure</h2>
+              {/* Progress pills */}
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                {[0, 1, 2].map(i => (
+                  <div key={i} style={{ height: '4px', width: activeStep === i ? '36px' : '12px', borderRadius: '2px', background: activeStep === i ? '#EA580C' : '#D6CDB8', transition: 'all 0.4s ease' }} />
+                ))}
               </div>
-              <div style={{ background: '#FAF8ED', border: '1px solid #E5E1D0', borderRadius: '14px', padding: '18px', marginBottom: '24px' }}>
-                <div style={{ fontSize: '11px', color: '#A8A29E', marginBottom: '8px', fontWeight: 600 }}>📍 Localisation détectée</div>
-                <div style={{ fontSize: '16px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif', color: '#1C1917', marginBottom: '12px' }}>Tokyo, Japon 🇯🇵</div>
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  {['🏃 Course', '🚴 Vélo', '🚶 Marche'].map((t, ti) => (
-                    <span key={t} style={{ fontSize: '11px', padding: '5px 12px', borderRadius: '999px', background: ti === 0 ? '#EA580C' : '#F5F3E7', color: ti === 0 ? 'white' : '#57534E', fontWeight: 600, fontFamily: '"Montserrat",sans-serif' }}>{t}</span>
-                  ))}
-                </div>
-              </div>
-              <p style={{ fontSize: '15px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>Entrez votre ville actuelle ou laissez Élan vous géolocaliser. Précisez votre type d'activité préférée et votre niveau.</p>
             </div>
 
-            {/* Step 02 */}
-            <div style={{ flexShrink: 0, width: 'min(400px, calc(85vw))', scrollSnapAlign: 'start', background: 'white', border: '1px solid rgba(4,120,87,0.2)', borderRadius: '28px', padding: '36px', boxShadow: '0 4px 28px rgba(4,120,87,0.07)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
-                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(4,120,87,0.06)', border: '1px solid rgba(4,120,87,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>🗺️</div>
-                <div>
-                  <div style={{ fontSize: '10px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: '#047857', letterSpacing: '0.1em' }}>ÉTAPE 02</div>
-                  <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '18px', color: '#1C1917', margin: '3px 0 0', lineHeight: 1.2 }}>L'IA génère votre parcours</h3>
+            {/* Cards stack */}
+            <div style={{ position: 'relative', width: '100%', maxWidth: '700px', height: '330px' }}>
+
+              {/* Step 01 */}
+              <div style={{ position: 'absolute', inset: 0, opacity: activeStep === 0 ? 1 : 0, transform: activeStep === 0 ? 'translateY(0) scale(1)' : activeStep > 0 ? 'translateY(-48px) scale(0.97)' : 'translateY(48px) scale(0.97)', transition: 'all 0.6s cubic-bezier(0.16,1,0.3,1)', pointerEvents: activeStep === 0 ? 'all' : 'none' }}>
+                <div style={{ background: 'white', border: '1px solid rgba(234,88,12,0.2)', borderRadius: '28px', padding: '36px', boxShadow: '0 8px 40px rgba(234,88,12,0.08)', height: '100%', display: 'flex', gap: '32px', alignItems: 'center' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '18px' }}>
+                      <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <MapPin size={26} color="#EA580C" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '10px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: '#EA580C', letterSpacing: '0.1em' }}>ÉTAPE 01</div>
+                        <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '20px', color: '#1C1917', margin: '3px 0 0' }}>Dites-nous où vous êtes</h3>
+                      </div>
+                    </div>
+                    <p style={{ fontSize: '15px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>Entrez votre ville actuelle ou laissez Élan vous géolocaliser. Précisez votre type d'activité préférée et votre niveau.</p>
+                  </div>
+                  <div style={{ width: '220px', flexShrink: 0, background: '#FAF8ED', border: '1px solid #E5E1D0', borderRadius: '18px', padding: '20px' }}>
+                    <div style={{ fontSize: '11px', color: '#A8A29E', marginBottom: '10px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={11} color="#A8A29E" /> Localisation détectée</div>
+                    <div style={{ fontSize: '17px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif', color: '#1C1917', marginBottom: '14px' }}>Tokyo, Japon</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
+                      {[['Course à pied', true], ['Vélo urbain', false], ['Marche', false]].map(([t, active]) => (
+                        <div key={t as string} style={{ fontSize: '12px', padding: '7px 12px', borderRadius: '10px', background: active ? '#EA580C' : 'white', color: active ? 'white' : '#57534E', fontWeight: 600, border: `1px solid ${active ? '#EA580C' : '#E5E1D0'}`, fontFamily: '"Montserrat",sans-serif' }}>{t as string}</div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div style={{ height: '90px', borderRadius: '14px', background: 'linear-gradient(135deg,#F0FDF4,#ECFDF5)', border: '1px solid rgba(4,120,87,0.15)', overflow: 'hidden', marginBottom: '24px', position: 'relative' }}>
-                <svg style={{ width: '100%', height: '100%' }} viewBox="0 0 300 90">
-                  <path d="M 20,65 Q 80,25 140,44 Q 200,65 265,28" stroke="#047857" strokeWidth="3" fill="none" strokeDasharray="8 4" strokeLinecap="round" />
-                  <circle cx="20" cy="65" r="6" fill="#047857" />
-                  <circle cx="265" cy="28" r="6" fill="#EA580C" />
-                  <circle cx="140" cy="44" r="4" fill="white" stroke="#047857" strokeWidth="2" />
-                  <text x="22" y="60" fontSize="9" fill="#047857">🏖</text>
-                  <text x="138" y="40" fontSize="9" fill="#047857">⛪</text>
-                </svg>
-                <div style={{ position: 'absolute', bottom: '8px', right: '10px', fontSize: '10px', fontWeight: 700, background: 'rgba(4,120,87,0.12)', border: '1px solid rgba(4,120,87,0.2)', color: '#047857', padding: '3px 8px', borderRadius: '999px', fontFamily: '"Montserrat",sans-serif' }}>🛡️ Score 9.2/10</div>
+
+              {/* Step 02 */}
+              <div style={{ position: 'absolute', inset: 0, opacity: activeStep === 1 ? 1 : 0, transform: activeStep === 1 ? 'translateY(0) scale(1)' : activeStep > 1 ? 'translateY(-48px) scale(0.97)' : 'translateY(48px) scale(0.97)', transition: 'all 0.6s cubic-bezier(0.16,1,0.3,1)', pointerEvents: activeStep === 1 ? 'all' : 'none' }}>
+                <div style={{ background: 'white', border: '1px solid rgba(4,120,87,0.2)', borderRadius: '28px', padding: '36px', boxShadow: '0 8px 40px rgba(4,120,87,0.08)', height: '100%', display: 'flex', gap: '32px', alignItems: 'center' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '18px' }}>
+                      <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(4,120,87,0.06)', border: '1px solid rgba(4,120,87,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Navigation size={26} color="#047857" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '10px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: '#047857', letterSpacing: '0.1em' }}>ÉTAPE 02</div>
+                        <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '20px', color: '#1C1917', margin: '3px 0 0' }}>L'IA génère votre parcours</h3>
+                      </div>
+                    </div>
+                    <p style={{ fontSize: '15px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>En quelques secondes, votre itinéraire passe par les monuments locaux, avec un score de sécurité et les meilleures heures.</p>
+                  </div>
+                  <div style={{ width: '220px', flexShrink: 0, borderRadius: '18px', overflow: 'hidden', background: 'linear-gradient(135deg,#F0FDF4,#ECFDF5)', border: '1px solid rgba(4,120,87,0.15)', position: 'relative', height: '160px' }}>
+                    <svg style={{ width: '100%', height: '100%' }} viewBox="0 0 220 160">
+                      <path d="M 20,120 Q 80,50 110,80 Q 150,110 200,55" stroke="#047857" strokeWidth="3" fill="none" strokeDasharray="8 4" strokeLinecap="round" />
+                      <circle cx="20" cy="120" r="7" fill="#047857" />
+                      <circle cx="200" cy="55" r="7" fill="#EA580C" />
+                      <circle cx="110" cy="80" r="4.5" fill="white" stroke="#047857" strokeWidth="2" />
+                    </svg>
+                    <div style={{ position: 'absolute', bottom: '10px', right: '10px', fontSize: '10px', fontWeight: 700, background: 'rgba(4,120,87,0.12)', border: '1px solid rgba(4,120,87,0.2)', color: '#047857', padding: '4px 10px', borderRadius: '999px', fontFamily: '"Montserrat",sans-serif', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Shield size={10} color="#047857" /> Score 9.2/10
+                    </div>
+                  </div>
+                </div>
               </div>
-              <p style={{ fontSize: '15px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>En quelques secondes, votre itinéraire passe par les monuments locaux, avec un score de sécurité et les meilleures heures.</p>
+
+              {/* Step 03 */}
+              <div style={{ position: 'absolute', inset: 0, opacity: activeStep === 2 ? 1 : 0, transform: activeStep === 2 ? 'translateY(0) scale(1)' : activeStep > 2 ? 'translateY(-48px) scale(0.97)' : 'translateY(48px) scale(0.97)', transition: 'all 0.6s cubic-bezier(0.16,1,0.3,1)', pointerEvents: activeStep === 2 ? 'all' : 'none' }}>
+                <div style={{ background: 'white', border: '1px solid rgba(14,116,144,0.2)', borderRadius: '28px', padding: '36px', boxShadow: '0 8px 40px rgba(14,116,144,0.08)', height: '100%', display: 'flex', gap: '32px', alignItems: 'center' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '18px' }}>
+                      <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(14,116,144,0.06)', border: '1px solid rgba(14,116,144,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <BarChart2 size={26} color="#0E7490" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '10px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: '#0E7490', letterSpacing: '0.1em' }}>ÉTAPE 03</div>
+                        <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '20px', color: '#1C1917', margin: '3px 0 0' }}>Suivez vos progrès</h3>
+                      </div>
+                    </div>
+                    <p style={{ fontSize: '15px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>Chaque séance est enregistrée. Comparez vos performances semaine par semaine et ajustez avec votre coach IA.</p>
+                  </div>
+                  <div style={{ width: '220px', flexShrink: 0, background: '#FAF8ED', border: '1px solid #E5E1D0', borderRadius: '18px', padding: '20px' }}>
+                    <div style={{ fontSize: '11px', color: '#A8A29E', marginBottom: '8px', fontWeight: 600, fontFamily: '"Montserrat",sans-serif', display: 'flex', alignItems: 'center', gap: '5px' }}><TrendingUp size={11} color="#A8A29E" /> Distance 8 sem.</div>
+                    <svg width="100%" height="52" viewBox="0 0 180 52">
+                      <defs><linearGradient id="sGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#0E7490" stopOpacity="0.15"/><stop offset="100%" stopColor="#0E7490" stopOpacity="0"/></linearGradient></defs>
+                      <path d="M0 42 L22 36 L45 32 L67 38 L90 26 L112 22 L135 16 L157 10 L180 13 L180 52 L0 52Z" fill="url(#sGrad)" />
+                      <path d="M0 42 L22 36 L45 32 L67 38 L90 26 L112 22 L135 16 L157 10 L180 13" stroke="#0E7490" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#A8A29E', marginTop: '4px' }}>
+                      {['S45','S47','S49','S51','S52'].map(s => <span key={s}>{s}</span>)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>{/* /cards stack */}
+
+            {/* Side step indicator */}
+            <div style={{ position: 'absolute', right: '40px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'flex-end' }}>
+              {['01','02','03'].map((n, i) => (
+                <div key={n} style={{ display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.3s ease', opacity: activeStep === i ? 1 : 0.3 }}>
+                  <div style={{ fontSize: '11px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: activeStep === i ? '#EA580C' : '#A8A29E' }}>{n}</div>
+                  <div style={{ width: '4px', height: activeStep === i ? '32px' : '12px', borderRadius: '2px', background: activeStep === i ? '#EA580C' : '#D6CDB8', transition: 'all 0.4s ease' }} />
+                </div>
+              ))}
             </div>
 
-            {/* Step 03 */}
-            <div style={{ flexShrink: 0, width: 'min(400px, calc(85vw))', scrollSnapAlign: 'start', background: 'white', border: '1px solid rgba(14,116,144,0.2)', borderRadius: '28px', padding: '36px', boxShadow: '0 4px 28px rgba(14,116,144,0.07)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
-                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(14,116,144,0.06)', border: '1px solid rgba(14,116,144,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>📊</div>
-                <div>
-                  <div style={{ fontSize: '10px', fontWeight: 900, fontFamily: '"Montserrat",sans-serif', color: '#0E7490', letterSpacing: '0.1em' }}>ÉTAPE 03</div>
-                  <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 800, fontSize: '18px', color: '#1C1917', margin: '3px 0 0', lineHeight: 1.2 }}>Suivez vos progrès</h3>
-                </div>
-              </div>
-              <div style={{ marginBottom: '24px' }}>
-                <div style={{ fontSize: '11px', color: '#A8A29E', marginBottom: '8px', fontWeight: 600, fontFamily: '"Montserrat",sans-serif' }}>DISTANCE · 8 DERNIÈRES SEMAINES</div>
-                <svg width="100%" height="54" viewBox="0 0 300 54">
-                  <defs><linearGradient id="stepAreaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#0E7490" stopOpacity="0.15"/><stop offset="100%" stopColor="#0E7490" stopOpacity="0"/></linearGradient></defs>
-                  <path d="M0 44 L37 37 L75 34 L112 39 L150 27 L187 23 L225 17 L262 11 L300 14 L300 54 L0 54Z" fill="url(#stepAreaGrad)" />
-                  <path d="M0 44 L37 37 L75 34 L112 39 L150 27 L187 23 L225 17 L262 11 L300 14" stroke="#0E7490" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#A8A29E', marginTop: '6px', fontFamily: '"Montserrat",sans-serif' }}>
-                  {['S45','S46','S47','S48','S49','S50','S51','S52'].map(s => <span key={s}>{s}</span>)}
-                </div>
-              </div>
-              <p style={{ fontSize: '15px', color: '#57534E', lineHeight: 1.7, margin: 0 }}>Chaque séance est enregistrée. Comparez vos performances semaine par semaine et ajustez avec votre coach IA.</p>
-            </div>
-          </div>
-
-          {/* Navigation dots */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '20px' }}>
-            {[0, 1, 2].map(i => (
-              <button
-                key={i}
-                onClick={() => {
-                  if (!carouselRef.current) return;
-                  const card = carouselRef.current.children[i] as HTMLElement;
-                  if (card) { carouselRef.current.scrollTo({ left: card.offsetLeft - 24, behavior: 'smooth' }); setActiveStep(i); }
-                }}
-                style={{ width: activeStep === i ? '28px' : '8px', height: '8px', borderRadius: '4px', background: activeStep === i ? '#EA580C' : '#D6CDB8', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }}
-              />
-            ))}
-          </div>
-        </div>
+          </div>{/* /sticky inner */}
+        </div>{/* /tall wrapper */}
       </section>
 
       {/* ── COMPARISON ────────────────────────────────────────────────────── */}
@@ -801,7 +855,7 @@ export default function LandingPage() {
             {plans.map((plan) => (
               <div key={plan.name} className={`pricing-card reveal${plan.featured ? ' featured' : ''}`}>
                 {plan.featured && (
-                  <div style={{ background: '#EA580C', color: 'white', fontSize: '11px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif', padding: '4px 14px', borderRadius: '999px', display: 'inline-flex', marginBottom: '16px', letterSpacing: '0.06em' }}>⭐ LE PLUS POPULAIRE</div>
+                  <div style={{ background: '#EA580C', color: 'white', fontSize: '11px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif', padding: '4px 14px', borderRadius: '999px', display: 'inline-flex', marginBottom: '16px', letterSpacing: '0.06em', alignItems: 'center', gap: '5px' }}><Star size={11} fill="white" color="white" /> LE PLUS POPULAIRE</div>
                 )}
                 <h3 style={{ fontFamily: '"Montserrat",sans-serif', fontWeight: 900, fontSize: '20px', color: '#1C1917', margin: '0 0 4px' }}>{plan.name}</h3>
                 <p style={{ fontSize: '13px', color: '#57534E', margin: '0 0 20px' }}>{plan.desc}</p>
@@ -875,7 +929,7 @@ export default function LandingPage() {
       <section style={{ padding: '100px 24px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         <div className="topo-bg" style={{ position: 'absolute', inset: 0, opacity: 0.6 }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <span className="badge badge-orange reveal" style={{ marginBottom: '24px', display: 'inline-flex' }}>🏃 Rejoins 5 200+ sportifs voyageurs</span>
+          <span className="badge badge-orange reveal" style={{ marginBottom: '24px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><TrendingUp size={12} color="#EA580C" /> Rejoins 5 200+ sportifs voyageurs</span>
           <h2 className="reveal" style={{ fontSize: 'clamp(28px,6vw,64px)', fontFamily: '"Montserrat",sans-serif', fontWeight: 900, color: '#1C1917', letterSpacing: '-0.04em', margin: '0 0 20px' }}>
             Votre prochaine aventure<br />
             <span style={{ background: 'linear-gradient(135deg,#EA580C,#D97706)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>commence ici</span>
@@ -902,7 +956,7 @@ export default function LandingPage() {
               </div>
               <p style={{ fontSize: '14px', lineHeight: 1.7, marginBottom: '20px', maxWidth: '260px' }}>L'application de coaching sportif et nutritionnel pour les voyageurs du monde entier.</p>
               <div style={{ display: 'flex', gap: '8px' }}>
-                {['🌿 GDPR', '🔒 SOC2', '⭐ 4.9/5'].map(b => <span key={b} style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '6px', background: 'rgba(255,255,255,0.06)', color: '#A8A29E', fontWeight: 600 }}>{b}</span>)}
+                {['GDPR', 'SOC2', '4.9 / 5'].map(b => <span key={b} style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '6px', background: 'rgba(255,255,255,0.06)', color: '#A8A29E', fontWeight: 600 }}>{b}</span>)}
               </div>
             </div>
             {[
