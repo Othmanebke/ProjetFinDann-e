@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Sidebar } from "./Sidebar";
+import Sidebar from "./Sidebar";
 import { Navbar } from "./Navbar";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -12,6 +12,7 @@ interface AppLayoutProps {
 }
 
 export function AppLayout({ children, title }: AppLayoutProps) {
+  // Fit & Travel
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
@@ -46,3 +47,5 @@ export function AppLayout({ children, title }: AppLayoutProps) {
     </div>
   );
 }
+
+export default AppLayout;

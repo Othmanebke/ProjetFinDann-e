@@ -8,10 +8,16 @@ export interface User {
   avatarUrl?: string;
   role: "ADMIN" | "USER";
   subscription?: {
-    plan: "FREE" | "PRO" | "ENTERPRISE";
+    plan: "FREE" | "PREMIUM_COACH" | "PASS_VOYAGEUR";
     status: string;
     currentPeriodEnd?: string;
   };
+  fitnessGoal?: string;
+  weightKg?: number;
+  heightCm?: number;
+  weeklyTargetKm?: number;
+  currentCity?: string;
+  currentCountry?: string;
 }
 
 interface AuthState {
@@ -54,7 +60,7 @@ export const useAuthStore = create<AuthState>()(
       setLoading: (isLoading) => set({ isLoading }),
     }),
     {
-      name: "smartproject-auth",
+      name: "fittravel-auth",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         accessToken: state.accessToken,

@@ -8,8 +8,8 @@ import toast from "react-hot-toast";
 import { Check, Zap, Shield, Star } from "lucide-react";
 
 const STRIPE_PRICES = {
-  PRO_MONTHLY: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_MONTHLY || "price_pro_monthly",
-  ENTERPRISE_MONTHLY: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE_MONTHLY || "price_enterprise_monthly",
+  PREMIUM_COACH_MONTHLY: process.env.NEXT_PUBLIC_STRIPE_PRICE_PREMIUM_COACH_MONTHLY || "price_premium_coach_monthly",
+  PASS_VOYAGEUR_MONTHLY: process.env.NEXT_PUBLIC_STRIPE_PRICE_PASS_VOYAGEUR_MONTHLY || "price_pass_voyageur_monthly",
 };
 
 const plans = [
@@ -20,53 +20,51 @@ const plans = [
     icon: <Star className="h-5 w-5" />,
     description: "Pour commencer",
     features: [
-      "3 projets maximum",
-      "10 tâches par projet",
-      "Chat IA basique (5/jour)",
-      "1 membre d'équipe",
+      "3 parcours IA par mois",
+      "5 messages Coach IA",
+      "10 logs nutrition",
+      "Séances illimitées",
       "Support communautaire",
     ],
     color: "slate",
     priceId: null,
   },
   {
-    id: "PRO",
-    name: "Pro",
+    id: "PREMIUM_COACH",
+    name: "Coach Premium",
     price: 29,
     icon: <Zap className="h-5 w-5" />,
-    description: "Pour les équipes",
+    description: "Parcours illimités, nutrition IA, analyse performance",
     features: [
-      "Projets illimités",
-      "Tâches illimitées",
-      "IA avancée (GPT-4o)",
-      "Génération de plans IA",
-      "Analyse des risques IA",
-      "10 membres d'équipe",
+      "30 parcours IA par mois",
+      "100 messages Coach IA",
+      "Logs nutrition illimités",
+      "Analyse performance IA",
+      "Recommandations restaurants",
       "Support prioritaire",
       "Analytics avancés",
     ],
     color: "primary",
-    priceId: STRIPE_PRICES.PRO_MONTHLY,
+    priceId: STRIPE_PRICES.PREMIUM_COACH_MONTHLY,
     highlight: true,
   },
   {
-    id: "ENTERPRISE",
-    name: "Enterprise",
+    id: "PASS_VOYAGEUR",
+    name: "Pass Voyageur",
     price: 99,
     icon: <Shield className="h-5 w-5" />,
-    description: "Pour les grandes organisations",
+    description: "Tout illimité + coach personnel IA + SMS reminders",
     features: [
-      "Tout Pro inclus",
-      "Membres illimités",
-      "SSO / SAML",
+      "Parcours illimités",
+      "Coach IA illimité",
+      "SMS rappels entraînement",
+      "Coach personnel IA dédié",
+      "Accès API",
       "SLA garanti 99.9%",
-      "Intégrations custom",
-      "Manager dédié",
-      "Audit logs",
-      "Data residency EU",
+      "Support VIP",
     ],
     color: "slate",
-    priceId: STRIPE_PRICES.ENTERPRISE_MONTHLY,
+    priceId: STRIPE_PRICES.PASS_VOYAGEUR_MONTHLY,
   },
 ];
 
@@ -137,7 +135,7 @@ export default function BillingPage() {
         {/* Plans */}
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Choisissez votre plan</h2>
-          <p className="text-slate-500 mb-6">14 jours d'essai gratuit sur Pro et Enterprise. Sans engagement.</p>
+          <p className="text-slate-500 mb-6">14 jours d'essai gratuit sur Premium Coach et Pass Voyageur. Sans engagement.</p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {plans.map((plan) => {
@@ -209,7 +207,7 @@ export default function BillingPage() {
         </div>
 
         <div className="text-center text-sm text-slate-400">
-          Questions ? <a href="mailto:support@smartproject.ai" className="text-primary-600 hover:underline">support@smartproject.ai</a>
+          Questions ? <a href="mailto:support@fittravel.app" className="text-primary-600 hover:underline">support@fittravel.app</a>
         </div>
       </div>
     </AppLayout>

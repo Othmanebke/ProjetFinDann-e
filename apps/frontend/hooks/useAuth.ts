@@ -32,6 +32,6 @@ export function useAuth() {
     },
     isAdmin: store.user?.role === "ADMIN",
     plan: store.user?.subscription?.plan || "FREE",
-    isPro: ["PRO", "ENTERPRISE"].includes(store.user?.subscription?.plan || ""),
+    isPremium: ["PREMIUM_COACH", "PASS_VOYAGEUR"].includes(store.user?.subscription?.plan || ""),
   };
 }

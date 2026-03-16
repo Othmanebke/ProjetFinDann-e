@@ -1,121 +1,99 @@
-# SmartProject AI 🚀
+# 🏃 Fit & Travel — Coaching Sportif & Nutrition pour Voyageurs
 
-**Plateforme SaaS de gestion de projets avec automatisation IA**
+Application SaaS de coaching sportif intelligent dédiée aux voyageurs. Génère des parcours sécurisés dans le monde entier, recommande des plats locaux adaptés à vos objectifs, et suit vos performances semaine après semaine.
 
-Stack : Next.js 14, Node.js/Express, TypeScript, PostgreSQL, Stripe, OpenAI GPT-4o
+## Concept
 
----
+**Fit & Travel** résout un problème réel : maintenir sa routine sportive et nutritionnelle en voyage est difficile. Notre IA génère des parcours de course/marche/vélo personnalisés passant par les points d'intérêt locaux (musées, monuments, parcs), et recommande des restaurants locaux respectant vos macros.
 
-## Démarrage rapide
+## Stack Technique
+
+- **Frontend** : Next.js 14, React 18, TailwindCSS, Zustand, SWR, Recharts
+- **Backend** : Node.js, Express, TypeScript, Prisma ORM, PostgreSQL
+- **IA** : OpenAI GPT-4o (génération de parcours, recommandations nutrition, analyse performance)
+- **Auth** : OAuth2 (Google, GitHub), JWT avec rotation des refresh tokens
+- **Paiement** : Stripe (FREE / PREMIUM COACH / PASS VOYAGEUR)
+- **Notifications** : SendGrid (email weekly recap), Twilio (SMS rappel run)
+- **Métriques** : Prometheus + Grafana
+- **Infrastructure** : Docker Compose, GitHub Actions CI/CD
+
+## Fonctionnalités
+
+### 🗺️ Parcours IA
+- Génération de parcours de course/marche/vélo dans n'importe quelle ville
+- Passage par des points d'intérêt culturels (monuments, musées, parcs)
+- Score de sécurité, meilleure heure, conseils pratiques
+- Niveaux : Facile / Modéré / Difficile
+
+### 🍽️ Nutrition Intelligente
+- Recommandations de plats locaux adaptés aux objectifs fitness
+- Macros détaillées (protéines, glucides, lipides, calories)
+- Filtre par restrictions alimentaires
+- Focus sur la cuisine locale authentique
+
+### 📊 Suivi Performance
+- Tableau de bord avec graphiques semaine par semaine
+- Comparaison des performances (distance, durée, calories)
+- Objectif hebdomadaire avec barre de progression
+- Analyse IA de la tendance de progression
+
+### 🤖 Coach IA 24/7
+- Assistant conversationnel fitness + voyage
+- Génération de programmes d'entraînement pour voyageurs
+- Conseils récupération, nutrition, prévention blessures
+
+## Plans
+
+| Fonctionnalité | FREE | PREMIUM COACH | PASS VOYAGEUR |
+|---|---|---|---|
+| Séances enregistrées | Illimité | Illimité | Illimité |
+| Parcours IA/mois | 3 | 30 | Illimité |
+| Coach IA | 5 messages | 100 messages | Illimité |
+| Logs nutrition | 10 | Illimité | Illimité |
+| SMS reminders | ❌ | ❌ | ✅ |
+
+## Installation
 
 ```bash
-# 1. Cloner et configurer
+# 1. Cloner le repo
+git clone https://github.com/Othmanebke/ProjetFinDann-e.git
+cd ProjetFinDann-e
+
+# 2. Variables d'environnement
 cp .env.example .env
-# Remplir les variables dans .env
+# Remplir les clés : DATABASE_URL, OPENAI_API_KEY, STRIPE_SECRET_KEY, etc.
 
-# 2. Démarrer les services
-docker-compose up -d postgres redis prometheus grafana
+# 3. Lancer l'infrastructure
+docker-compose up -d postgres redis
 
-# 3. Installer et migrer
+# 4. Installer les dépendances
 npm install
-npx prisma migrate dev --name init
-npx ts-node prisma/seed.ts
 
-# 4. Développer
+# 5. Base de données
+npx prisma migrate dev --name init
+npx prisma db seed
+
+# 6. Lancer en développement
 npm run dev
+# Frontend → http://localhost:3010
+# Backend  → http://localhost:4000
 ```
 
-### Services disponibles
-| Service | URL |
-|---------|-----|
-| Frontend Next.js | http://localhost:3000 |
-| Backend API | http://localhost:4000 |
-| API Health | http://localhost:4000/health |
-| Prometheus | http://localhost:9090 |
-| Grafana | http://localhost:3001 |
+## Comptes de test
 
----
+- **Admin** : admin@fittravel.app / Admin@123!
+- **Demo** : demo@fittravel.app / User@123!
 
 ## Architecture
 
-Voir [docs/architecture.md](docs/architecture.md) pour les diagrammes complets.
-
 ```
-apps/
-  frontend/    → Next.js 14 (App Router, TailwindCSS, Zustand, Recharts)
-  backend/     → Express + TypeScript (Prisma, JWT, OpenAI, Stripe, Twilio)
-packages/
-  types/       → TypeScript interfaces partagées
-  shared/      → Utilities partagées
-prisma/        → Schema DB + migrations + seed
-docs/          → Architecture, BC01-BC04
+fit-travel/
+├── apps/
+│   ├── frontend/          # Next.js 14 App Router
+│   └── backend/           # Express + TypeScript
+├── packages/
+│   ├── types/             # Types partagés TypeScript
+│   └── shared/            # Utilitaires partagés
+├── prisma/                # Schéma + migrations + seed
+└── docs/                  # Documentation
 ```
-
----
-
-## Services Backend
-
-| Service | Endpoint | Description |
-|---------|----------|-------------|
-| Auth | `/auth/*` | OAuth2 Google/GitHub + JWT |
-| Projects | `/projects/*` | CRUD projets |
-| Tasks | `/tasks/*` | CRUD tâches Kanban |
-| AI | `/ai/*` | Chat + génération IA (GPT-4o) |
-| Billing | `/billing/*` | Stripe Checkout + Webhooks |
-| Metrics | `/metrics` | Prometheus format |
-| Admin | `/admin/*` | Administration |
-
----
-
-## Plans d'abonnement
-
-| Plan | Prix | Fonctionnalités |
-|------|------|----------------|
-| **Free** | 0€ | 3 projets, chat IA basique (5/j) |
-| **Pro** | 29€/mois | Illimité, IA avancée, 10 membres |
-| **Enterprise** | 99€/mois | SSO, SLA 99.9%, membres illimités |
-
----
-
-## Tests
-
-```bash
-# Tests unitaires Jest (backend)
-npm run test --workspace=@smartproject/backend
-
-# Tests E2E Cypress (frontend)
-npm run test:open --workspace=@smartproject/frontend
-```
-
----
-
-## Documentation
-
-| Document | Description |
-|----------|-------------|
-| [BC01 — Cadrage](docs/BC01-cadrage.md) | Vision, personas, user stories, roadmap |
-| [BC02 — Tests & Docs](docs/BC02-tests-docs.md) | Tests, API docs, guide installation |
-| [BC03 — Pilotage](docs/BC03-pilotage.md) | Planning, RACI, budget, gantt |
-| [BC04 — Maintenance](docs/BC04-maintenance.md) | Monitoring, CI/CD, backup, runbook |
-| [Architecture](docs/architecture.md) | Diagrammes Mermaid, ERD, arborescence |
-
----
-
-## Variables d'Environnement
-
-Voir [.env.example](.env.example) pour la liste complète.
-
-Variables requises minimales :
-- `DATABASE_URL` — PostgreSQL
-- `JWT_SECRET` + `JWT_REFRESH_SECRET` — Auth
-- `GOOGLE_CLIENT_ID/SECRET` ou `GITHUB_CLIENT_ID/SECRET` — OAuth
-- `OPENAI_API_KEY` — IA
-- `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` — Paiements
-- `SENDGRID_API_KEY` — Emails
-- `TWILIO_ACCOUNT_SID` + `TWILIO_AUTH_TOKEN` — SMS
-
----
-
-## Licence
-
-MIT © 2026 SmartProject AI

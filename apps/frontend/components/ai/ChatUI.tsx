@@ -121,10 +121,10 @@ export function ChatUI() {
   };
 
   const suggestions = [
-    "Génère un plan pour mon projet de lancement produit",
-    "Quelles sont les meilleures pratiques agiles ?",
-    "Comment prioriser mes tâches cette semaine ?",
-    "Identifie les risques de mon sprint en cours",
+    "Génère un run de 8km à Tokyo 🗺️",
+    "Quels plats locaux pour la récup à Lisbonne ? 🍽️",
+    "Analyse ma semaine : 3 runs, 18km total 📊",
+    "Programme HIIT pour voyageur sans salle 💪",
   ];
 
   return (
@@ -137,8 +137,8 @@ export function ChatUI() {
               <Bot className="h-8 w-8" />
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-white">SmartProject AI Assistant</h3>
-              <p className="text-slate-400 mt-1">Votre assistant IA spécialisé en gestion de projets</p>
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Coach IA 🤖</h3>
+              <p className="text-slate-400 mt-1">Votre coach fitness et voyage disponible 24/7</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg w-full">
               {suggestions.map((s) => (
@@ -191,7 +191,7 @@ export function ChatUI() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Posez votre question à SmartProject AI… (Entrée pour envoyer)"
+            placeholder="Demande un parcours à Rome, des conseils récup, un plan semaine... (Entrée pour envoyer)"
             rows={1}
             className="flex-1 resize-none bg-transparent text-sm text-slate-900 dark:text-white placeholder:text-slate-400 outline-none max-h-32"
             style={{ minHeight: "24px" }}
@@ -205,7 +205,7 @@ export function ChatUI() {
           </button>
         </div>
         <p className="text-center text-xs text-slate-400 mt-2">
-          SmartProject AI peut faire des erreurs. Vérifiez les informations importantes.
+          Fit & Travel Coach IA peut faire des erreurs. Vérifiez les informations importantes.
         </p>
       </div>
     </div>

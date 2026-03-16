@@ -5,7 +5,7 @@ import { ChatUI } from "@/components/ai/ChatUI";
 
 export default function AIPage() {
   return (
-    <AppLayout title="Assistant IA">
+    <AppLayout title="Coach IA 🤖">
       <div className="h-[calc(100vh-8rem)] flex flex-col">
         <ChatUI />
       </div>

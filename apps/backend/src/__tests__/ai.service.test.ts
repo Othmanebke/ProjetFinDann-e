@@ -1,133 +1,111 @@
-import { generateProjectPlan, summarizeActivity, identifyRisks, generateTasks } from "../services/ai.service";
-import { AppError } from "../middlewares/error.middleware";
+import { generateRoute, recommendRestaurants, analyzeWorkoutPerformance } from '../services/ai.service';
 
-// Mock OpenAI client
-const mockCreate = jest.fn();
-jest.mock("../clients/openai.client", () => ({
-  openaiClient: { chat: { completions: { create: mockCreate } } },
-  AI_MODEL: "gpt-4o",
-}));
-
-// Mock Prisma
-const mockProject = {
-  id: "proj-1",
-  name: "Test Project",
-  description: "A test project",
-  status: "ACTIVE",
-  endDate: new Date("2026-12-31"),
-  tasks: [
-    { title: "Task 1", status: "DONE", priority: "HIGH", dueDate: null },
-    { title: "Task 2", status: "TODO", priority: "MEDIUM", dueDate: new Date("2025-01-01") },
-  ],
-  members: [{ user: { name: "Alice" } }, { user: { name: "Bob" } }],
-};
-
-jest.mock("../lib/prisma", () => ({
-  prisma: {
-    project: {
-      findFirst: jest.fn().mockResolvedValue(mockProject),
-    },
-    activityLog: {
-      findMany: jest.fn().mockResolvedValue([
-        { action: "task.created", user: { name: "Alice" }, createdAt: new Date(), metadata: {} },
-      ]),
+jest.mock('../clients/openai.client', () => ({
+  chat: {
+    completions: {
+      create: jest.fn(),
     },
   },
 }));
 
-jest.mock("../clients/prometheus.client", () => ({
-  aiRequestsTotal: { inc: jest.fn() },
-  aiRequestDuration: { startTimer: jest.fn().mockReturnValue(jest.fn()) },
+jest.mock('../lib/prisma', () => ({
+  fitChat: { findFirst: jest.fn(), create: jest.fn() },
+  fitMessage: { create: jest.fn() },
 }));
 
-const mockAIResponse = (content: object) => {
-  mockCreate.mockResolvedValueOnce({
-    choices: [{ message: { content: JSON.stringify(content) } }],
-  });
+import openai from '../clients/openai.client';
+const mockCreate = openai.chat.completions.create as jest.Mock;
+
+const mockRoute = {
+  name: 'Barceloneta Coastal Run',
+  description: 'A scenic 6km run along the Barcelona waterfront',
+  distanceKm: 6.2,
+  estimatedMinutes: 38,
+  difficulty: 'EASY',
+  waypoints: [{ lat: 41.37, lng: 2.18, name: 'Barceloneta Beach', type: 'start' }],
+  pointsOfInterest: [{ name: 'Port Olímpic', type: 'landmark', description: 'Olympic marina' }],
+  safetyScore: 9,
+  safetyNotes: 'Well-lit flat route',
+  bestTimeOfDay: 'morning',
+  tips: ['Bring water', 'Avoid peak hours'],
 };
 
-describe("AIService", () => {
-  const userId = "user-123";
-  const projectId = "proj-1";
+describe('AI Service — Fit & Travel', () => {
+  beforeEach(() => jest.clearAllMocks());
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  describe('generateRoute', () => {
+    it('generates a route for a given city', async () => {
+      mockCreate.mockResolvedValueOnce({
+        choices: [{ message: { content: JSON.stringify(mockRoute) } }],
+      });
 
-  describe("generateProjectPlan", () => {
-    it("should generate a project plan from OpenAI", async () => {
-      const expectedPlan = {
-        phases: ["Phase 1", "Phase 2"],
-        milestones: ["Launch"],
-        risks: ["Resource constraints"],
-        recommendations: ["Use agile"],
-        estimatedDuration: "3 months",
-      };
+      const route = await generateRoute('Barcelona', 'Spain', 'RUNNING', 6, 'EASY', { fitnessGoal: 'ENDURANCE' });
 
-      mockAIResponse(expectedPlan);
-
-      const result = await generateProjectPlan(projectId, userId);
-      expect(result).toEqual(expectedPlan);
-      expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({
-          model: "gpt-4o",
-          response_format: { type: "json_object" },
-        })
-      );
+      expect(route.name).toBe('Barceloneta Coastal Run');
+      expect(route.distanceKm).toBe(6.2);
+      expect(route.safetyScore).toBe(9);
+      expect(route.waypoints).toHaveLength(1);
+      expect(route.pointsOfInterest).toHaveLength(1);
     });
 
-    it("should throw AppError 404 when project not found", async () => {
-      const { prisma } = require("../lib/prisma");
-      prisma.project.findFirst.mockResolvedValueOnce(null);
+    it('calls OpenAI with city and activity type in prompt', async () => {
+      mockCreate.mockResolvedValueOnce({
+        choices: [{ message: { content: JSON.stringify(mockRoute) } }],
+      });
 
-      await expect(generateProjectPlan(projectId, userId)).rejects.toThrow(AppError);
+      await generateRoute('Tokyo', 'Japan', 'WALKING', 5, 'MODERATE');
+
+      expect(mockCreate).toHaveBeenCalledTimes(1);
+      const call = mockCreate.mock.calls[0][0];
+      expect(call.messages[1].content).toContain('Tokyo');
+      expect(call.messages[1].content).toContain('walking');
     });
   });
 
-  describe("identifyRisks", () => {
-    it("should identify risks for a project", async () => {
-      const riskData = {
-        riskLevel: "MEDIUM",
-        risks: [{ title: "Late tasks", severity: "HIGH", probability: "MEDIUM", mitigation: "Add resources" }],
-        overallAssessment: "Project is on track with minor concerns",
-      };
-
-      mockAIResponse(riskData);
-
-      const result = await identifyRisks(projectId, userId);
-      expect(result).toEqual(riskData);
-    });
-  });
-
-  describe("generateTasks", () => {
-    it("should generate tasks for a project", async () => {
-      const tasksData = {
-        tasks: [
-          { title: "Setup CI/CD", description: "Configure pipeline", priority: "HIGH", estimatedHours: 8, tags: ["devops"] },
-          { title: "Write tests", description: "Unit and E2E tests", priority: "MEDIUM", estimatedHours: 16, tags: ["testing"] },
+  describe('recommendRestaurants', () => {
+    it('returns restaurant recommendations for a city', async () => {
+      const mockRecs = {
+        recommendations: [
+          { restaurant: 'La Boqueria', mealName: 'Grilled Sea Bass', caloriesKcal: 420, proteinG: 38, carbsG: 22, fatG: 16, tags: ['local', 'high-protein'], whyRecommended: 'High protein for muscle gain', priceRange: '€€' },
         ],
       };
+      mockCreate.mockResolvedValueOnce({
+        choices: [{ message: { content: JSON.stringify(mockRecs) } }],
+      });
 
-      mockAIResponse(tasksData);
+      const recs = await recommendRestaurants('Barcelona', 'Spain', 600, 'MUSCLE_GAIN');
 
-      const result = await generateTasks(projectId, userId, "Backend API development");
-      expect(result).toEqual(tasksData);
+      expect(recs).toHaveLength(1);
+      expect(recs[0].mealName).toBe('Grilled Sea Bass');
+      expect(recs[0].proteinG).toBe(38);
     });
   });
 
-  describe("summarizeActivity", () => {
-    it("should summarize recent activity", async () => {
-      const summaryData = {
-        summary: "Good progress this week",
-        highlights: ["3 tasks completed"],
-        concerns: [],
-        count: 1,
+  describe('analyzeWorkoutPerformance', () => {
+    it('returns performance trend analysis', async () => {
+      const mockAnalysis = {
+        summary: 'Tu as parcouru 23km cette semaine, en progression de 15%.',
+        performanceTrend: 'improving',
+        strengths: ['Régularité', 'Distance en hausse'],
+        areasToImprove: ['Vitesse', 'Récupération'],
+        nextWeekGoal: 'Atteindre 25km en 4 séances',
+        recommendedWorkouts: ['Fartlek 5km', 'Long run 10km', 'HIIT 30min'],
       };
+      mockCreate.mockResolvedValueOnce({
+        choices: [{ message: { content: JSON.stringify(mockAnalysis) } }],
+      });
 
-      mockAIResponse(summaryData);
+      const weeklyData = [
+        { weekNumber: 10, distanceKm: 15, durationMin: 90, calories: 1200, sessions: 3 },
+        { weekNumber: 11, distanceKm: 20, durationMin: 120, calories: 1500, sessions: 4 },
+        { weekNumber: 12, distanceKm: 23, durationMin: 140, calories: 1700, sessions: 4 },
+      ];
 
-      const result = await summarizeActivity(projectId, userId, 7);
-      expect(result).toEqual(summaryData);
+      const analysis = await analyzeWorkoutPerformance(weeklyData, 'ENDURANCE', 25);
+
+      expect(analysis.performanceTrend).toBe('improving');
+      expect(analysis.strengths).toContain('Régularité');
+      expect(analysis.nextWeekGoal).toContain('25km');
     });
   });
 });

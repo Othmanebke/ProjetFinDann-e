@@ -201,26 +201,25 @@ function useTypewriter(phrases: string[], speed = 60, pauseMs = 2000) {
 ══════════════════════════════════════════════════════════════════ */
 
 const TERMINAL_LINES = [
-  { type: 'prompt', text: '$ smartproject generate --project "Mobile App Launch"' },
-  { type: 'output', text: 'Analyzing project scope...' },
+  { type: 'prompt', text: '$ fittravel generate --city "Barcelona" --type run --km 8' },
+  { type: 'output', text: 'Analyzing city map and landmarks...' },
   { type: 'output', text: 'Connecting to GPT-4o engine...' },
-  { type: 'success', text: '✓ AI plan generated in 1.2s' },
+  { type: 'success', text: '✓ Route generated in 1.4s' },
   { type: 'highlight', text: '' },
-  { type: 'highlight', text: '📋 PROJECT PLAN: Mobile App Launch' },
+  { type: 'highlight', text: '🗺️  ROUTE: Barceloneta Coastal Run — 8.2km' },
   { type: 'output', text: '─────────────────────────────────────' },
-  { type: 'cmd', text: 'Sprint 1 (Weeks 1-2): Foundation' },
-  { type: 'output', text: '  • Setup CI/CD pipeline' },
-  { type: 'output', text: '  • Define system architecture' },
-  { type: 'output', text: '  • Design tokens & component lib' },
-  { type: 'cmd', text: 'Sprint 2 (Weeks 3-4): Core Features' },
-  { type: 'output', text: '  • Auth flow (OAuth + biometrics)' },
-  { type: 'output', text: '  • Onboarding screens (7 steps)' },
-  { type: 'output', text: '  • Push notifications setup' },
-  { type: 'cmd', text: 'Sprint 3 (Weeks 5-6): Launch Prep' },
-  { type: 'output', text: '  • Performance audit & optimization' },
-  { type: 'output', text: '  • App store submissions (iOS/Android)' },
-  { type: 'success', text: '⚠ Risk detected: Sprint 2 may be tight' },
-  { type: 'success', text: '→ Suggestion: Add 1 dev for auth tasks' },
+  { type: 'cmd', text: 'Waypoints (4 points d\'intérêt)' },
+  { type: 'output', text: '  📍 Barceloneta Beach (start)' },
+  { type: 'output', text: '  📍 Port Olímpic — Olympic marina' },
+  { type: 'output', text: '  📍 Parc de la Ciutadella' },
+  { type: 'cmd', text: 'Infos pratiques' },
+  { type: 'output', text: '  ⏱  ~50 min · Niveau: Facile' },
+  { type: 'output', text: '  🛡️  Safety score: 9/10' },
+  { type: 'output', text: '  ☀️  Meilleure heure: 7h-9h matin' },
+  { type: 'cmd', text: 'Nutrition post-run recommandée' },
+  { type: 'output', text: '  🍽️  La Cova Fumada — Bomba & Seafood' },
+  { type: 'success', text: '✓ 38g protéines · 520 kcal · Note: 4.8★' },
+  { type: 'success', text: '→ Parfait pour récupération musculaire' },
 ];
 
 function TerminalDemo() {
@@ -256,7 +255,7 @@ function TerminalDemo() {
         <div className="w-3 h-3 rounded-full bg-red-500/70" />
         <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
         <div className="w-3 h-3 rounded-full bg-green-500/70" />
-        <span style={{ marginLeft: 12, fontSize: 12, color: '#475569' }}>smartproject-ai — terminal</span>
+        <span style={{ marginLeft: 12, fontSize: 12, color: '#475569' }}>fit-travel — coach IA terminal</span>
       </div>
       <div className="terminal-body">
         {TERMINAL_LINES.slice(0, visibleLines).map((line, i) => (
@@ -277,11 +276,11 @@ function TerminalDemo() {
 ══════════════════════════════════════════════════════════════════ */
 
 const CHAT_MESSAGES = [
-  { role: 'user', text: 'Generate a sprint plan for our API redesign project' },
-  { role: 'ai', text: 'Analyzing codebase dependencies and team velocity...' },
-  { role: 'ai', text: 'Sprint plan ready! 3 sprints, 18 tasks, estimated 6 weeks. Risk score: Low 🟢' },
-  { role: 'user', text: 'What are the top 3 risks?' },
-  { role: 'ai', text: 'Breaking changes in v2 endpoints, Auth migration complexity, and documentation lag. I\'ve created mitigation tasks automatically.' },
+  { role: 'user', text: 'Génère un run de 8km à Tokyo passant par les temples' },
+  { role: 'ai', text: 'Analyse des quartiers et points d\'intérêt de Tokyo...' },
+  { role: 'ai', text: 'Parcours prêt ! 8.3km · Sensoji → Ueno Park → Akihabara. Score sécurité: 9/10 🟢' },
+  { role: 'user', text: 'Que manger après pour la récupération ?' },
+  { role: 'ai', text: 'Je recommande le "Chicken Ramen" au restaurant Ichiran Shibuya : 42g protéines, 520 kcal. Parfait pour la récup musculaire post-run !' },
 ];
 
 function BentoChatCard() {
@@ -437,28 +436,28 @@ function TiltCard({ children, className, style }: { children: React.ReactNode; c
 
 const FAQ_ITEMS = [
   {
-    q: 'How does the AI project planning work?',
-    a: 'SmartProject AI connects to GPT-4o to analyze your project description, team size, and goals. It automatically generates a structured sprint plan with tasks, milestones, risk assessments, and resource allocation — typically in under 2 seconds.',
+    q: 'Comment fonctionne la génération de parcours par IA ?',
+    a: 'Fit & Travel connecte GPT-4o à une base de données de villes mondiales. Tu indiques la ville, le type d\'activité, la distance souhaitée et le niveau de difficulté. L\'IA génère un parcours passant par les points d\'intérêt locaux (monuments, parcs, musées) avec un score de sécurité et les meilleures heures de pratique.',
   },
   {
-    q: 'Is my data secure and GDPR compliant?',
-    a: 'Absolutely. All data is encrypted at rest (AES-256) and in transit (TLS 1.3). We are SOC 2 Type II certified, fully GDPR compliant, and your data is never used to train AI models. You can export or delete everything at any time.',
+    q: 'Mes données sont-elles sécurisées et conformes au RGPD ?',
+    a: 'Oui. Toutes les données sont chiffrées au repos (AES-256) et en transit (TLS 1.3). Nous sommes entièrement conformes au RGPD et tes données ne sont jamais utilisées pour entraîner des modèles IA. Tu peux exporter ou supprimer toutes tes données à tout moment.',
   },
   {
-    q: 'Can I migrate from Jira or Notion?',
-    a: 'Yes. We provide one-click importers for Jira, Notion, Asana, Linear, and Trello. Your projects, tasks, comments, and attachments migrate in minutes with zero data loss.',
+    q: 'Comment fonctionnent les recommandations de restaurants ?',
+    a: 'Notre IA analyse ta localisation, tes objectifs fitness (prise de masse, endurance, perte de poids) et tes restrictions alimentaires pour recommander des plats locaux adaptés à tes macros. Chaque recommandation inclut les calories, protéines, glucides et lipides.',
   },
   {
-    q: 'What integrations are available?',
-    a: 'SmartProject AI integrates with Slack, GitHub, GitLab, Figma, Notion, Stripe, Google Workspace, Microsoft Teams, Zapier, and 40+ other tools via our REST API and webhooks.',
+    q: 'L\'app fonctionne-t-elle sans connexion internet ?',
+    a: 'Les fonctionnalités de base (consultation de tes séances, parcours sauvegardés) fonctionnent hors ligne. La génération de parcours IA, le coach IA et les recommandations restaurants nécessitent une connexion internet.',
   },
   {
-    q: 'What is the difference between the Pro and Enterprise plans?',
-    a: 'The Enterprise plan adds SSO/SAML for single sign-on, unlimited team members, custom data retention policies, a dedicated account manager, priority SLA (99.9% uptime), audit logs, and on-premise deployment options.',
+    q: 'Quelle est la différence entre Premium Coach et Pass Voyageur ?',
+    a: 'Le Pass Voyageur inclut tout du Premium Coach, plus des parcours illimités (vs 30/mois), le Coach IA sans limite de messages, des rappels SMS pour tes entraînements, et un accès API pour intégrer Fit & Travel dans tes propres outils.',
   },
   {
-    q: 'Is there a free trial for paid plans?',
-    a: 'Yes! All paid plans start with a 14-day free trial — no credit card required. You get full access to all features at your selected tier. After the trial, downgrade to Free or continue with your chosen plan.',
+    q: 'Y a-t-il un essai gratuit ?',
+    a: 'Oui ! Tous les plans payants démarrent avec 14 jours d\'essai gratuit — sans carte bancaire. Tu as accès à toutes les fonctionnalités de ton niveau pendant l\'essai. Après, repasse au plan Free ou continue avec ton plan choisi.',
   },
 ];
 
@@ -499,71 +498,71 @@ function FaqAccordion() {
 ══════════════════════════════════════════════════════════════════ */
 
 const STATS = [
-  { target: 12000, suffix: '+',    label: 'Active teams',       color: '#8b5cf6' },
-  { target: 85000, suffix: '+',    label: 'Projects managed',   color: '#06b6d4' },
-  { target: 99,    suffix: '.9%',  label: 'Uptime guaranteed',  color: '#10b981' },
-  { target: 4,     suffix: '.9★',  label: 'Average rating',     color: '#f59e0b' },
+  { target: 5000,  suffix: '+',    label: 'Sportifs voyageurs', color: '#8b5cf6' },
+  { target: 120,   suffix: '+',    label: 'Villes couvertes',   color: '#06b6d4' },
+  { target: 99,    suffix: '.9%',  label: 'Uptime garanti',     color: '#10b981' },
+  { target: 4,     suffix: '.9★',  label: 'Note moyenne',       color: '#f59e0b' },
 ];
 
 const PLANS = [
   {
-    name: 'Free', price: 0, featured: false, desc: 'Perfect to get started',
-    features: ['3 active projects', 'AI chat (5/day)', '5 team members', 'Basic analytics', 'Community support'],
+    name: 'FREE', price: 0, featured: false, desc: 'Pour commencer à courir',
+    features: ['3 parcours IA/mois', 'Coach IA 5 messages', '10 logs nutrition', 'Séances illimitées', 'Support communautaire'],
   },
   {
-    name: 'Pro', price: 29, featured: true, desc: 'For ambitious teams',
-    features: ['Unlimited projects', 'Unlimited AI', '10 members', 'Full analytics', 'SMS/Email alerts', 'Priority support', 'Integrations'],
+    name: 'PREMIUM COACH', price: 29, featured: true, desc: 'Pour les sportifs voyageurs',
+    features: ['30 parcours IA/mois', '100 messages Coach IA', 'Nutrition illimitée', 'Analyse performance IA', 'Recommandations restaurants', 'Support prioritaire'],
   },
   {
-    name: 'Enterprise', price: 99, featured: false, desc: 'For large organizations',
-    features: ['Everything in Pro', 'SSO + SAML', 'Unlimited members', 'SLA 99.9%', 'Audit logs', 'Dedicated manager', 'Custom SLA'],
+    name: 'PASS VOYAGEUR', price: 99, featured: false, desc: 'Pour les nomades sportifs',
+    features: ['Parcours illimités', 'Coach IA illimité', 'SMS rappels run', 'Coach personnel IA', 'API access', 'SLA 99.9%'],
   },
 ];
 
 const TESTIMONIALS = [
   {
-    name: 'Sarah Chen', role: 'CTO', company: 'TechFlow', avatar: 'SC', stars: 5,
-    quote: 'SmartProject AI cut our planning time by 70%. The AI detects risks before they become blockers. It\'s like having a senior PM available 24/7 inside our workspace.',
-    logo: '⚡',
+    name: 'Sophie Moreau', role: 'Traileuse', company: 'Lyon', avatar: 'SM', stars: 5,
+    quote: 'J\'ai couru à Barcelone, Tokyo et Lisbonne avec des parcours générés par Fit & Travel. Chaque fois, le coach IA m\'a donné le meilleur itinéraire passant par les monuments. Incroyable !',
+    logo: '🏃',
   },
   {
-    name: 'Marc Dubois', role: 'Lead Engineer', company: 'Nexus Labs', avatar: 'MD', stars: 5,
-    quote: 'The streaming AI chat is genuinely jaw-dropping. I generate a full sprint plan in 30 seconds. My team shipped our last product 3 weeks early because of this tool.',
-    logo: '🔬',
+    name: 'Antoine Leclerc', role: 'Consultant nomade', company: 'Paris / Monde', avatar: 'AL', stars: 5,
+    quote: 'Maintenir ma routine sportive en voyage était un défi. Avec Fit & Travel, je trouve toujours un parcours sécurisé et des restos locaux adaptés à mes macros. Révolutionnaire.',
+    logo: '🌍',
   },
   {
-    name: 'Julie Martin', role: 'Product Manager', company: 'Scale.ai', avatar: 'JM', stars: 5,
-    quote: 'The Kanban + analytics combo gives us perfect visibility. The smart notifications mean we never miss a deadline. My entire team loves it — even the skeptics.',
-    logo: '🚀',
+    name: 'Camille Dubois', role: 'Ultra-marathonienne', company: 'Bordeaux', avatar: 'CD', stars: 5,
+    quote: 'L\'analyse de performance semaine par semaine m\'a permis d\'améliorer mon allure de 12% en 2 mois. Le Coach IA me donne des conseils vraiment personnalisés. Je recommande à 100%.',
+    logo: '🥇',
   },
 ];
 
 const INTEGRATIONS = [
-  { name: 'Slack', color: '#4A154B', bg: 'rgba(74,21,75,0.3)', icon: '💬' },
-  { name: 'GitHub', color: '#f8fafc', bg: 'rgba(248,250,252,0.08)', icon: '🐙' },
-  { name: 'Jira', color: '#0052CC', bg: 'rgba(0,82,204,0.2)', icon: '🔷' },
-  { name: 'Notion', color: '#f8fafc', bg: 'rgba(248,250,252,0.08)', icon: '📝' },
-  { name: 'Figma', color: '#F24E1E', bg: 'rgba(242,78,30,0.2)', icon: '🎨' },
-  { name: 'Stripe', color: '#635BFF', bg: 'rgba(99,91,255,0.2)', icon: '💳' },
-  { name: 'Zapier', color: '#FF4A00', bg: 'rgba(255,74,0,0.2)', icon: '⚡' },
-  { name: 'Linear', color: '#5E6AD2', bg: 'rgba(94,106,210,0.2)', icon: '📐' },
-  { name: 'Vercel', color: '#f8fafc', bg: 'rgba(248,250,252,0.08)', icon: '▲' },
-  { name: 'Asana', color: '#F06A6A', bg: 'rgba(240,106,106,0.2)', icon: '✅' },
-  { name: 'Teams', color: '#6264A7', bg: 'rgba(98,100,167,0.2)', icon: '🏢' },
-  { name: 'Datadog', color: '#774AA4', bg: 'rgba(119,74,164,0.2)', icon: '🐶' },
+  { name: 'Paris', color: '#8b5cf6', bg: 'rgba(139,92,246,0.2)', icon: '🇫🇷' },
+  { name: 'Tokyo', color: '#f43f5e', bg: 'rgba(244,63,94,0.2)', icon: '🇯🇵' },
+  { name: 'Barcelona', color: '#f59e0b', bg: 'rgba(245,158,11,0.2)', icon: '🇪🇸' },
+  { name: 'New York', color: '#06b6d4', bg: 'rgba(6,182,212,0.2)', icon: '🇺🇸' },
+  { name: 'Lisbonne', color: '#10b981', bg: 'rgba(16,185,129,0.2)', icon: '🇵🇹' },
+  { name: 'Bangkok', color: '#a78bfa', bg: 'rgba(167,139,250,0.2)', icon: '🇹🇭' },
+  { name: 'Marrakech', color: '#fb923c', bg: 'rgba(251,146,60,0.2)', icon: '🇲🇦' },
+  { name: 'Sydney', color: '#22d3ee', bg: 'rgba(34,211,238,0.2)', icon: '🇦🇺' },
+  { name: 'Montréal', color: '#f8fafc', bg: 'rgba(248,250,252,0.08)', icon: '🇨🇦' },
+  { name: 'Dubaï', color: '#fbbf24', bg: 'rgba(251,191,36,0.2)', icon: '🇦🇪' },
+  { name: 'Rome', color: '#f472b6', bg: 'rgba(244,114,182,0.2)', icon: '🇮🇹' },
+  { name: 'Berlin', color: '#818cf8', bg: 'rgba(129,140,248,0.2)', icon: '🇩🇪' },
 ];
 
 const COMPARISON_FEATURES = [
-  { label: 'AI project generation', sp: true, notion: false, jira: false, asana: false },
-  { label: 'Automated sprint planning', sp: true, notion: false, jira: 'partial', asana: 'partial' },
-  { label: 'Risk detection & alerts', sp: true, notion: false, jira: false, asana: false },
-  { label: 'Real-time AI chat', sp: true, notion: false, jira: false, asana: false },
-  { label: 'Kanban + Gantt + List views', sp: true, notion: true, jira: true, asana: true },
-  { label: 'Team analytics & burndown', sp: true, notion: 'partial', jira: true, asana: true },
-  { label: 'SSO & SAML (Enterprise)', sp: true, notion: true, jira: true, asana: true },
-  { label: 'One-click AI summaries', sp: true, notion: false, jira: false, asana: false },
-  { label: 'Native integrations (40+)', sp: true, notion: true, jira: true, asana: true },
-  { label: 'Pricing starts at', sp: '$0', notion: '$0', jira: '$0', asana: '$0' },
+  { label: 'Génération de parcours IA', sp: true, notion: false, jira: false, asana: false },
+  { label: 'Points d\'intérêt locaux', sp: true, notion: false, jira: false, asana: false },
+  { label: 'Score de sécurité parcours', sp: true, notion: false, jira: false, asana: false },
+  { label: 'Coach IA fitness 24/7', sp: true, notion: false, jira: false, asana: false },
+  { label: 'Recommandations nutrition', sp: true, notion: false, jira: false, asana: false },
+  { label: 'Suivi performances hebdo', sp: true, notion: 'partial', jira: false, asana: false },
+  { label: 'Multi-sport (6 types)', sp: true, notion: false, jira: false, asana: false },
+  { label: 'SMS rappels entraînement', sp: true, notion: false, jira: false, asana: false },
+  { label: 'Analyse IA tendances', sp: true, notion: false, jira: false, asana: false },
+  { label: 'Tarif de départ', sp: '0€', notion: '0€', jira: '0€', asana: '0€' },
 ];
 
 function CompCell({ val }: { val: boolean | string }) {
@@ -575,24 +574,24 @@ function CompCell({ val }: { val: boolean | string }) {
 
 const TIMELINE_STEPS = [
   {
-    num: '01', title: 'Describe your project', color: '#8b5cf6',
-    desc: 'Type a brief description of your project — goals, team size, and deadline. Our AI understands natural language, no templates needed.',
-    detail: '~30 seconds',
-  },
-  {
-    num: '02', title: 'AI generates your plan', color: '#06b6d4',
-    desc: 'GPT-4o breaks down your project into sprints, tasks, milestones, and risk flags. It estimates effort and assigns optimal priorities.',
-    detail: '~2 seconds',
-  },
-  {
-    num: '03', title: 'Invite your team', color: '#10b981',
-    desc: 'Add teammates with role-based permissions. Everyone gets a personalized view with their tasks, deadlines, and AI nudges.',
+    num: '01', title: 'Crée ton profil sportif', color: '#8b5cf6',
+    desc: 'Indique tes objectifs fitness, ton niveau et tes préférences sportives. Notre IA personnalise tout à partir de tes données.',
     detail: '~1 minute',
   },
   {
-    num: '04', title: 'Ship faster', color: '#f43f5e',
-    desc: 'Track progress with real-time dashboards, automated standups, and proactive AI alerts when something is at risk.',
-    detail: 'Ongoing',
+    num: '02', title: 'Génère ton parcours IA', color: '#06b6d4',
+    desc: 'GPT-4o génère un parcours local passant par les monuments, avec score de sécurité, distance et meilleure heure de départ.',
+    detail: '~2 secondes',
+  },
+  {
+    num: '03', title: 'Cours et enregistre ta séance', color: '#10b981',
+    desc: 'Enregistre ta séance avec distance, durée, calories et fréquence cardiaque. Ton historique se construit automatiquement.',
+    detail: 'En courant',
+  },
+  {
+    num: '04', title: 'Progresse semaine après semaine', color: '#f43f5e',
+    desc: 'Suis tes graphiques de progression, reçois les recommandations nutrition du Coach IA et atteins tes objectifs hebdomadaires.',
+    detail: 'En continu',
   },
 ];
 
@@ -607,7 +606,7 @@ export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const heroWords = useTypewriter(
-    ['10x faster.', 'smarter.', 'without the chaos.', 'powered by AI.'],
+    ['Courez le monde.', 'Bougez partout.', 'partout dans le monde.', 'Sport & voyage, réunis.'],
     70,
     2200
   );
@@ -629,7 +628,7 @@ export default function LandingPage() {
             <div className="w-8 h-8 rounded-xl flex items-center justify-center glow-purple" style={{ background: 'linear-gradient(135deg, #7c3aed, #06b6d4)' }}>
               <Sparkles size={16} className="text-white" />
             </div>
-            <span className="font-black text-lg text-white">SmartProject <span className="gradient-text-purple">AI</span></span>
+            <span className="font-black text-lg text-white">Fit & <span className="gradient-text-purple">Travel</span></span>
           </div>
 
           {/* Hamburger button */}
@@ -683,7 +682,7 @@ export default function LandingPage() {
             <div className="w-8 h-8 rounded-xl flex items-center justify-center glow-purple" style={{ background: 'linear-gradient(135deg, #7c3aed, #06b6d4)' }}>
               <Sparkles size={16} className="text-white" />
             </div>
-            <span className="font-black text-lg text-white">SmartProject <span className="gradient-text-purple">AI</span></span>
+            <span className="font-black text-lg text-white">Fit & <span className="gradient-text-purple">Travel</span></span>
           </div>
           <button
             onClick={() => setMenuOpen(false)}
@@ -789,28 +788,28 @@ export default function LandingPage() {
 
         {/* Floating tags */}
         <div className="float-tag hidden lg:flex items-center gap-2" style={{ top: '22%', left: '6%', background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.3)', color: '#c4b5fd', animation: 'floatTag1 4s ease-in-out infinite' }}>
-          <Sparkles size={12} /> AI-powered planning
+          <Sparkles size={12} /> Parcours IA dans 50+ villes
         </div>
         <div className="float-tag hidden lg:flex items-center gap-2" style={{ top: '35%', right: '5%', background: 'rgba(6,182,212,0.12)', border: '1px solid rgba(6,182,212,0.3)', color: '#22d3ee', animation: 'floatTag2 5s ease-in-out infinite' }}>
-          <Zap size={12} /> 10x faster delivery
+          <Zap size={12} /> Coach IA 24/7
         </div>
         <div className="float-tag hidden lg:flex items-center gap-2" style={{ bottom: '30%', left: '8%', background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)', color: '#10b981', animation: 'floatTag3 3.5s ease-in-out infinite' }}>
-          <Shield size={12} /> SOC 2 certified
+          <Shield size={12} /> Score sécurité parcours
         </div>
         <div className="float-tag hidden lg:flex items-center gap-2" style={{ bottom: '38%', right: '7%', background: 'rgba(244,63,94,0.1)', border: '1px solid rgba(244,63,94,0.25)', color: '#fb7185', animation: 'floatTag1 4.5s ease-in-out 1s infinite' }}>
-          <Activity size={12} /> 12,000+ teams
+          <Activity size={12} /> 5,000+ sportifs voyageurs
         </div>
 
         <div className="relative z-10 text-center max-w-5xl mx-auto">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8 text-sm font-medium"
             style={{ background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.3)', color: '#c4b5fd' }}>
-            <Sparkles size={13} /> Powered by GPT-4o · Automatic sprint generation <ArrowRight size={13} />
+            <Sparkles size={13} /> Propulsé par GPT-4o · Parcours IA dans le monde entier <ArrowRight size={13} />
           </div>
 
           {/* Headline with typewriter */}
           <h1 className="font-black mb-6" style={{ fontSize: 'clamp(42px,7vw,90px)', lineHeight: 1.04, letterSpacing: '-0.04em' }}>
-            Ship projects<br />
+            Votre coach IA,<br />
             <span className="gradient-text">{heroWords}</span>
             <span className="typewriter-cursor" style={{ marginLeft: 4 }} />
           </h1>
@@ -818,15 +817,15 @@ export default function LandingPage() {
           {/* Glitch subtitle */}
           <p
             className="glitch text-lg md:text-xl mb-4 max-w-2xl mx-auto font-semibold"
-            data-text="The AI-native project management platform"
+            data-text="La plateforme de coaching sportif et voyage propulsée par l'IA"
             style={{ color: '#94a3b8', letterSpacing: '-0.01em' }}
           >
-            The AI-native project management platform
+            La plateforme de coaching sportif et voyage propulsée par l'IA
           </p>
 
           <p className="text-base mb-10 max-w-xl mx-auto" style={{ color: '#475569', lineHeight: 1.7 }}>
-            SmartProject AI combines <strong style={{ color: '#94a3b8' }}>GPT-4o intelligence</strong> with{' '}
-            <strong style={{ color: '#94a3b8' }}>real-time collaboration</strong> to plan, execute, and deliver faster than ever.
+            Fit & Travel combine <strong style={{ color: '#94a3b8' }}>l'intelligence GPT-4o</strong> avec{' '}
+            <strong style={{ color: '#94a3b8' }}>des parcours locaux personnalisés</strong> pour maintenir ta routine sportive partout dans le monde.
           </p>
 
           {/* CTAs */}
@@ -834,13 +833,13 @@ export default function LandingPage() {
             <MagneticButton>
               <Link href="/login">
                 <button className="btn-glow flex items-center gap-2 text-base px-10 py-4 glow-pulse-anim">
-                  Start free — no card needed <ArrowRight size={16} />
+                  Commencer gratuitement <ArrowRight size={16} />
                 </button>
               </Link>
             </MagneticButton>
             <MagneticButton>
               <button className="btn-glass flex items-center gap-2 text-base px-8 py-4">
-                <Play size={14} /> Watch 2-min demo
+                <Play size={14} /> Voir la démo 2 min
               </button>
             </MagneticButton>
           </div>
@@ -848,8 +847,8 @@ export default function LandingPage() {
           {/* Trust badges */}
           <div className="flex items-center justify-center gap-6 flex-wrap mb-16">
             {[
-              { icon: <Shield size={14} />, label: 'SOC 2 Type II', color: '#8b5cf6' },
-              { icon: <Lock size={14} />, label: 'GDPR Compliant', color: '#06b6d4' },
+              { icon: <Shield size={14} />, label: '120+ villes mondiales', color: '#8b5cf6' },
+              { icon: <Lock size={14} />, label: 'RGPD Conforme', color: '#06b6d4' },
               { icon: <Activity size={14} />, label: '99.9% Uptime SLA', color: '#10b981' },
             ].map((b, i) => (
               <div key={i} className="flex items-center gap-2 text-sm" style={{ color: b.color }}>
@@ -866,7 +865,7 @@ export default function LandingPage() {
               <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl" style={{ background: 'rgba(8,8,25,0.92)', backdropFilter: 'blur(20px)' }}>
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5">
                   <div className="w-3 h-3 rounded-full bg-red-500/70" /><div className="w-3 h-3 rounded-full bg-yellow-500/70" /><div className="w-3 h-3 rounded-full bg-green-500/70" />
-                  <div className="ml-4 h-5 rounded-full flex items-center px-3 text-xs text-slate-600" style={{ background: 'rgba(255,255,255,0.04)', minWidth: 200 }}>app.smartproject.ai/dashboard</div>
+                  <div className="ml-4 h-5 rounded-full flex items-center px-3 text-xs text-slate-600" style={{ background: 'rgba(255,255,255,0.04)', minWidth: 200 }}>app.fittravel.app/dashboard</div>
                 </div>
                 <div className="flex h-72">
                   <div className="w-14 border-r border-white/5 flex flex-col items-center gap-3 py-4">
@@ -877,9 +876,9 @@ export default function LandingPage() {
                   <div className="flex-1 p-4 overflow-hidden">
                     <div className="grid grid-cols-3 gap-3 mb-4">
                       {[
-                        { label: 'Active projects', val: '12', color: 'rgba(139,92,246,0.9)', icon: Layers },
-                        { label: "Today's tasks", val: '48', color: 'rgba(6,182,212,0.9)', icon: CheckCircle2 },
-                        { label: 'On track', val: '87%', color: 'rgba(16,185,129,0.9)', icon: TrendingUp },
+                        { label: 'Km cette semaine', val: '23km', color: 'rgba(139,92,246,0.9)', icon: Activity },
+                        { label: 'Calories brûlées', val: '1840', color: 'rgba(6,182,212,0.9)', icon: CheckCircle2 },
+                        { label: 'Objectif atteint', val: '92%', color: 'rgba(16,185,129,0.9)', icon: TrendingUp },
                       ].map((s, i) => (
                         <div key={i} className="rounded-xl p-3" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
                           <s.icon size={12} style={{ color: s.color }} className="mb-1" />
@@ -890,10 +889,10 @@ export default function LandingPage() {
                     </div>
                     <div className="space-y-2">
                       {[
-                        { title: 'UI Design System v2', prog: 78, color: '#8b5cf6' },
-                        { title: 'API authentication', prog: 100, color: '#22c55e' },
-                        { title: 'E2E Test Suite', prog: 45, color: '#06b6d4' },
-                        { title: 'Staging deployment', prog: 20, color: '#f59e0b' },
+                        { title: 'Run Tokyo — 8.3km 🇯🇵', prog: 100, color: '#22c55e' },
+                        { title: 'Objectif semaine 23km', prog: 78, color: '#8b5cf6' },
+                        { title: 'Programme HIIT x3/sem', prog: 66, color: '#06b6d4' },
+                        { title: 'Parcours Barcelone', prog: 20, color: '#f59e0b' },
                       ].map((t, i) => (
                         <div key={i} className="flex items-center gap-3 rounded-lg px-3 py-2" style={{ background: 'rgba(255,255,255,0.02)' }}>
                           <div className="w-2 h-2 rounded-full" style={{ background: t.color }} />
@@ -905,11 +904,11 @@ export default function LandingPage() {
                     </div>
                   </div>
                   <div className="w-44 border-l border-white/5 p-3 flex flex-col gap-2">
-                    <div className="text-xs text-slate-500 font-medium flex items-center gap-1"><Bot size={10} className="text-violet-400" /> AI Assistant</div>
+                    <div className="text-xs text-slate-500 font-medium flex items-center gap-1"><Bot size={10} className="text-violet-400" /> Coach IA</div>
                     <div className="rounded-xl p-2 text-xs text-slate-400" style={{ background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.15)' }}>
-                      Risk detected: 2 critical tasks behind schedule.
+                      +12% distance vs semaine précédente 🏃
                     </div>
-                    <div className="rounded-xl p-2 text-xs text-slate-500" style={{ background: 'rgba(255,255,255,0.02)' }}>Generate sprint plan?</div>
+                    <div className="rounded-xl p-2 text-xs text-slate-500" style={{ background: 'rgba(255,255,255,0.02)' }}>Générer un parcours ?</div>
                     <div className="mt-auto">
                       <div className="w-full rounded-lg px-2 py-1.5 text-xs text-center font-semibold" style={{ background: 'rgba(139,92,246,0.3)', color: '#c4b5fd', cursor: 'pointer' }}>Ask AI</div>
                     </div>
@@ -930,12 +929,12 @@ export default function LandingPage() {
       {/* ── MARQUEE ────────────────────────────────────────────────────── */}
       <section className="py-14 overflow-hidden" style={{ borderTop: '1px solid rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
         <p className="text-center text-xs mb-8 uppercase tracking-widest font-semibold" style={{ color: '#1e293b' }}>
-          Trusted by 12,000+ forward-thinking teams
+          Rejoint par 5,000+ sportifs voyageurs dans le monde
         </p>
         <div className="marquee-wrapper">
           <div className="marquee-track">
-            {['Stripe', 'Vercel', 'Linear', 'Notion', 'GitHub', 'Figma', 'Slack', 'Atlassian', 'Shopify', 'Intercom',
-              'Stripe', 'Vercel', 'Linear', 'Notion', 'GitHub', 'Figma', 'Slack', 'Atlassian', 'Shopify', 'Intercom'].map((name, i) => (
+            {['Paris 🇫🇷', 'Tokyo 🇯🇵', 'Barcelona 🇪🇸', 'New York 🇺🇸', 'Lisbonne 🇵🇹', 'Bangkok 🇹🇭', 'Marrakech 🇲🇦', 'Sydney 🇦🇺', 'Rome 🇮🇹', 'Dubaï 🇦🇪',
+              'Paris 🇫🇷', 'Tokyo 🇯🇵', 'Barcelona 🇪🇸', 'New York 🇺🇸', 'Lisbonne 🇵🇹', 'Bangkok 🇹🇭', 'Marrakech 🇲🇦', 'Sydney 🇦🇺', 'Rome 🇮🇹', 'Dubaï 🇦🇪'].map((name, i) => (
               <div key={i} className="flex items-center gap-2 whitespace-nowrap" style={{ color: '#1e293b', fontSize: 17, fontWeight: 800, letterSpacing: '-0.02em' }}>
                 <div className="w-5 h-5 rounded" style={{ background: 'rgba(255,255,255,0.04)' }} />
                 {name}
@@ -954,9 +953,9 @@ export default function LandingPage() {
               <Layers size={13} /> Features
             </div>
             <h2 className="font-black mb-4" style={{ fontSize: 'clamp(32px,5vw,60px)', letterSpacing: '-0.03em' }}>
-              Not just another PM tool.<br /><span className="gradient-text">This is next-gen.</span>
+              Courir partout,<br /><span className="gradient-text">manger local, performer.</span>
             </h2>
-            <p className="text-lg max-w-xl mx-auto" style={{ color: '#64748b' }}>Every feature is designed to remove friction and let AI do the heavy lifting.</p>
+            <p className="text-lg max-w-xl mx-auto" style={{ color: '#64748b' }}>Chaque fonctionnalité est pensée pour le sportif voyageur moderne.</p>
           </div>
 
           {/* Bento grid */}
@@ -969,8 +968,8 @@ export default function LandingPage() {
             >
               <div className="flex items-center justify-between mb-5">
                 <div>
-                  <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#8b5cf6' }}>AI Assistant</div>
-                  <h3 className="text-xl font-black" style={{ color: '#f1f5f9' }}>Chat your way to done</h3>
+                  <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#8b5cf6' }}>Coach IA</div>
+                  <h3 className="text-xl font-black" style={{ color: '#f1f5f9' }}>Ton coach fitness & voyage 24/7</h3>
                 </div>
                 <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.3)' }}>
                   <Bot size={18} style={{ color: '#a78bfa' }} />
@@ -984,26 +983,20 @@ export default function LandingPage() {
               className="bento-card reveal reveal-delay-2"
               style={{ minHeight: 340, border: '1px solid rgba(6,182,212,0.15)', background: 'linear-gradient(135deg, rgba(6,182,212,0.04) 0%, rgba(16,185,129,0.03) 100%)' }}
             >
-              <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#06b6d4' }}>Kanban</div>
-              <h3 className="text-lg font-black mb-4" style={{ color: '#f1f5f9' }}>Visual task board</h3>
-              <div className="grid grid-cols-3 gap-2 flex-1">
+              <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#06b6d4' }}>Parcours IA</div>
+              <h3 className="text-lg font-black mb-4" style={{ color: '#f1f5f9' }}>Parcours de sport dans n'importe quelle ville</h3>
+              <div className="flex flex-col gap-2">
                 {[
-                  { label: 'To Do', color: '#64748b', tasks: ['Auth design', 'DB schema', 'API specs'] },
-                  { label: 'In Progress', color: '#06b6d4', tasks: ['UI components', 'Testing'] },
-                  { label: 'Done', color: '#10b981', tasks: ['Setup CI/CD', 'Team onboard', 'Kickoff'] },
-                ].map((col, ci) => (
-                  <div key={ci}>
-                    <div className="text-xs font-semibold mb-2 flex items-center gap-1" style={{ color: col.color }}>
-                      <div className="w-2 h-2 rounded-full" style={{ background: col.color }} />
-                      {col.label}
+                  { city: 'Barcelone', type: '🏃 Run 6km', score: '9/10' },
+                  { city: 'Tokyo', type: '🚴 Vélo 12km', score: '8/10' },
+                  { city: 'Lisbonne', type: '🚶 Marche 4km', score: '10/10' },
+                ].map((r, i) => (
+                  <div key={i} className="flex items-center justify-between rounded-lg px-3 py-2" style={{ background: 'rgba(6,182,212,0.06)', border: '1px solid rgba(6,182,212,0.15)' }}>
+                    <div>
+                      <div className="text-xs font-semibold" style={{ color: '#f1f5f9' }}>{r.city}</div>
+                      <div className="text-xs" style={{ color: '#64748b' }}>{r.type}</div>
                     </div>
-                    <div className="flex flex-col gap-1.5">
-                      {col.tasks.map((task, ti) => (
-                        <div key={ti} className="rounded-lg px-2 py-2 text-xs" style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${col.color}20`, color: '#94a3b8' }}>
-                          {task}
-                        </div>
-                      ))}
-                    </div>
+                    <div className="text-xs font-bold" style={{ color: '#10b981' }}>🛡️ {r.score}</div>
                   </div>
                 ))}
               </div>
@@ -1014,13 +1007,13 @@ export default function LandingPage() {
               className="bento-card reveal reveal-delay-3"
               style={{ border: '1px solid rgba(16,185,129,0.15)', background: 'linear-gradient(135deg, rgba(16,185,129,0.05) 0%, transparent 100%)' }}
             >
-              <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#10b981' }}>Analytics</div>
-              <h3 className="text-lg font-black mb-4" style={{ color: '#f1f5f9' }}>Real-time insights</h3>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#10b981' }}>Suivi Performance</div>
+              <h3 className="text-lg font-black mb-4" style={{ color: '#f1f5f9' }}>Graphiques semaine par semaine</h3>
               <div className="space-y-3">
                 {[
-                  { label: 'Sprint velocity', val: '94%', color: '#10b981' },
-                  { label: 'On-time delivery', val: '87%', color: '#06b6d4' },
-                  { label: 'Team happiness', val: '4.9★', color: '#f59e0b' },
+                  { label: 'Km cette semaine', val: '23km', color: '#10b981' },
+                  { label: 'Calories brûlées', val: '1 840', color: '#f43f5e' },
+                  { label: 'Score progression', val: '4.9★', color: '#f59e0b' },
                 ].map((s, i) => (
                   <div key={i} className="flex items-center justify-between">
                     <span className="text-xs" style={{ color: '#64748b' }}>{s.label}</span>
@@ -1035,10 +1028,10 @@ export default function LandingPage() {
               className="bento-card reveal reveal-delay-4"
               style={{ border: '1px solid rgba(245,158,11,0.15)', background: 'linear-gradient(135deg, rgba(245,158,11,0.04) 0%, transparent 100%)' }}
             >
-              <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#f59e0b' }}>Integrations</div>
-              <h3 className="text-lg font-black mb-4" style={{ color: '#f1f5f9' }}>40+ connectors</h3>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#f59e0b' }}>Nutrition locale</div>
+              <h3 className="text-lg font-black mb-4" style={{ color: '#f1f5f9' }}>Plats locaux adaptés à tes macros</h3>
               <div className="flex flex-wrap gap-2">
-                {['Slack', 'GitHub', 'Figma', 'Jira', 'Notion', 'Stripe'].map((name, i) => (
+                {['🍱 Tokyo', '🥩 Buenos Aires', '🥗 Paris', '🍜 Bangkok', '🥘 Marrakech', '🍝 Rome'].map((name, i) => (
                   <div key={i} className="px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#94a3b8' }}>
                     {name}
                   </div>
@@ -1051,10 +1044,10 @@ export default function LandingPage() {
               className="bento-card reveal reveal-delay-5"
               style={{ border: '1px solid rgba(99,102,241,0.2)', background: 'linear-gradient(135deg, rgba(99,102,241,0.06) 0%, transparent 100%)' }}
             >
-              <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#818cf8' }}>Security</div>
-              <h3 className="text-lg font-black mb-3" style={{ color: '#f1f5f9' }}>Enterprise-grade</h3>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#818cf8' }}>Sécurité garantie</div>
+              <h3 className="text-lg font-black mb-3" style={{ color: '#f1f5f9' }}>Score de sécurité sur chaque parcours</h3>
               <div className="space-y-2">
-                {['AES-256 encryption', 'SOC 2 Type II', 'GDPR compliant', 'SSO + SAML'].map((f, i) => (
+                {['Score sécurité /10', 'Meilleure heure de départ', 'Éclairage public', 'Zones à éviter'].map((f, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs" style={{ color: '#64748b' }}>
                     <CheckCircle2 size={12} style={{ color: '#6366f1' }} />{f}
                   </div>
@@ -1074,7 +1067,7 @@ export default function LandingPage() {
               <Code2 size={13} /> Live AI Demo
             </div>
             <h2 className="font-black mb-4" style={{ fontSize: 'clamp(32px,5vw,60px)', letterSpacing: '-0.03em' }}>
-              Watch AI build your plan<br /><span className="gradient-text">in real-time</span>
+              L'IA génère ton parcours<br /><span className="gradient-text">en temps réel</span>
             </h2>
           </div>
 
@@ -1085,17 +1078,17 @@ export default function LandingPage() {
             <div className="reveal reveal-delay-2 flex flex-col gap-8">
               <div>
                 <h3 className="font-black text-2xl mb-3" style={{ letterSpacing: '-0.02em' }}>
-                  From idea to sprint in <span className="gradient-text-cyan">2 seconds</span>
+                  Un parcours localisé en <span className="gradient-text-cyan">2 secondes</span>
                 </h3>
                 <p className="text-base leading-relaxed" style={{ color: '#64748b' }}>
-                  Just describe your project in plain English. Our AI engine — powered by GPT-4o — understands context, estimates effort, assigns priorities, and flags risks automatically.
+                  Indique simplement ta ville, ton activité et ta distance. Notre IA — propulsée par GPT-4o — génère un parcours passant par les monuments, évalue la sécurité et recommande les meilleurs spots nutrition à proximité.
                 </p>
               </div>
               <div className="flex flex-col gap-4">
                 {[
-                  { icon: <Brain size={18} />, title: 'Context-aware AI', desc: 'Understands your team, tech stack, and past project velocity', color: '#8b5cf6' },
-                  { icon: <Zap size={18} />, title: 'Instant generation', desc: 'Full project structure ready in under 3 seconds', color: '#06b6d4' },
-                  { icon: <Shield size={18} />, title: 'Risk intelligence', desc: 'Proactively detects bottlenecks before they derail your sprint', color: '#f43f5e' },
+                  { icon: <Brain size={18} />, title: 'IA géolocalisée', desc: 'Connaît les monuments, parcs et zones sécurisées de chaque ville', color: '#8b5cf6' },
+                  { icon: <Zap size={18} />, title: 'Génération instantanée', desc: 'Parcours complet avec waypoints prêt en moins de 2 secondes', color: '#06b6d4' },
+                  { icon: <Shield size={18} />, title: 'Score de sécurité', desc: 'Évalue l\'éclairage, la fréquentation et les risques de chaque parcours', color: '#f43f5e' },
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-4 p-4 rounded-2xl" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${item.color}18`, border: `1px solid ${item.color}30`, color: item.color }}>
@@ -1121,9 +1114,9 @@ export default function LandingPage() {
               <Globe size={13} /> Integrations
             </div>
             <h2 className="font-black mb-4" style={{ fontSize: 'clamp(32px,5vw,60px)', letterSpacing: '-0.03em' }}>
-              Plug into your <span className="gradient-text">entire stack</span>
+              Explore le monde entier,<br /><span className="gradient-text">sport inclus</span>
             </h2>
-            <p className="text-lg max-w-lg mx-auto" style={{ color: '#64748b' }}>40+ native integrations. Your tools, connected — not replaced.</p>
+            <p className="text-lg max-w-lg mx-auto" style={{ color: '#64748b' }}>Parcours disponibles dans 120+ villes mondiales. Nouvelles destinations ajoutées chaque semaine.</p>
           </div>
           <div className="hex-grid max-w-3xl mx-auto reveal">
             {INTEGRATIONS.map((intg, i) => (
@@ -1144,7 +1137,7 @@ export default function LandingPage() {
               <GitBranch size={13} /> How it works
             </div>
             <h2 className="font-black mb-4" style={{ fontSize: 'clamp(32px,5vw,60px)', letterSpacing: '-0.03em' }}>
-              Go live in <span className="gradient-text">4 steps</span>
+              Prêt à courir en <span className="gradient-text">4 étapes</span>
             </h2>
           </div>
           <div className="relative">
@@ -1192,22 +1185,22 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto relative z-10">
           <div className="text-center mb-16 reveal">
             <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-6 text-sm" style={{ background: 'rgba(244,63,94,0.1)', border: '1px solid rgba(244,63,94,0.2)', color: '#fb7185' }}>
-              <TrendingUp size={13} /> Why SmartProject AI
+              <TrendingUp size={13} /> Pourquoi Fit & Travel
             </div>
             <h2 className="font-black mb-4" style={{ fontSize: 'clamp(32px,5vw,60px)', letterSpacing: '-0.03em' }}>
-              We just <span className="gradient-text">outperform</span> them all
+              La seule app qui <span className="gradient-text">combine sport + voyage</span>
             </h2>
-            <p className="text-lg" style={{ color: '#64748b' }}>Especially on AI. That&apos;s our moat.</p>
+            <p className="text-lg" style={{ color: '#64748b' }}>L'IA au service de ta performance, où que tu sois.</p>
           </div>
           <div className="rounded-2xl overflow-hidden border reveal" style={{ border: '1px solid rgba(255,255,255,0.07)' }}>
             {/* Header */}
             <div className="grid grid-cols-5 text-sm font-bold" style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
               <div className="p-4 col-span-2" style={{ color: '#64748b' }}>Feature</div>
               {[
-                { name: 'SmartProject AI', highlight: true },
-                { name: 'Notion' },
-                { name: 'Jira' },
-                { name: 'Asana' },
+                { name: 'Fit & Travel', highlight: true },
+                { name: 'Strava' },
+                { name: 'Nike Run' },
+                { name: 'Garmin' },
               ].map((h, i) => (
                 <div key={i} className="p-4 text-center" style={{ color: h.highlight ? '#a78bfa' : '#475569', background: h.highlight ? 'rgba(139,92,246,0.06)' : 'transparent', borderLeft: '1px solid rgba(255,255,255,0.04)' }}>
                   {h.name}
@@ -1316,7 +1309,7 @@ export default function LandingPage() {
               <Star size={13} fill="currentColor" /> Testimonials
             </div>
             <h2 className="font-black mb-4" style={{ fontSize: 'clamp(32px,5vw,56px)', letterSpacing: '-0.03em' }}>
-              Teams that switched <span className="gradient-text">never looked back</span>
+              Les sportifs voyageurs <span className="gradient-text">adorent Fit & Travel</span>
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1361,7 +1354,7 @@ export default function LandingPage() {
             <h2 className="font-black mb-4" style={{ fontSize: 'clamp(32px,5vw,56px)', letterSpacing: '-0.03em' }}>
               Got <span className="gradient-text">questions?</span>
             </h2>
-            <p className="text-lg" style={{ color: '#64748b' }}>Everything you need to know about SmartProject AI.</p>
+            <p className="text-lg" style={{ color: '#64748b' }}>Tout ce que tu dois savoir sur Fit & Travel.</p>
           </div>
           <div className="reveal">
             <FaqAccordion />
@@ -1381,30 +1374,30 @@ export default function LandingPage() {
         </div>
         <div className="max-w-3xl mx-auto text-center relative z-10 reveal">
           <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8 text-sm font-semibold" style={{ background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.35)', color: '#c4b5fd' }}>
-            <Sparkles size={13} /> Join 12,000+ teams
+            <Sparkles size={13} /> Rejoins 5,000+ sportifs voyageurs
           </div>
           <h2
             className="font-black mb-6"
             style={{ fontSize: 'clamp(40px,7vw,80px)', lineHeight: 1.05, letterSpacing: '-0.04em' }}
           >
-            Ready to ship<br />
-            <span className="gradient-text">at warp speed?</span>
+            Prêt à courir<br />
+            <span className="gradient-text">partout dans le monde ?</span>
           </h2>
           <p className="text-xl mb-12" style={{ color: '#475569', lineHeight: 1.6 }}>
-            Start for free. No credit card. No lock-in.<br />
-            Just your team, AI, and your next big win.
+            Commence gratuitement. Sans carte bancaire.<br />
+            Ton coach IA t'attend dans 120+ villes.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <MagneticButton>
               <Link href="/login">
                 <button className="btn-glow glow-pulse-anim flex items-center gap-2 text-lg px-12 py-5 rounded-2xl">
-                  Start free today <ArrowRight size={18} />
+                  Commencer aujourd'hui <ArrowRight size={18} />
                 </button>
               </Link>
             </MagneticButton>
             <MagneticButton>
               <button className="btn-glass flex items-center gap-2 text-base px-8 py-5 rounded-2xl">
-                <Play size={16} /> Schedule a demo
+                <Play size={16} /> Planifier une démo
               </button>
             </MagneticButton>
           </div>
@@ -1423,10 +1416,10 @@ export default function LandingPage() {
                 <div className="w-8 h-8 rounded-xl flex items-center justify-center glow-purple" style={{ background: 'linear-gradient(135deg, #7c3aed, #06b6d4)' }}>
                   <Sparkles size={16} className="text-white" />
                 </div>
-                <span className="font-black text-lg text-white">SmartProject <span className="gradient-text-purple">AI</span></span>
+                <span className="font-black text-lg text-white">Fit & <span className="gradient-text-purple">Travel</span></span>
               </div>
               <p className="text-sm mb-6 max-w-xs" style={{ color: '#475569', lineHeight: 1.7 }}>
-                The AI-native project management platform trusted by 12,000+ teams to plan, execute, and ship faster.
+                La plateforme de coaching sportif et voyage propulsée par l'IA. Parcours, nutrition et performance pour les sportifs nomades.
               </p>
               {/* Newsletter */}
               <div className="flex gap-2">
@@ -1476,7 +1469,7 @@ export default function LandingPage() {
 
           {/* Bottom bar */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
-            <p className="text-sm" style={{ color: '#1e293b' }}>© 2026 SmartProject AI. All rights reserved.</p>
+            <p className="text-sm" style={{ color: '#1e293b' }}>© 2026 Fit & Travel. Tous droits réservés.</p>
             <div className="flex items-center gap-6">
               {[
                 { icon: <Github size={18} />, label: 'GitHub' },
