@@ -33,10 +33,7 @@ export function ChatUI() {
     setInput("");
     setIsLoading(true);
 
-    // Add user message
     setMessages((prev) => [...prev, { role: "user", content: text }]);
-
-    // Add empty assistant message for streaming
     setMessages((prev) => [...prev, { role: "assistant", content: "", isStreaming: true }]);
 
     try {
@@ -128,26 +125,28 @@ export function ChatUI() {
   ];
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" style={{ background: '#FAF8ED' }}>
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+      <div className="flex-1 overflow-y-auto space-y-4 pr-2" style={{ padding: '16px' }}>
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center gap-6">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-lg">
-              <Bot className="h-8 w-8" />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '20px', background: 'linear-gradient(135deg,#EA580C,#047857)', boxShadow: '0 8px 24px rgba(234,88,12,0.3)' }}>
+              <Bot className="h-8 w-8" style={{ color: 'white' }} />
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Coach IA 🤖</h3>
-              <p className="text-slate-400 mt-1">Votre coach fitness et voyage disponible 24/7</p>
+              <h3 style={{ fontSize: '20px', fontWeight: 900, color: '#1C1917', fontFamily: '"Montserrat",sans-serif', margin: '0 0 6px' }}>Coach IA 🤖</h3>
+              <p style={{ color: '#A8A29E', fontSize: '14px', margin: 0 }}>Votre coach fitness et voyage disponible 24/7</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg w-full">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', maxWidth: '480px', width: '100%' }}>
               {suggestions.map((s) => (
                 <button
                   key={s}
                   onClick={() => { setInput(s); inputRef.current?.focus(); }}
-                  className="card p-3 text-left text-sm text-slate-600 dark:text-slate-400 hover:border-primary-300 hover:text-primary-700 dark:hover:border-primary-700 dark:hover:text-primary-400 transition-colors"
+                  style={{ background: 'white', border: '1px solid #E5E1D0', borderRadius: '12px', padding: '12px 14px', textAlign: 'left', fontSize: '13px', color: '#57534E', cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: '0 1px 3px rgba(28,25,23,0.05)' }}
+                  onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = 'rgba(234,88,12,0.3)'; b.style.color = '#EA580C'; b.style.transform = 'translateY(-1px)'; }}
+                  onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = '#E5E1D0'; b.style.color = '#57534E'; b.style.transform = 'none'; }}
                 >
-                  <Sparkles className="h-3.5 w-3.5 mb-1 text-primary-500" />
+                  <Sparkles style={{ width: '14px', height: '14px', marginBottom: '4px', display: 'block', color: '#EA580C' }} />
                   {s}
                 </button>
               ))}
@@ -157,24 +156,32 @@ export function ChatUI() {
           messages.map((msg, i) => (
             <div
               key={i}
-              className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
+              style={{ display: 'flex', gap: '12px', flexDirection: msg.role === "user" ? 'row-reverse' : 'row', alignItems: 'flex-start' }}
             >
-              <div className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-white text-sm ${
-                msg.role === "user" ? "bg-primary-600" : "bg-gradient-to-br from-primary-500 to-primary-700"
-              }`}>
-                {msg.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+              <div style={{
+                width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: msg.role === "user" ? '#EA580C' : 'linear-gradient(135deg,#EA580C,#047857)',
+                color: 'white', fontSize: '14px',
+              }}>
+                {msg.role === "user" ? <User style={{ width: '16px', height: '16px' }} /> : <Bot style={{ width: '16px', height: '16px' }} />}
               </div>
-              <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm ${
-                msg.role === "user"
-                  ? "bg-primary-600 text-white rounded-tr-sm"
-                  : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-tl-sm"
-              }`}>
+              <div style={{
+                maxWidth: '80%', borderRadius: '16px', padding: '12px 16px', fontSize: '14px',
+                background: msg.role === "user" ? '#EA580C' : 'white',
+                color: msg.role === "user" ? 'white' : '#1C1917',
+                border: msg.role === "user" ? 'none' : '1px solid #E5E1D0',
+                borderTopRightRadius: msg.role === "user" ? '4px' : '16px',
+                borderTopLeftRadius: msg.role === "user" ? '16px' : '4px',
+                boxShadow: msg.role === "user" ? '0 4px 14px rgba(234,88,12,0.3)' : '0 1px 4px rgba(28,25,23,0.06)',
+                lineHeight: 1.7,
+              }}>
                 {msg.role === "assistant" ? (
-                  <div className={`prose prose-sm dark:prose-invert max-w-none ${msg.isStreaming ? "streaming-cursor" : ""}`}>
+                  <div className={`prose prose-sm max-w-none ${msg.isStreaming ? "streaming-cursor" : ""}`} style={{ color: '#1C1917' }}>
                     <ReactMarkdown>{msg.content || "…"}</ReactMarkdown>
                   </div>
                 ) : (
-                  <p>{msg.content}</p>
+                  <p style={{ margin: 0 }}>{msg.content}</p>
                 )}
               </div>
             </div>
@@ -184,8 +191,11 @@ export function ChatUI() {
       </div>
 
       {/* Input */}
-      <div className="mt-4 border-t border-slate-200 dark:border-slate-800 pt-4">
-        <div className="flex items-end gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 focus-within:ring-2 focus-within:ring-primary-500 focus-within:border-transparent transition-all">
+      <div style={{ padding: '16px', borderTop: '1px solid #E5E1D0', background: '#FAF8ED' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', background: 'white', border: '1px solid #D6CDB8', borderRadius: '16px', padding: '12px', boxShadow: '0 1px 4px rgba(28,25,23,0.05)', transition: 'all 0.2s ease' }}
+          onFocus={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#EA580C'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 0 0 3px rgba(234,88,12,0.12)'; }}
+          onBlur={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#D6CDB8'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 1px 4px rgba(28,25,23,0.05)'; }}
+        >
           <textarea
             ref={inputRef}
             value={input}
@@ -193,19 +203,24 @@ export function ChatUI() {
             onKeyDown={handleKeyDown}
             placeholder="Demande un parcours à Rome, des conseils récup, un plan semaine... (Entrée pour envoyer)"
             rows={1}
-            className="flex-1 resize-none bg-transparent text-sm text-slate-900 dark:text-white placeholder:text-slate-400 outline-none max-h-32"
-            style={{ minHeight: "24px" }}
+            style={{ flex: 1, resize: 'none', background: 'transparent', fontSize: '14px', color: '#1C1917', outline: 'none', maxHeight: '128px', minHeight: '24px', border: 'none', fontFamily: '"Inter",sans-serif', lineHeight: 1.5 }}
           />
           <button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            style={{
+              width: '36px', height: '36px', borderRadius: '10px', flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: (!input.trim() || isLoading) ? '#E5E1D0' : '#EA580C',
+              border: 'none', cursor: (!input.trim() || isLoading) ? 'not-allowed' : 'pointer',
+              transition: 'all 0.2s ease', color: 'white',
+            }}
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            {isLoading ? <Loader2 style={{ width: '16px', height: '16px', animation: 'spin 1s linear infinite' }} /> : <Send style={{ width: '16px', height: '16px' }} />}
           </button>
         </div>
-        <p className="text-center text-xs text-slate-400 mt-2">
-          Fit & Travel Coach IA peut faire des erreurs. Vérifiez les informations importantes.
+        <p style={{ textAlign: 'center', fontSize: '11px', color: '#A8A29E', marginTop: '8px', margin: '8px 0 0' }}>
+          Élan Coach IA peut faire des erreurs. Vérifiez les informations importantes.
         </p>
       </div>
     </div>

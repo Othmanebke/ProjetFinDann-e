@@ -12,7 +12,6 @@ interface AppLayoutProps {
 }
 
 export function AppLayout({ children, title }: AppLayoutProps) {
-  // Fit & Travel
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
@@ -24,10 +23,10 @@ export function AppLayout({ children, title }: AppLayoutProps) {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600" />
-          <p className="text-slate-400 text-sm">Chargement…</p>
+      <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center', background: '#FAF8ED' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '3px solid #E5E1D0', borderTopColor: '#EA580C', animation: 'spin 0.8s linear infinite' }} />
+          <p style={{ color: '#A8A29E', fontSize: '14px', fontWeight: 600, fontFamily: '"Montserrat",sans-serif' }}>Chargement…</p>
         </div>
       </div>
     );
@@ -36,11 +35,11 @@ export function AppLayout({ children, title }: AppLayoutProps) {
   if (!isAuthenticated) return null;
 
   return (
-    <div className="flex min-h-screen">
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#FAF8ED' }}>
       <Sidebar />
-      <div className="flex flex-1 flex-col pl-64">
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingLeft: '240px' }}>
         <Navbar title={title} />
-        <main className="flex-1 p-6">
+        <main style={{ flex: 1 }}>
           {children}
         </main>
       </div>

@@ -10,22 +10,42 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          50: "#f5f3ff", 100: "#ede9fe", 200: "#ddd6fe", 300: "#c4b5fd",
-          400: "#a78bfa", 500: "#8b5cf6", 600: "#7c3aed", 700: "#6d28d9",
-          800: "#5b21b6", 900: "#4c1d95", 950: "#2e1065",
+          50:  '#FFF7F0',
+          100: '#FFEDD5',
+          200: '#FED7AA',
+          300: '#FDBA74',
+          400: '#FB923C',
+          500: '#F97316',
+          600: '#EA580C',
+          700: '#C2410C',
+          800: '#9A3412',
+          900: '#7C2D12',
         },
-        cyan: {
-          50: "#ecfeff", 100: "#cffafe", 200: "#a5f3fc", 300: "#67e8f9",
-          400: "#22d3ee", 500: "#06b6d4", 600: "#0891b2", 700: "#0e7490",
-          800: "#155e75", 900: "#164e63", 950: "#083344",
+        forest: {
+          600: '#059669',
+          700: '#047857',
+          800: '#065F46',
         },
-        fuchsia: {
-          50: "#fdf4ff", 100: "#fae8ff", 200: "#f5d0fe", 300: "#f0abfc",
-          400: "#e879f9", 500: "#d946ef", 600: "#c026d3", 700: "#a21caf",
-          800: "#86198f", 900: "#701a75", 950: "#4a044e",
+        ocean: {
+          600: '#0891B2',
+          700: '#0E7490',
+        },
+        earth: {
+          700: '#92400E',
+          800: '#78350F',
+          900: '#451A03',
+        },
+        sand: {
+          50:  '#FAF8ED',
+          100: '#F5F3E7',
+          200: '#EDE9D8',
+          300: '#E5E1D0',
+          400: '#D6CDB8',
         },
       },
       fontFamily: {
+        display: ['Montserrat', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
         sans: ["Inter", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
       },
@@ -71,8 +91,8 @@ const config: Config = {
           "80%": { transform: "translate(-20px, 30px) scale(0.92)" },
         },
         glowPulse: {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(139, 92, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.1)" },
-          "50%": { boxShadow: "0 0 60px rgba(139, 92, 246, 0.8), 0 0 120px rgba(139, 92, 246, 0.3)" },
+          "0%, 100%": { opacity: "0.7" },
+          "50%": { opacity: "1" },
         },
         gradientX: {
           "0%, 100%": { backgroundPosition: "0% 50%" },
@@ -80,19 +100,19 @@ const config: Config = {
         },
         shimmer: {
           "0%": { transform: "translateX(-100%)" },
-          "100%": { transform: "translateX(200%)" },
+          "100%": { transform: "translateX(350%)" },
         },
         bounceGentle: {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-12px)" },
+          "50%": { transform: "translateY(-5px)" },
         },
         fadeUp: {
           "0%": { opacity: "0", transform: "translateY(30px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         borderGlow: {
-          "0%, 100%": { borderColor: "rgba(139, 92, 246, 0.3)" },
-          "50%": { borderColor: "rgba(139, 92, 246, 0.8)" },
+          "0%, 100%": { borderColor: "rgba(234, 88, 12, 0.3)" },
+          "50%": { borderColor: "rgba(234, 88, 12, 0.7)" },
         },
         textShimmer: {
           "0%, 100%": { backgroundPosition: "0% 50%" },
