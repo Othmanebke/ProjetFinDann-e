@@ -13,9 +13,10 @@ const navItems = [
   { href: '/routes',     label: 'Parcours',         icon: Map },
   { href: '/nutrition',  label: 'Nutrition',        icon: Utensils },
   { href: '/ai',         label: 'Coach IA',         icon: Bot },
+  { href: '/explorer',   label: 'Explorer',         icon: Zap },
   { href: '/billing',    label: 'Abonnement',       icon: CreditCard },
   { href: '/profile',    label: 'Profil',           icon: Settings },
-  { href: '/metrics',    label: 'Métriques',        icon: BarChart3 },
+  { href: '/metrics',    label: 'Performance',      icon: BarChart3 },
 ];
 
 export default function Sidebar() {
