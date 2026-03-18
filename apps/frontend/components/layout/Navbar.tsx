@@ -88,23 +88,23 @@ export function Navbar({ title }: NavbarProps) {
               </div>
               
               <div className="p-2 space-y-1">
-                <Link href="/apps/frontend/app/projects/routes/page.tsx" className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                <Link href="/routes" className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg transition-colors">
                   <Map className="w-4 h-4 text-orange-500" />
                   Parcours
                 </Link>
-                <Link href="/apps/frontend/app/projects/nutrition/page.tsx" className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                <Link href="/nutrition" className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg transition-colors">
                   <Utensils className="w-4 h-4 text-emerald-500" />
                   Nutrition
                 </Link>
-                <Link href="/apps/frontend/app/projects/metrics/page.tsx" className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                <Link href="/metrics" className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg transition-colors">
                   <BarChart3 className="w-4 h-4 text-indigo-500" />
                   Performance
                 </Link>
-                <Link href="/apps/frontend/app/projects/ai/page.tsx" className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                <Link href="/ai" className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg transition-colors">
                   <Bot className="w-4 h-4 text-rose-500" />
                   Coach IA
                 </Link>
-                <Link href="/apps/frontend/app/projects/explorer/page.tsx" className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                <Link href="/explorer" className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg transition-colors">
                   <Zap className="w-4 h-4 text-cyan-500" />
                   Explorer
                 </Link>
