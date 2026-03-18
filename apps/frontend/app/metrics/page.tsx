@@ -14,25 +14,23 @@ export default function MetricsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {[
-          { label: 'VO2 Max', value: '52', unit: 'ml/kg/min', trend: '+1.2', icon: Activity, color: 'text-indigo-400', link: '/routes' },
-          { label: 'Allure Moy', value: '4:45', unit: '/km', trend: '-0:15', icon: Zap, color: 'text-yellow-400', link: '/nutrition' },
-          { label: 'FC Repos', value: '48', unit: 'bpm', trend: '-2', icon: Heart, color: 'text-rose-400', link: '/ai' },
-          { label: 'Charge Entr.', value: '1840', unit: 'pts', trend: '+150', icon: Crosshair, color: 'text-blue-400', link: '/explorer' },
+          { label: 'VO2 Max', value: '52', unit: 'ml/kg/min', trend: '+1.2', icon: Activity, color: 'text-indigo-400' },
+          { label: 'Allure Moy', value: '4:45', unit: '/km', trend: '-0:15', icon: Zap, color: 'text-yellow-400' },
+          { label: 'FC Repos', value: '48', unit: 'bpm', trend: '-2', icon: Heart, color: 'text-rose-400' },
+          { label: 'Charge Entr.', value: '1840', unit: 'pts', trend: '+150', icon: Crosshair, color: 'text-blue-400' },
         ].map((stat, idx) => (
-          <a key={idx} href={stat.link}>
-            <div className="p-6 rounded-3xl border border-white/5 bg-white/[0.02] backdrop-blur-xl flex flex-col justify-between h-40 hover:bg-white/5 transition-colors">
-              <div className="flex justify-between items-start">
-                <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-widest">{stat.label}</h3>
-                <stat.icon className={`w-5 h-5 ${stat.color}`} />
-              </div>
-              <div>
-                <p className="text-3xl font-bold flex items-baseline gap-2">
-                  {stat.value} <span className="text-sm text-neutral-500">{stat.unit}</span>
-                </p>
-                <p className="text-xs text-emerald-500 mt-2 font-semibold bg-emerald-500/10 w-fit px-2 py-1 rounded">{stat.trend} ce mois</p>
-              </div>
+          <div key={idx} className="p-6 rounded-3xl border border-white/5 bg-white/[0.02] backdrop-blur-xl flex flex-col justify-between h-40">
+            <div className="flex justify-between items-start">
+              <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-widest">{stat.label}</h3>
+              <stat.icon className={`w-5 h-5 ${stat.color}`} />
             </div>
-          </a>
+            <div>
+              <p className="text-3xl font-bold flex items-baseline gap-2">
+                {stat.value} <span className="text-sm text-neutral-500">{stat.unit}</span>
+              </p>
+              <p className="text-xs text-emerald-500 mt-2 font-semibold bg-emerald-500/10 w-fit px-2 py-1 rounded">{stat.trend} ce mois</p>
+            </div>
+          </div>
         ))}
       </div>
 

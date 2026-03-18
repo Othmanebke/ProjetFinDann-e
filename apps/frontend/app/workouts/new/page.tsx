@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
-import api from '@/lib/api';
+import { api } from '@/lib/api';
 import { Save, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 

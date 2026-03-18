@@ -20,21 +20,19 @@ export default function NutritionPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         {[
-          { label: 'Protéines', value: '140g', max: '160g', color: 'from-blue-500 to-blue-700', icon: Apple, link: '/metrics' },
-          { label: 'Glucides', value: '280g', max: '350g', color: 'from-emerald-400 to-emerald-600', icon: Flame, link: '/routes' },
-          { label: 'Lipides', value: '65g', max: '80g', color: 'from-orange-400 to-orange-600', icon: Coffee, link: '/ai' },
-          { label: 'Hydratation', value: '2.1L', max: '3L', color: 'from-cyan-400 to-cyan-600', icon: Droplets, link: '/explorer' },
+          { label: 'Protéines', value: '140g', max: '160g', color: 'from-blue-500 to-blue-700', icon: Apple },
+          { label: 'Glucides', value: '280g', max: '350g', color: 'from-emerald-400 to-emerald-600', icon: Flame },
+          { label: 'Lipides', value: '65g', max: '80g', color: 'from-orange-400 to-orange-600', icon: Coffee },
+          { label: 'Hydratation', value: '2.1L', max: '3L', color: 'from-cyan-400 to-cyan-600', icon: Droplets },
         ].map((macro, idx) => (
-          <a key={idx} href={macro.link}>
-            <div className="p-6 rounded-3xl border border-white/5 bg-white/[0.02] backdrop-blur-xl relative overflow-hidden hover:bg-white/5 transition-colors">
-              <macro.icon className="absolute top-6 right-6 w-6 h-6 text-white/10" />
-              <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-4">{macro.label}</h3>
-              <p className="text-2xl font-bold mb-2">{macro.value} <span className="text-sm font-normal text-neutral-500">/ {macro.max}</span></p>
-              <div className="w-full bg-neutral-900 rounded-full h-1">
-                <div className={`bg-gradient-to-r ${macro.color} h-1 rounded-full w-[70%]`} />
-              </div>
+          <div key={idx} className="p-6 rounded-3xl border border-white/5 bg-white/[0.02] backdrop-blur-xl relative overflow-hidden">
+            <macro.icon className="absolute top-6 right-6 w-6 h-6 text-white/10" />
+            <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-4">{macro.label}</h3>
+            <p className="text-2xl font-bold mb-2">{macro.value} <span className="text-sm font-normal text-neutral-500">/ {macro.max}</span></p>
+            <div className="w-full bg-neutral-900 rounded-full h-1">
+              <div className={`bg-gradient-to-r ${macro.color} h-1 rounded-full w-[70%]`} />
             </div>
-          </a>
+          </div>
         ))}
       </div>
 

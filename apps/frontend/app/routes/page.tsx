@@ -47,50 +47,17 @@ export default function RoutesPage() {
           <div className="flex-1 p-6 rounded-3xl border border-white/5 bg-white/[0.02] backdrop-blur-xl">
             <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-6">Suggestions</h3>
             <div className="space-y-4">
-              <a href="/nutrition">
-                <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
                   <div className="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center">
                     <Map className="text-neutral-400 w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold">Boucle Forestière 1</p>
+                    <p className="text-sm font-semibold">Boucle Forestière {i}</p>
                     <p className="text-xs text-neutral-500">8.5 km • Valloné</p>
                   </div>
                 </div>
-              </a>
-              <a href="/metrics">
-                <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
-                  <div className="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center">
-                    <Map className="text-neutral-400 w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Boucle Forestière 2</p>
-                    <p className="text-xs text-neutral-500">8.5 km • Valloné</p>
-                  </div>
-                </div>
-              </a>
-              <a href="/ai">
-                <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
-                  <div className="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center">
-                    <Map className="text-neutral-400 w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Boucle Forestière 3</p>
-                    <p className="text-xs text-neutral-500">8.5 km • Valloné</p>
-                  </div>
-                </div>
-              </a>
-              <a href="/explorer">
-                <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
-                  <div className="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center">
-                    <Map className="text-neutral-400 w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Explorer</p>
-                    <p className="text-xs text-neutral-500">Découvrir</p>
-                  </div>
-                </div>
-              </a>
+              ))}
             </div>
           </div>
         </div>

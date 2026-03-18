@@ -22,15 +22,10 @@ export default function AiCoachPage() {
             </h3>
             <p className="text-3xl font-bold mb-2">92<span className="text-lg text-neutral-500">/100</span></p>
             <p className="text-sm font-medium text-emerald-400 mb-4">Excellente récupération</p>
+            
             <p className="text-sm text-neutral-400 leading-relaxed">
               Vos données de sommeil et votre VFC indiquent que vous êtes prêt pour un effort intense aujourd'hui. Je vous recommande la séance de fractionné prévue initiale, mais avec 2 répétitions supplémentaires.
             </p>
-            <div className="mt-4 flex gap-2">
-              <a href="/routes" className="text-xs font-bold text-orange-500 hover:underline">Parcours</a>
-              <a href="/nutrition" className="text-xs font-bold text-emerald-500 hover:underline">Nutrition</a>
-              <a href="/metrics" className="text-xs font-bold text-indigo-500 hover:underline">Performance</a>
-              <a href="/explorer" className="text-xs font-bold text-cyan-500 hover:underline">Explorer</a>
-            </div>
           </div>
 
           <div className="p-6 rounded-3xl border border-white/5 bg-white/[0.02] backdrop-blur-xl">
