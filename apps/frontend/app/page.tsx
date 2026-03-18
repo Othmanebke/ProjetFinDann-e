@@ -887,7 +887,7 @@ export default function LandingPage() {
             <div className="col-span-12 md:col-span-8 md:row-span-2 group card-hover rounded-[24px] overflow-hidden relative shadow-lg">
               <img src="https://images.unsplash.com/photo-1502224562085-639556652f33?auto=format&fit=crop&q=80&w=1600" alt="Running path" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', padding: '32px', color: 'white' }}>
-                <div style={{ fontSize: '24px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif' }}>Les routes de l\'Atlas</div>
+                <div style={{ fontSize: '24px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif' }}>Les routes de l&apos;Atlas</div>
                 <div style={{ fontSize: '14px', opacity: 0.8, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>Maroc 🇲🇦</div>
               </div>
             </div>
@@ -911,7 +911,7 @@ export default function LandingPage() {
             <div className="col-span-12 md:col-span-6 md:row-span-1 group card-hover rounded-[24px] overflow-hidden relative shadow-lg">
               <img src="https://images.unsplash.com/photo-1530143311094-34d807799e8f?auto=format&fit=crop&q=80&w=1200" alt="City sunrise" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', padding: '24px', color: 'white' }}>
-                <div style={{ fontSize: '20px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif' }}>Côte d\'Azur au lever</div>
+                <div style={{ fontSize: '20px', fontWeight: 800, fontFamily: '"Montserrat",sans-serif' }}>Côte d&apos;Azur au lever</div>
                 <div style={{ fontSize: '13px', opacity: 0.8, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>France 🇫🇷</div>
               </div>
             </div>
