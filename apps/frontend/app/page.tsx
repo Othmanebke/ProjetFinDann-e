@@ -365,15 +365,15 @@ export default function LandingPage() {
           {/* RIGHT — Links */}
           <div style={{ flex: 1, padding: '32px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px' }}>
             {([
-              { Icon: Map,           label: 'Parcours',    href: '#features',     desc: 'Itinéraires IA dans 127+ villes',         color: '#047857' },
-              { Icon: Utensils,      label: 'Nutrition',   href: '#features',     desc: 'Plats locaux adaptés à vos macros',       color: '#EA580C' },
-              { Icon: BarChart2,     label: 'Performance', href: '#features',     desc: 'Graphiques semaine par semaine',          color: '#0E7490' },
-              { Icon: Bot,           label: 'Coach IA',    href: '#features',     desc: 'Conseils personnalisés 24h/24',           color: '#78350F' },
-              { Icon: Globe,         label: 'Explorer',    href: '#gallery',      desc: 'Découvrez les plus beaux paysages', color: '#047857' },
+              { Icon: Map,           label: 'Parcours',    href: '/routes',     desc: 'Itinéraires IA dans 127+ villes',         color: '#047857' },
+              { Icon: Utensils,      label: 'Nutrition',   href: '/nutrition',  desc: 'Plats locaux adaptés à vos macros',       color: '#EA580C' },
+              { Icon: BarChart2,     label: 'Performance', href: '/metrics',    desc: 'Graphiques semaine par semaine',          color: '#0E7490' },
+              { Icon: Bot,           label: 'Coach IA',    href: '/ai',         desc: 'Conseils personnalisés 24h/24',           color: '#78350F' },
+              { Icon: Globe,         label: 'Explorer',    href: '/explorer',   desc: 'Découvrez les plus beaux paysages',       color: '#047857' },
             ] as {Icon: React.FC<{size?:number;color?:string}>;label:string;href:string;desc:string;color:string}[]).map((item, i) => {
               const NavIcon = item.Icon;
               return (
-                <a key={item.label} href={item.href} onClick={() => setMenuOpen(false)}
+                <Link key={item.label} href={item.href} onClick={() => setMenuOpen(false)}
                   style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 18px', borderRadius: '14px', textDecoration: 'none', border: '1px solid transparent', transition: 'all 0.2s ease', animation: menuOpen ? `fadeInUp 0.4s ease ${0.08 + i * 0.05}s both` : 'none' }}
                   onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = `${item.color}0a`; el.style.borderColor = `${item.color}25`; el.style.transform = 'translateX(6px)'; }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'transparent'; el.style.borderColor = 'transparent'; el.style.transform = 'none'; }}
@@ -386,7 +386,7 @@ export default function LandingPage() {
                     <div style={{ fontSize: '12px', color: '#A8A29E', marginTop: '2px' }}>{item.desc}</div>
                   </div>
                   <ChevronRight size={16} style={{ color: item.color, opacity: 0.5, flexShrink: 0 }} />
-                </a>
+                </Link>
               );
             })}
           </div>
