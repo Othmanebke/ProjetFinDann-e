@@ -1,6 +1,6 @@
-# BC02 — Tests & Documentation : SmartProject AI
+# BC02 — Tests & Documentation : élan (Fit & Travel)
 
-**Version :** 1.0
+**Version :** 2.0
 **Date :** Mars 2026
 
 ---
@@ -12,7 +12,7 @@
 | Niveau | Outil | Responsable | Environnement |
 |--------|-------|------------|---------------|
 | Unitaires | Jest (backend) | Dev | Local / CI |
-| Intégration | Jest + Supertest | Dev | CI (DB real) |
+| Intégration | Jest + Supertest | Dev | CI (DB réelle) |
 | E2E | Cypress | QA / Dev | Staging |
 | Performance | k6 | DevOps | Staging |
 | Sécurité | OWASP ZAP | SecOps | Staging |
@@ -23,8 +23,8 @@
 | Service | Couverture minimale |
 |---------|-------------------|
 | auth.service | 90% |
-| projects.service | 85% |
-| tasks.service | 85% |
+| workout.service | 85% |
+| nutrition.service | 85% |
 | ai.service | 80% |
 | billing.service | 90% |
 | notification.service | 75% |
@@ -41,41 +41,45 @@
 | T-BE-01 | Générer un JWT valide | auth.service | Token JWT avec sub, email, role |
 | T-BE-02 | Vérifier un JWT valide | auth.service | Payload décodé correct |
 | T-BE-03 | Rejeter un JWT expiré | auth.service | Erreur "jwt expired" |
-| T-BE-04 | Rejeter un JWT invalide | auth.service | Erreur |
-| T-BE-05 | Créer un projet | projects.service | Projet + ActivityLog créés |
-| T-BE-06 | Accès refusé projet inexistant | projects.service | AppError 404 |
-| T-BE-07 | Liste paginée projets | projects.service | { data, pagination } |
-| T-BE-08 | Créer une tâche | tasks.service | Tâche créée + log |
-| T-BE-09 | Tâche accès refusé | tasks.service | AppError 403 |
-| T-BE-10 | Générer plan IA | ai.service | JSON structuré |
-| T-BE-11 | IA error graceful | ai.service | Pas de crash |
-| T-BE-12 | Stripe checkout URL | billing.service | URL Stripe |
-| T-BE-13 | Subscription status | billing.service | { plan, status } |
-| T-BE-14 | Webhook signature invalide | billing.service | AppError 400 |
-| T-BE-15 | Envoyer email welcome | notification.service | SendGrid appelé |
-| T-BE-16 | Email welcome fail graceful | notification.service | Pas d'erreur throw |
-| T-BE-17 | Envoyer SMS deadline | notification.service | Twilio appelé |
-| T-BE-18 | Créer in-app notification | notification.service | DB record créé |
+| T-BE-04 | Rejeter un JWT invalide | auth.service | Erreur 401 |
+| T-BE-05 | Créer un workout | workout.service | Workout + weekNumber calculé |
+| T-BE-06 | Workout accès refusé (autre user) | workout.service | AppError 404 |
+| T-BE-07 | Stats hebdomadaires 8 semaines | workout.service | Array de 8 objets avec totaux |
+| T-BE-08 | Créer un log nutrition | nutrition.service | NutritionLog avec macros |
+| T-BE-09 | Résumé journalier nutrition | nutrition.service | { totalCalories, totalProtein, ... } |
+| T-BE-10 | Générer parcours IA | ai.service | JSON avec waypoints + POIs |
+| T-BE-11 | IA error graceful (no OpenAI key) | ai.service | Fallback mock, pas de crash |
+| T-BE-12 | Chat streaming SSE | ai.service | Headers SSE + flux de tokens |
+| T-BE-13 | Analyse performance | ai.service | { analysis, recommendations } |
+| T-BE-14 | Stripe checkout URL | billing.service | URL Stripe Checkout |
+| T-BE-15 | Subscription status | billing.service | { plan, status } |
+| T-BE-16 | Webhook signature invalide | billing.service | AppError 400 |
+| T-BE-17 | Envoyer email welcome | notification.service | SendGrid appelé |
+| T-BE-18 | Envoyer SMS run reminder | notification.service | Twilio appelé |
+| T-BE-19 | Créer notification in-app | notification.service | DB record créé |
+| T-BE-20 | Rate limit IA > 10 req/min | middleware | 429 Too Many Requests |
 
 ### Frontend — Tests E2E Cypress
 
 | Test ID | Description | Page | Résultat attendu |
 |---------|------------|------|-----------------|
-| T-FE-01 | Affichage page login | /login | Boutons Google + GitHub visibles |
+| T-FE-01 | Affichage page login | /login | Boutons Google + GitHub + Microsoft visibles |
 | T-FE-02 | Clic login Google → OAuth | /login | Redirect vers backend/auth/google |
-| T-FE-03 | Affichage erreur oauth_failed | /login?error=... | Message d'erreur visible |
-| T-FE-04 | Callback missing tokens | /auth/callback | Redirect /login |
-| T-FE-05 | Affichage liste projets | /projects | Projets affichés |
-| T-FE-06 | Modal création projet | /projects | Modal s'ouvre |
-| T-FE-07 | Créer un projet | /projects | POST /projects appelé |
-| T-FE-08 | Navigation vers projet | /projects | Redirect /projects/[id] |
-| T-FE-09 | Affichage chat IA | /ai | Interface chat visible |
-| T-FE-10 | Suggestions IA initiales | /ai | 4 suggestions affichées |
-| T-FE-11 | Clic suggestion → input | /ai | Input pré-rempli |
-| T-FE-12 | Envoyer message IA | /ai | SSE streaming + réponse |
-| T-FE-13 | Affichage plans billing | /billing | Free + Pro + Enterprise |
-| T-FE-14 | Plan actuel mis en valeur | /billing | Badge "Plan actuel" |
-| T-FE-15 | Upgrade → Stripe Checkout | /billing | Redirect Stripe |
+| T-FE-03 | Login démo sans backend | /login | Redirect /dashboard avec user démo |
+| T-FE-04 | Callback tokens valides | /auth/callback | Redirect /dashboard |
+| T-FE-05 | Dashboard KPIs visibles | /dashboard | 4 KPI cards + graphiques |
+| T-FE-06 | Affichage liste workouts | /workouts | Workouts listés |
+| T-FE-07 | Créer un workout | /workouts/new | POST /workouts appelé |
+| T-FE-08 | Affichage page nutrition | /nutrition | Macros journalières + liste repas |
+| T-FE-09 | Logger un repas | /nutrition | POST /nutrition appelé |
+| T-FE-10 | Affichage chat IA | /ai | Interface chat + liste conversations |
+| T-FE-11 | Envoyer message IA | /ai | SSE streaming + réponse affichée |
+| T-FE-12 | Affichage page routes | /routes | Liste parcours + bouton générer |
+| T-FE-13 | Génération parcours (Premium) | /routes | POST /routes/generate appelé |
+| T-FE-14 | Affichage métriques | /metrics | Graphiques barres + zones FC |
+| T-FE-15 | Affichage plans billing | /billing | Free + Premium Coach + Pass Voyageur |
+| T-FE-16 | Upgrade → Stripe Checkout | /billing | Redirect Stripe |
+| T-FE-17 | Notifications in-app | /dashboard | Cloche avec badge non-lus |
 
 ### Tests de Sécurité
 
@@ -83,10 +87,10 @@
 |----|------|------------|--------|
 | S-01 | Auth | JWT sans token → 401 | ✅ |
 | S-02 | Auth | JWT expiré → 401 | ✅ |
-| S-03 | AuthZ | User accède projet autre user → 404 | ✅ |
-| S-04 | AuthZ | User accède admin route → 403 | ✅ |
+| S-03 | AuthZ | User accède workout d'un autre user → 404 | ✅ |
+| S-04 | AuthZ | Free user accède génération parcours → 403 | ✅ |
 | S-05 | Input | SQL injection via query params | ✅ Prisma protège |
-| S-06 | Input | XSS via project name | ✅ Zod sanitize |
+| S-06 | Input | XSS via mealName | ✅ Zod sanitize |
 | S-07 | Rate | > 10 requêtes IA/min → 429 | ✅ |
 | S-08 | Webhook | Stripe sans signature → 400 | ✅ |
 | S-09 | CORS | Frontend autre domaine → bloqué | ✅ |
@@ -98,7 +102,7 @@
 
 ### Base URL
 ```
-Production: https://api.smartproject.ai
+Production: https://api.elan-fitness.app
 Development: http://localhost:4000
 ```
 
@@ -108,15 +112,21 @@ Tous les endpoints (sauf `/auth/*`, `/metrics`, `/health`, `/billing/webhook`) r
 Authorization: Bearer <accessToken>
 ```
 
+---
+
 ### Endpoints Auth
 
 #### GET /auth/google
 Initie le flux OAuth2 Google.
 - **Response :** 302 Redirect vers Google
 
-#### GET /auth/google/callback
-Callback OAuth2 Google.
-- **Response :** 302 Redirect vers `FRONTEND_URL/auth/callback?access_token=...&refresh_token=...`
+#### GET /auth/github
+Initie le flux OAuth2 GitHub.
+- **Response :** 302 Redirect vers GitHub
+
+#### GET /auth/microsoft
+Initie le flux OAuth2 Microsoft.
+- **Response :** 302 Redirect vers Microsoft
 
 #### POST /auth/refresh
 ```json
@@ -148,142 +158,285 @@ Response 200:
 {
   "id": "cuid",
   "email": "user@example.com",
-  "name": "John Doe",
+  "name": "Théo Martin",
   "avatarUrl": "https://...",
   "role": "USER",
   "phone": "+33600000000",
   "timezone": "Europe/Paris",
+  "fitnessGoal": "ENDURANCE",
+  "weeklyTargetKm": 40,
+  "currentCity": "Paris",
+  "currentCountry": "France",
   "subscription": {
-    "plan": "PRO",
+    "plan": "PASS_VOYAGEUR",
     "status": "ACTIVE",
     "currentPeriodEnd": "2026-04-15T00:00:00.000Z"
   }
 }
 ```
 
-### Endpoints Projects
+---
 
-#### GET /projects
+### Endpoints Workouts
+
+#### GET /workouts
 ```
-Query params: page, limit, status, search
-Response 200: { data: Project[], pagination: { page, limit, total, totalPages } }
+Query params: page, limit, type, startDate, endDate
+Response 200: { data: Workout[], pagination: { page, limit, total, totalPages } }
 ```
 
-#### POST /projects
+#### GET /workouts/stats
+```json
+Query params: weeks (défaut: 8)
+Response 200:
+[
+  {
+    "weekNumber": 11,
+    "yearNumber": 2026,
+    "distanceKm": 45.2,
+    "durationMin": 280,
+    "calories": 3200,
+    "sessions": 4
+  }
+]
+```
+
+#### POST /workouts
 ```json
 Request:
 {
-  "name": "Mon Projet",
-  "description": "Description",
-  "color": "#6366f1",
-  "startDate": "2026-03-01T00:00:00Z",
-  "endDate": "2026-06-30T00:00:00Z"
+  "type": "RUN",
+  "title": "Run matinal Bois de Boulogne",
+  "distanceKm": 12.5,
+  "durationMin": 68,
+  "calories": 720,
+  "heartRateAvg": 148,
+  "heartRateMax": 172,
+  "paceMinPerKm": 5.44,
+  "city": "Paris",
+  "country": "France",
+  "completedAt": "2026-03-20T07:30:00Z"
 }
-Response 201: Project
+Response 201: Workout
 ```
 
-#### GET /projects/:id
+#### GET /workouts/:id
 ```
-Response 200: Project (avec tasks, members, _count)
-Response 404: { "error": "Project not found" }
+Response 200: Workout
+Response 404: { "error": "Workout not found" }
 ```
 
-#### PUT /projects/:id
+#### PATCH /workouts/:id
 ```json
-Request: Partial<Project>
-Response 200: Project updated
+Request: Partial<Workout>
+Response 200: Workout updated
 ```
 
-#### DELETE /projects/:id
+#### DELETE /workouts/:id
 ```
 Response 204: No content
-Response 404: { "error": "Project not found or you are not the owner" }
 ```
 
-#### GET /projects/:id/stats
+---
+
+### Endpoints Nutrition
+
+#### GET /nutrition
+```
+Query params: page, limit, date
+Response 200: { data: NutritionLog[], pagination: {...} }
+```
+
+#### GET /nutrition/daily
 ```json
+Query params: date (YYYY-MM-DD, défaut: aujourd'hui)
 Response 200:
 {
-  "taskStats": [
-    { "status": "TODO", "_count": { "id": 5 } },
-    { "status": "DONE", "_count": { "id": 8 } }
-  ],
-  "recentActivity": [ ActivityLog... ]
+  "date": "2026-03-20",
+  "logs": [...],
+  "summary": {
+    "totalCalories": 1850,
+    "totalProteinG": 145,
+    "totalCarbsG": 210,
+    "totalFatG": 62,
+    "totalFiberG": 28,
+    "mealCount": 4
+  }
 }
 ```
 
-### Endpoints AI
+#### GET /nutrition/stats
+```json
+Query params: weeks (défaut: 4)
+Response 200: [ { week, avgCalories, avgProtein, avgCarbs, avgFat } ]
+```
 
-#### POST /ai/chat *(Free + Pro)*
+#### POST /nutrition
 ```json
 Request:
 {
-  "message": "Comment planifier ce sprint ?",
-  "chatId": "cuid-optionnel",
-  "projectId": "cuid-optionnel"
+  "mealName": "Bowls de quinoa saumon",
+  "caloriesKcal": 520,
+  "proteinG": 38,
+  "carbsG": 55,
+  "fatG": 14,
+  "fiberG": 6,
+  "restaurant": "Cojean",
+  "city": "Paris",
+  "country": "France",
+  "loggedAt": "2026-03-20T12:30:00Z"
 }
-Response: text/event-stream (SSE)
-data: {"type":"chat_id","chatId":"..."}
-data: {"type":"delta","content":"..."}
-data: {"type":"done"}
-data: {"type":"error","message":"..."}
+Response 201: NutritionLog
 ```
 
-#### POST /ai/generate-plan *(Pro+)*
+#### POST /nutrition/recommend *(Premium+)*
 ```json
-Request: { "projectId": "cuid" }
-Response 200:
+Request:
 {
-  "phases": [{"name": "...", "duration": "2 weeks", "tasks": [...]}],
-  "milestones": [{"name": "Beta launch", "date": "2026-05-01"}],
-  "risks": ["Resource constraints", "..."],
-  "recommendations": ["Use Scrum", "..."],
-  "estimatedDuration": "3 months"
+  "city": "Tokyo",
+  "country": "Japan",
+  "targetCalories": 650,
+  "fitnessGoal": "ENDURANCE",
+  "restrictions": ["gluten-free"]
 }
-```
-
-#### POST /ai/risks *(Pro+)*
-```json
-Request: { "projectId": "cuid" }
 Response 200:
 {
-  "riskLevel": "MEDIUM",
-  "risks": [
+  "recommendations": [
     {
-      "title": "2 tâches urgentes en retard",
-      "severity": "HIGH",
-      "probability": "CERTAIN",
-      "mitigation": "Allouer des ressources supplémentaires"
-    }
-  ],
-  "overallAssessment": "Le projet présente un risque modéré..."
-}
-```
-
-#### POST /ai/generate-tasks *(Pro+)*
-```json
-Request: { "projectId": "cuid", "context": "Développer une API REST" }
-Response 200:
-{
-  "tasks": [
-    {
-      "title": "Setup Express + TypeScript",
-      "description": "...",
-      "priority": "HIGH",
-      "estimatedHours": 4,
-      "tags": ["backend", "setup"]
+      "name": "Sushi Yoshida",
+      "cuisine": "Japanese",
+      "estimatedCalories": 580,
+      "proteinRich": true,
+      "address": "...",
+      "why": "Poisson riche en protéines, faible en graisses saturées"
     }
   ]
 }
 ```
 
+---
+
+### Endpoints Routes (Parcours)
+
+#### GET /routes
+```
+Response 200: TravelRoute[]
+```
+
+#### POST /routes/generate *(Pass Voyageur)*
+```json
+Request:
+{
+  "city": "Kyoto",
+  "country": "Japan",
+  "activityType": "RUN",
+  "distanceKm": 10,
+  "difficulty": "MODERATE"
+}
+Response 200:
+{
+  "name": "Run Temples de Kyoto",
+  "description": "Parcours longeant les temples...",
+  "distanceKm": 10.2,
+  "estimatedMinutes": 62,
+  "elevationM": 85,
+  "safetyScore": 9,
+  "bestTimeOfDay": "Matin (6h-9h)",
+  "waypoints": [
+    { "lat": 35.0116, "lng": 135.7681, "label": "Départ - Gion" }
+  ],
+  "pointsOfInterest": [
+    { "name": "Temple Kinkaku-ji", "type": "landmark", "lat": 35.0394, "lng": 135.7292 }
+  ]
+}
+```
+
+#### POST /routes/restaurants *(Premium+)*
+Voir `POST /nutrition/recommend` — même payload, même format de réponse.
+
+#### DELETE /routes/:id
+```
+Response 204: No content
+```
+
+---
+
+### Endpoints IA
+
+#### GET /ai/chats
+```json
+Response 200: FitChat[]
+```
+
+#### POST /ai/chats
+```json
+Request: { "title": "Ma séance à Lisbonne" }
+Response 201: { "id": "cuid", "title": "..." }
+```
+
+#### POST /ai/chats/:chatId/stream
+```json
+Request: { "message": "Donne-moi un plan de récupération après 15km" }
+Response: text/event-stream (SSE)
+
+data: {"type":"delta","content":"Après une longue sortie..."}
+data: {"type":"delta","content":" voici mes recommandations :"}
+data: {"type":"done"}
+data: {"type":"error","message":"..."}
+```
+
+#### POST /ai/analyze-performance *(Premium+)*
+```json
+Request:
+{
+  "weeklyData": [
+    { "weekNumber": 10, "distanceKm": 38, "durationMin": 240, "calories": 2800, "sessions": 4 }
+  ],
+  "fitnessGoal": "ENDURANCE",
+  "weeklyTargetKm": 40
+}
+Response 200:
+{
+  "analysis": "Tu es à 95% de ton objectif hebdomadaire...",
+  "recommendations": ["Augmente progressivement de 10% par semaine", "..."],
+  "weeklyTrend": "IMPROVING"
+}
+```
+
+---
+
+### Endpoints Notifications
+
+#### GET /notifications
+```json
+Response 200: Notification[] (50 dernières, tri desc)
+```
+
+#### PATCH /notifications/:id/read
+```json
+Response 200: { "ok": true }
+```
+
+#### PATCH /notifications/read-all
+```json
+Response 200: { "ok": true }
+```
+
+#### POST /notifications/sms-reminder
+```json
+Request: { "city": "Lyon", "time": "18h30" }
+Response 200: { "ok": true, "message": "SMS sent to +336..." }
+Erreur 400: { "error": "No phone number on your account" }
+```
+
+---
+
 ### Endpoints Billing
 
 #### POST /billing/checkout
 ```json
-Request: { "priceId": "price_pro_monthly" }
+Request: { "priceId": "price_premium_coach_monthly" }
 Response 200: { "url": "https://checkout.stripe.com/pay/cs_..." }
-Response 403: { "error": "Upgrade required" }
 ```
 
 #### GET /billing/portal
@@ -295,7 +448,7 @@ Response 200: { "url": "https://billing.stripe.com/session/..." }
 ```json
 Response 200:
 {
-  "plan": "PRO",
+  "plan": "PASS_VOYAGEUR",
   "status": "ACTIVE",
   "currentPeriodEnd": "2026-04-15T00:00:00.000Z",
   "cancelAtPeriodEnd": false
@@ -312,27 +465,37 @@ Response 400: { "error": "Invalid webhook signature" }
 
 ---
 
+### Endpoint Métriques
+
+#### GET /metrics
+```
+Response 200: text/plain (format Prometheus)
+Pas d'authentification requise (scraping Prometheus)
+```
+
+---
+
 ## 4. Guide d'Installation
 
 ### Prérequis
 - Node.js 20+
 - npm 10+
 - Docker + Docker Compose
-- Comptes : Google Cloud, GitHub OAuth, OpenAI, Stripe, SendGrid, Twilio
+- Comptes : Google Cloud, GitHub OAuth, Microsoft Azure, OpenAI, Stripe, SendGrid, Twilio
 
 ### Installation Locale (Développement)
 
 ```bash
 # 1. Cloner le repo
-git clone https://github.com/your-org/smartproject-ai.git
-cd smartproject-ai
+git clone https://github.com/your-org/elan-fit-travel.git
+cd elan-fit-travel
 
 # 2. Copier les variables d'environnement
 cp .env.example .env
 # Remplir toutes les variables dans .env
 
-# 3. Démarrer les services Docker
-docker-compose up -d postgres redis prometheus grafana
+# 3. Démarrer PostgreSQL via Docker
+docker-compose up -d postgres
 
 # 4. Installer les dépendances
 npm install
@@ -341,45 +504,79 @@ npm install
 npx prisma generate
 npx prisma migrate dev --name init
 
-# 6. Seed la base de données
+# 6. Seed la base de données (admin + démo + données d'exemple)
 npx ts-node prisma/seed.ts
 
 # 7. Démarrer le développement
 npm run dev
-# Backend: http://localhost:4000
+# Backend:  http://localhost:4000
 # Frontend: http://localhost:3000
-# Grafana: http://localhost:3001
-# Prometheus: http://localhost:9090
+```
+
+### Variables d'Environnement Requises
+
+```env
+# Base de données
+DATABASE_URL=postgresql://user:password@localhost:5432/elan
+
+# JWT
+JWT_SECRET=<min-32-chars>
+JWT_REFRESH_SECRET=<min-32-chars>
+
+# OAuth
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+GITHUB_CLIENT_ID=...
+GITHUB_CLIENT_SECRET=...
+MICROSOFT_CLIENT_ID=...
+MICROSOFT_CLIENT_SECRET=...
+
+# IA
+OPENAI_API_KEY=sk-...
+
+# Paiements
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Notifications
+SENDGRID_API_KEY=SG....
+SENDGRID_FROM_EMAIL=no-reply@elan-fitness.app
+TWILIO_ACCOUNT_SID=AC...
+TWILIO_AUTH_TOKEN=...
+TWILIO_FROM_NUMBER=+1...
+
+# App
+FRONTEND_URL=http://localhost:3000
+BACKEND_URL=http://localhost:4000
 ```
 
 ### Déploiement Production
 
 ```bash
-# 1. Builder tout
+# Builder
 npm run build
 
-# 2. Démarrer avec Docker Compose prod
-docker-compose up -d
+# Démarrer en production
+docker-compose -f docker-compose.prod.yml up -d
 
-# 3. Migrer la DB en prod
+# Migrer la DB
 DATABASE_URL=<prod_url> npx prisma migrate deploy
-
-# 4. Accéder aux services
-# Frontend: http://your-domain:3000
-# Backend API: http://your-domain:4000
-# Métriques: http://your-domain:4000/metrics
 ```
 
 ### Configuration OAuth Google
-1. Aller sur https://console.cloud.google.com
-2. Créer un projet → API & Services → Credentials
-3. Créer un OAuth 2.0 Client ID
-4. Authorized redirect URIs : `http://localhost:4000/auth/google/callback`
-5. Copier Client ID + Client Secret dans `.env`
+1. Google Cloud Console → API & Services → Credentials
+2. Créer OAuth 2.0 Client ID (type : Web application)
+3. Authorized redirect URIs : `http://localhost:4000/auth/google/callback`
+4. Copier Client ID + Secret dans `.env`
 
 ### Configuration Stripe
-1. Créer un compte sur stripe.com
-2. Récupérer les clés API (test mode)
-3. Créer les produits et prix (Pro, Enterprise)
-4. Configurer les webhooks : `http://your-domain:4000/billing/webhook`
-5. Événements à écouter : `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed`
+1. Créer produits + prix dans le dashboard Stripe (test mode)
+2. Configurer webhook : `http://your-domain:4000/billing/webhook`
+3. Événements : `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed`
+4. Copier `STRIPE_WEBHOOK_SECRET` (`whsec_...`) dans `.env`
+
+### Mode Démo (sans backend)
+Le bouton "Continuer avec la démo" crée une session 100% client-side :
+- Token : `"demo-access-token"` (stocké dans Zustand + localStorage)
+- Toutes les API calls retournent des données mock
+- Aucun backend nécessaire pour tester le frontend

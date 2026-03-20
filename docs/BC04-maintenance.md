@@ -1,6 +1,6 @@
-# BC04 — Maintenance & Exploitation : SmartProject AI
+# BC04 — Maintenance & Exploitation : élan (Fit & Travel)
 
-**Version :** 1.0
+**Version :** 2.0
 **Date :** Mars 2026
 
 ---
@@ -11,100 +11,113 @@
 
 | Métrique | Type | Description |
 |---------|------|-------------|
-| `smartproject_http_requests_total` | Counter | Requêtes HTTP par method/route/status |
-| `smartproject_http_request_duration_seconds` | Histogram | Latence HTTP |
-| `smartproject_ai_requests_total` | Counter | Requêtes IA par type/model/status |
-| `smartproject_ai_request_duration_seconds` | Histogram | Durée requêtes IA |
-| `smartproject_active_users` | Gauge | Utilisateurs actifs |
-| `smartproject_projects_total` | Counter | Projets créés total |
-| `smartproject_tasks_total` | Counter | Tâches créées par status/priority |
-| `smartproject_errors_total` | Counter | Erreurs backend par type/route |
-| `smartproject_subscriptions` | Gauge | Abonnements actifs par plan |
+| `elan_http_requests_total` | Counter | Requêtes HTTP par method/route/status |
+| `elan_http_request_duration_seconds` | Histogram | Latence HTTP |
+| `elan_ai_requests_total` | Counter | Requêtes IA par type (chat/route/analyze/restaurant) |
+| `elan_ai_request_duration_seconds` | Histogram | Durée requêtes GPT-4o |
+| `elan_active_users` | Gauge | Utilisateurs actifs (sessions en cours) |
+| `elan_workouts_total` | Counter | Workouts créés |
+| `elan_nutrition_logs_total` | Counter | Repas loggés |
+| `elan_errors_total` | Counter | Erreurs backend par type/route |
+| `elan_subscriptions` | Gauge | Abonnements actifs par plan (FREE/PREMIUM/VOYAGEUR) |
 | `process_cpu_seconds_total` | Counter | CPU Node.js |
-| `process_heap_bytes` | Gauge | Mémoire heap |
+| `process_heap_bytes` | Gauge | Mémoire heap Node.js |
 | `nodejs_eventloop_lag_seconds` | Histogram | Lag event loop |
 
-### 1.2 Grafana Dashboard JSON
+### 1.2 Grafana Dashboard
 
 ```json
 {
   "dashboard": {
-    "id": null,
-    "uid": "smartproject",
-    "title": "SmartProject AI — Overview",
-    "tags": ["smartproject", "production"],
+    "uid": "elan-fitness",
+    "title": "élan Fit & Travel — Overview",
+    "tags": ["elan", "production"],
     "timezone": "Europe/Paris",
     "panels": [
       {
         "id": 1, "title": "HTTP Requests/min", "type": "stat",
-        "targets": [{"expr": "rate(smartproject_http_requests_total[5m]) * 60"}]
+        "targets": [{"expr": "rate(elan_http_requests_total[5m]) * 60"}]
       },
       {
         "id": 2, "title": "API Latency p95 (ms)", "type": "stat",
-        "targets": [{"expr": "histogram_quantile(0.95, rate(smartproject_http_request_duration_seconds_bucket[5m])) * 1000"}]
+        "targets": [{"expr": "histogram_quantile(0.95, rate(elan_http_request_duration_seconds_bucket[5m])) * 1000"}]
       },
       {
-        "id": 3, "title": "AI Requests/min", "type": "stat",
-        "targets": [{"expr": "rate(smartproject_ai_requests_total[5m]) * 60"}]
+        "id": 3, "title": "Requêtes IA/min", "type": "stat",
+        "targets": [{"expr": "rate(elan_ai_requests_total[5m]) * 60"}]
       },
       {
-        "id": 4, "title": "Error Rate (%)", "type": "stat",
-        "targets": [{"expr": "rate(smartproject_errors_total[5m]) / rate(smartproject_http_requests_total[5m]) * 100"}]
+        "id": 4, "title": "Taux d'erreur (%)", "type": "stat",
+        "targets": [{"expr": "rate(elan_errors_total[5m]) / rate(elan_http_requests_total[5m]) * 100"}]
       },
       {
-        "id": 5, "title": "HTTP Requests by Route", "type": "timeseries",
-        "targets": [{"expr": "sum by(route) (rate(smartproject_http_requests_total[5m]))"}]
+        "id": 5, "title": "Workouts créés (24h)", "type": "stat",
+        "targets": [{"expr": "increase(elan_workouts_total[24h])"}]
       },
       {
-        "id": 6, "title": "Subscriptions by Plan", "type": "piechart",
-        "targets": [{"expr": "smartproject_subscriptions"}]
+        "id": 6, "title": "Abonnements par plan", "type": "piechart",
+        "targets": [{"expr": "elan_subscriptions"}]
       },
       {
-        "id": 7, "title": "Memory Usage (MB)", "type": "timeseries",
+        "id": 7, "title": "Latence IA (p95 ms)", "type": "timeseries",
+        "targets": [{"expr": "histogram_quantile(0.95, rate(elan_ai_request_duration_seconds_bucket[5m])) * 1000"}]
+      },
+      {
+        "id": 8, "title": "Mémoire Heap (MB)", "type": "timeseries",
         "targets": [{"expr": "process_heap_bytes / 1024 / 1024"}]
-      },
-      {
-        "id": 8, "title": "CPU Usage (%)", "type": "timeseries",
-        "targets": [{"expr": "rate(process_cpu_seconds_total[5m]) * 100"}]
       }
     ]
   }
 }
 ```
 
-### 1.3 Alertes Prometheus (prometheus.yml — règles)
+### 1.3 Alertes Prometheus
 
 ```yaml
 groups:
-  - name: smartproject
+  - name: elan
     rules:
       - alert: HighErrorRate
-        expr: rate(smartproject_errors_total[5m]) > 0.1
+        expr: rate(elan_errors_total[5m]) > 0.1
         for: 2m
         labels: { severity: "warning" }
         annotations:
           summary: "Taux d'erreur élevé ({{ $value }} erreurs/s)"
 
       - alert: SlowAPIResponse
-        expr: histogram_quantile(0.95, rate(smartproject_http_request_duration_seconds_bucket[5m])) > 2
+        expr: histogram_quantile(0.95, rate(elan_http_request_duration_seconds_bucket[5m])) > 2
         for: 5m
         labels: { severity: "critical" }
         annotations:
           summary: "API lente — p95 > 2 secondes"
 
+      - alert: SlowAIResponse
+        expr: histogram_quantile(0.95, rate(elan_ai_request_duration_seconds_bucket[5m])) > 15
+        for: 3m
+        labels: { severity: "warning" }
+        annotations:
+          summary: "IA GPT-4o lente — p95 > 15 secondes"
+
       - alert: BackendDown
-        expr: up{job="smartproject-backend"} == 0
+        expr: up{job="elan-backend"} == 0
         for: 1m
         labels: { severity: "critical" }
         annotations:
-          summary: "Backend SmartProject AI est DOWN"
+          summary: "Backend élan est DOWN"
 
       - alert: HighMemoryUsage
         expr: process_heap_bytes > 500 * 1024 * 1024
         for: 5m
         labels: { severity: "warning" }
         annotations:
-          summary: "Mémoire heap > 500MB"
+          summary: "Mémoire heap Node.js > 500MB"
+
+      - alert: StripeWebhookErrors
+        expr: rate(elan_errors_total{route="/billing/webhook"}[5m]) > 0
+        for: 1m
+        labels: { severity: "critical" }
+        annotations:
+          summary: "Erreurs webhook Stripe détectées"
 ```
 
 ---
@@ -116,16 +129,16 @@ groups:
 Format JSON en production :
 ```json
 {
-  "timestamp": "2026-03-15 14:32:01",
+  "timestamp": "2026-03-20 08:15:42",
   "level": "info",
-  "message": "POST /projects 201 45ms",
-  "service": "smartproject-api",
-  "userId": "cuid_xyz",
+  "message": "POST /workouts 201 38ms",
+  "service": "elan-api",
+  "userId": "clxyz123",
   "requestId": "uuid-v4",
   "method": "POST",
-  "path": "/projects",
+  "path": "/workouts",
   "statusCode": 201,
-  "duration": 45
+  "duration": 38
 }
 ```
 
@@ -133,12 +146,12 @@ Format JSON en production :
 
 | Niveau | Usage |
 |--------|-------|
-| `error` | Erreurs critiques, crashes, exceptions non gérées |
-| `warn` | Tentatives d'auth échouées, rate limiting |
-| `info` | Requêtes HTTP (morgan), créations importantes |
-| `debug` | Requêtes Prisma, détails IA (dev only) |
+| `error` | Erreurs critiques, exceptions non gérées, échecs Stripe/OpenAI |
+| `warn` | Tentatives d'auth échouées, rate limiting atteint, Twilio/SendGrid error |
+| `info` | Requêtes HTTP (morgan), créations workout/nutrition, events Stripe |
+| `debug` | Requêtes Prisma, tokens SSE IA, détails OAuth (dev only) |
 
-### 2.3 Retention des Logs
+### 2.3 Rétention des Logs
 
 | Environnement | Durée | Stockage |
 |---------------|-------|---------|
@@ -152,11 +165,14 @@ Format JSON en production :
 # Erreurs critiques
 grep '"level":"error"' logs/combined.log | tail -50
 
-# Tentatives d'auth suspectes
+# Échecs d'authentification
 grep '"action":"auth.failed"' logs/combined.log
 
-# Latences > 2s
-grep '"duration":[2-9][0-9][0-9][0-9]' logs/combined.log
+# Latences IA > 10s
+grep '"path":"/ai/' logs/combined.log | grep '"duration":[1-9][0-9][0-9][0-9][0-9]'
+
+# Erreurs Stripe webhook
+grep '"path":"/billing/webhook"' logs/combined.log | grep '"level":"error"'
 ```
 
 ---
@@ -182,16 +198,14 @@ grep '"duration":[2-9][0-9][0-9][0-9]' logs/combined.log
 NEW_SECRET=$(openssl rand -base64 64)
 
 # 2. Mettre à jour .env (zero-downtime : accepter ancien + nouveau pendant 24h)
-JWT_SECRET_OLD=<ancien_secret>
 JWT_SECRET=<nouveau_secret>
 
 # 3. Déployer la nouvelle version
 docker-compose up -d backend
 
-# 4. Après 24h, supprimer l'ancien secret et tous les refresh tokens
-DELETE FROM refresh_tokens WHERE created_at < NOW() - INTERVAL '24 hours';
-
-# 5. Redéployer sans JWT_SECRET_OLD
+# 4. Après 24h, purger les refresh tokens existants
+docker exec elan_postgres psql -U elan -c \
+  "DELETE FROM refresh_tokens WHERE created_at < NOW() - INTERVAL '24 hours';"
 ```
 
 ---
@@ -205,8 +219,8 @@ DELETE FROM refresh_tokens WHERE created_at < NOW() - INTERVAL '24 hours';
 # backup-db.sh — Exécuté quotidiennement via cron à 3h00 UTC
 
 DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_FILE="smartproject_${DATE}.sql.gz"
-S3_BUCKET="s3://smartproject-backups/postgres"
+BACKUP_FILE="elan_${DATE}.sql.gz"
+S3_BUCKET="s3://elan-backups/postgres"
 
 # Dump compressé
 pg_dump $DATABASE_URL | gzip > /tmp/$BACKUP_FILE
@@ -217,18 +231,12 @@ aws s3 cp /tmp/$BACKUP_FILE $S3_BUCKET/$BACKUP_FILE
 # Nettoyage local
 rm /tmp/$BACKUP_FILE
 
-# Supprimer backups > 30 jours
-aws s3 ls $S3_BUCKET/ | awk '{print $4}' | \
-  xargs -I{} aws s3api head-object --bucket smartproject-backups --key postgres/{} | \
-  # Filter old files...
-  echo "Cleanup done"
-
 echo "Backup $BACKUP_FILE uploaded to S3"
 ```
 
 ### 4.2 Stratégie de Rétention
 
-| Fréquence | Retention | Stockage |
+| Fréquence | Rétention | Stockage |
 |-----------|-----------|---------|
 | Quotidienne | 30 jours | S3 Standard |
 | Hebdomadaire | 3 mois | S3 Standard-IA |
@@ -238,12 +246,9 @@ echo "Backup $BACKUP_FILE uploaded to S3"
 
 ```bash
 # Restaurer depuis un backup
-aws s3 cp s3://smartproject-backups/postgres/smartproject_20260315_030000.sql.gz /tmp/
-
-gunzip /tmp/smartproject_20260315_030000.sql.gz
-
-psql $DATABASE_URL < /tmp/smartproject_20260315_030000.sql
-
+aws s3 cp s3://elan-backups/postgres/elan_20260320_030000.sql.gz /tmp/
+gunzip /tmp/elan_20260320_030000.sql.gz
+psql $DATABASE_URL < /tmp/elan_20260320_030000.sql
 echo "Restoration complete"
 ```
 
@@ -252,7 +257,7 @@ echo "Restoration complete"
 | Métrique | Cible | Commentaire |
 |---------|-------|-------------|
 | RPO (Recovery Point Objective) | 24h | Backup quotidien |
-| RTO (Recovery Time Objective) | 2h | Temps de restauration |
+| RTO (Recovery Time Objective) | 2h | Temps de restauration estimé |
 
 ---
 
@@ -262,7 +267,7 @@ echo "Restoration complete"
 
 ```yaml
 # .github/workflows/ci.yml
-name: SmartProject AI CI/CD
+name: élan CI/CD
 
 on:
   push:
@@ -272,12 +277,11 @@ on:
 
 env:
   NODE_VERSION: "20"
-  DATABASE_URL: postgresql://test:test@localhost:5432/test
+  DATABASE_URL: postgresql://test:test@localhost:5432/elan_test
 
 jobs:
-  # ─── Tests Backend ─────────────────────────────────────────────────────────
   test-backend:
-    name: Backend Tests
+    name: Backend Tests (Jest)
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -285,7 +289,7 @@ jobs:
         env:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
-          POSTGRES_DB: test
+          POSTGRES_DB: elan_test
         ports: ["5432:5432"]
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
@@ -303,15 +307,15 @@ jobs:
           DATABASE_URL: ${{ env.DATABASE_URL }}
 
       - name: Run Jest tests
-        run: npm run test --workspace=@smartproject/backend -- --coverage
+        run: npm run test --workspace=@elan/backend -- --coverage
         env:
           JWT_SECRET: test_secret_min_32_chars_padding_here
           JWT_REFRESH_SECRET: test_refresh_min_32_chars_padding_x
+          OPENAI_API_KEY: sk-test-mock
 
       - name: Upload coverage
         uses: codecov/codecov-action@v4
 
-  # ─── Lint & Type Check ─────────────────────────────────────────────────────
   lint:
     name: Lint & Type Check
     runs-on: ubuntu-latest
@@ -323,10 +327,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
-      - run: npx tsc --noEmit --workspace=@smartproject/backend
-      - run: npx tsc --noEmit --workspace=@smartproject/frontend
+      - run: npx tsc --noEmit --workspace=@elan/backend
+      - run: npx tsc --noEmit --workspace=@elan/frontend
 
-  # ─── Build Docker ──────────────────────────────────────────────────────────
   build:
     name: Build Docker Images
     runs-on: ubuntu-latest
@@ -347,7 +350,7 @@ jobs:
           context: .
           file: ./apps/backend/Dockerfile
           push: true
-          tags: smartproject/backend:${{ github.sha }},smartproject/backend:latest
+          tags: elan/backend:${{ github.sha }},elan/backend:latest
 
       - name: Build & Push Frontend
         uses: docker/build-push-action@v5
@@ -355,9 +358,8 @@ jobs:
           context: .
           file: ./apps/frontend/Dockerfile
           push: true
-          tags: smartproject/frontend:${{ github.sha }},smartproject/frontend:latest
+          tags: elan/frontend:${{ github.sha }},elan/frontend:latest
 
-  # ─── Deploy Production ─────────────────────────────────────────────────────
   deploy:
     name: Deploy to Production
     runs-on: ubuntu-latest
@@ -372,11 +374,11 @@ jobs:
           username: ${{ secrets.PROD_USER }}
           key: ${{ secrets.PROD_SSH_KEY }}
           script: |
-            cd /opt/smartproject
+            cd /opt/elan
             docker-compose pull
             docker-compose up -d --no-deps backend frontend
-            docker exec smartproject_backend npx prisma migrate deploy
-            echo "✅ Deployment complete"
+            docker exec elan_backend npx prisma migrate deploy
+            echo "Deployment complete"
 ```
 
 ### 5.2 Pipeline E2E (Nightly)
@@ -399,7 +401,7 @@ jobs:
         with: { node-version: "20", cache: npm }
       - run: npm ci
       - name: Start services
-        run: docker-compose up -d postgres redis
+        run: docker-compose up -d postgres
       - name: Run Cypress E2E
         uses: cypress-io/github-action@v6
         with:
@@ -407,6 +409,8 @@ jobs:
           start: npm run dev
           wait-on: "http://localhost:3000"
           browser: chrome
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:4000
 ```
 
 ---
@@ -414,26 +418,28 @@ jobs:
 ## 6. Checklist de Maintenance Mensuelle
 
 ### Sécurité
-- [ ] Vérifier les logs d'accès suspects (> 5 tentatives auth échouées)
+- [ ] Vérifier les logs d'accès suspects (> 5 tentatives auth échouées depuis même IP)
 - [ ] Audit des dépendances : `npm audit`
 - [ ] Vérifier l'expiration des certificats SSL
 - [ ] Rotation des secrets selon calendrier
+- [ ] Purger les refresh tokens expirés : `DELETE FROM refresh_tokens WHERE expires_at < NOW()`
 
 ### Performance
-- [ ] Vérifier les métriques Grafana (latence p95, memory, CPU)
+- [ ] Vérifier les métriques Grafana (latence p95, latence IA p95, mémoire)
 - [ ] Analyser les requêtes Prisma lentes (slow query log)
-- [ ] Nettoyer les anciens refresh tokens expirés
-- [ ] Archiver les ActivityLogs > 90 jours
+- [ ] Vérifier le cache des réponses IA (éviter doublons coûteux)
+- [ ] Archiver les workouts/nutrition logs > 1 an si besoin
 
 ### Business
-- [ ] Vérifier les alertes paiements échoués Stripe
-- [ ] Exporter les métriques MRR, Churn, conversion
-- [ ] Vérifier les webhooks Stripe actifs
-- [ ] Contrôler les coûts OpenAI
+- [ ] Vérifier les alertes paiements échoués Stripe (Dashboard > Webhooks)
+- [ ] Exporter les métriques MRR, Churn, conversion Free→Premium
+- [ ] Contrôler les coûts OpenAI (Dashboard > Usage)
+- [ ] Contrôler les coûts Twilio (Dashboard > Usage)
+- [ ] Vérifier les webhooks Stripe actifs et fonctionnels
 
 ### Infrastructure
-- [ ] Vérifier les backups S3 (intégrité + retention)
-- [ ] Mettre à jour les images Docker
+- [ ] Vérifier les backups S3 (intégrité + rétention)
+- [ ] Mettre à jour les images Docker (security patches)
 - [ ] Tester la procédure de restauration DB (staging)
 - [ ] Vérifier les quotas cloud (CPU, storage, bandwidth)
 
@@ -445,7 +451,7 @@ jobs:
 ```bash
 # 1. Vérifier l'état
 docker ps | grep backend
-docker logs smartproject_backend --tail 100
+docker logs elan_backend --tail 100
 
 # 2. Redémarrer
 docker-compose restart backend
@@ -454,6 +460,9 @@ docker-compose restart backend
 docker-compose restart postgres
 sleep 10
 docker-compose restart backend
+
+# 4. Vérifier métriques
+curl http://localhost:4000/health
 ```
 
 ### Incident : Paiements Stripe échoués
@@ -462,38 +471,86 @@ docker-compose restart backend
 # https://dashboard.stripe.com/webhooks
 
 # 2. Vérifier les logs backend
-grep '"action":"billing.webhook"' logs/combined.log | tail -20
+grep '"path":"/billing/webhook"' logs/combined.log | tail -20
 
 # 3. Relancer manuellement les événements Stripe
 # Dashboard Stripe > Webhooks > Resend event
 ```
 
-### Incident : OpenAI Rate Limit
+### Incident : OpenAI Rate Limit / Lenteur IA
 ```bash
-# 1. Vérifier les métriques
-# Grafana > AI Requests/min > si > 60, rate limit atteint
+# 1. Vérifier les métriques Grafana
+# Panel "Latence IA p95" — si > 15s, problème OpenAI
 
-# 2. Ajuster le rate limit Express temporairement
+# 2. Vérifier le statut OpenAI
+# https://status.openai.com
+
+# 3. Temporairement réduire le rate limit IA
 # apps/backend/src/middlewares/rate-limit.middleware.ts
 # Réduire max de 10 à 5 pour /ai/*
 
-# 3. Contacter OpenAI pour augmenter les quotas
-# https://platform.openai.com/account/limits
+# 4. Si OpenAI down : les endpoints de génération retournent
+# le fallback mock intégré dans ai.service.ts
 ```
 
 ### Incident : DB Full
 ```bash
 # 1. Vérifier la taille
-docker exec smartproject_postgres psql -U smartproject -c "\l+"
+docker exec elan_postgres psql -U elan -c "\l+"
 
-# 2. Purger les vieux logs
-docker exec smartproject_postgres psql -U smartproject -c \
-  "DELETE FROM activity_logs WHERE created_at < NOW() - INTERVAL '90 days';"
-
-# 3. Purger les refresh tokens expirés
-docker exec smartproject_postgres psql -U smartproject -c \
+# 2. Purger les refresh tokens expirés
+docker exec elan_postgres psql -U elan -c \
   "DELETE FROM refresh_tokens WHERE expires_at < NOW();"
 
-# 4. VACUUM
-docker exec smartproject_postgres psql -U smartproject -c "VACUUM ANALYZE;"
+# 3. VACUUM
+docker exec elan_postgres psql -U elan -c "VACUUM ANALYZE;"
+
+# 4. Vérifier les gros volumes
+docker exec elan_postgres psql -U elan -c \
+  "SELECT relname, pg_size_pretty(pg_total_relation_size(oid)) FROM pg_class ORDER BY pg_total_relation_size(oid) DESC LIMIT 10;"
+```
+
+### Incident : SMS Twilio non reçus
+```bash
+# 1. Vérifier le solde Twilio
+# https://console.twilio.com
+
+# 2. Vérifier les logs
+grep '"action":"sms"' logs/combined.log | tail -20
+
+# 3. Tester manuellement via API
+curl -X POST http://localhost:4000/api/notifications/sms-reminder \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"city": "Paris", "time": "18h30"}'
+```
+
+---
+
+## 8. Architecture de Déploiement
+
+```
+                    ┌─────────────────────────────────┐
+                    │         Cloudflare CDN           │
+                    │     (DNS + DDoS protection)      │
+                    └──────────────┬──────────────────┘
+                                   │
+                    ┌──────────────▼──────────────────┐
+                    │         Load Balancer            │
+                    └─────────┬──────────┬────────────┘
+                              │          │
+              ┌───────────────▼─┐    ┌───▼───────────────┐
+              │  Next.js :3000  │    │  Express API :4000 │
+              │   (Frontend)    │    │    (Backend)       │
+              └─────────────────┘    └───────┬────────────┘
+                                             │
+              ┌──────────────────────────────▼────────────┐
+              │              PostgreSQL :5432              │
+              │          (Managed DB — 10GB)               │
+              └───────────────────────────────────────────┘
+
+              ┌──────────────┐  ┌──────────────┐
+              │  Prometheus  │  │    Grafana   │
+              │    :9090     │  │    :3001     │
+              └──────────────┘  └──────────────┘
 ```

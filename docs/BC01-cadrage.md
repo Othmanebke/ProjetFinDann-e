@@ -1,6 +1,6 @@
-# BC01 — Cadrage Produit : SmartProject AI
+# BC01 — Cadrage Produit : élan (Fit & Travel)
 
-**Version :** 1.0
+**Version :** 2.0
 **Date :** Mars 2026
 **Statut :** Approuvé
 
@@ -8,16 +8,18 @@
 
 ## 1. Vision Produit
 
-**SmartProject AI** est une plateforme SaaS B2B de gestion de projets enrichie par l'intelligence artificielle. Elle permet aux équipes de planifier, organiser et livrer leurs projets plus efficacement grâce à l'automatisation IA basée sur GPT-4o.
+**élan** est une plateforme SaaS B2C de coaching fitness et de voyage, enrichie par l'intelligence artificielle. Elle accompagne les sportifs nomades dans leur pratique physique où qu'ils se trouvent dans le monde, en combinant suivi d'entraînement, nutrition, génération de parcours IA et coach personnel conversationnel.
 
 ### Proposition de Valeur Unique
-> "L'IA qui fait le travail de planification à votre place, pour que vous vous concentriez sur la livraison."
+> "Ton coach fitness personnel qui s'adapte à chaque ville du monde."
 
 **Différentiateurs clés :**
-- IA intégrée nativement (pas un add-on) — génération de plans, analyse de risques, création de tâches automatique
-- Chat IA spécialisé en gestion de projet (pas généraliste)
-- Notifications intelligentes SMS + Email sur les deadlines critiques
-- Pricing transparent et accessible (Free → Pro → Enterprise)
+- Coach IA (GPT-4o) spécialisé fitness + voyage — pas un chatbot généraliste
+- Génération de parcours de course/vélo adaptés à la ville où l'utilisateur se trouve
+- Recommandations de restaurants calibrées sur les objectifs nutritionnels
+- Suivi complet : workouts, nutrition, métriques hebdomadaires, progression
+- Notifications multi-canaux : in-app, email (SendGrid), SMS (Twilio)
+- Pricing adapté : Free → Premium Coach → Pass Voyageur
 
 ---
 
@@ -25,140 +27,135 @@
 
 | Objectif | Indicateur | Cible 12 mois |
 |----------|-----------|----------------|
-| Acquisition | Utilisateurs inscrits | 5 000 |
-| Conversion | Free → Pro | 8% |
-| Revenus | MRR | 50 000 € |
-| Rétention | Churn mensuel | < 3% |
-| Satisfaction | NPS | > 50 |
-| Engagement | Requêtes IA/user/semaine | > 5 |
+| Acquisition | Utilisateurs inscrits | 10 000 |
+| Conversion | Free → Premium | 10% |
+| Revenus | MRR | 30 000 € |
+| Rétention | Churn mensuel | < 4% |
+| Satisfaction | NPS | > 55 |
+| Engagement | Sessions IA/user/semaine | > 3 |
 
 ---
 
 ## 3. Personas
 
-### Persona 1 — Sarah, Chef de Projet (utilisatrice principale)
-- **Profil :** 32 ans, Chef de projet dans une startup SaaS, équipe de 6 personnes
-- **Problèmes :** Trop de temps à planifier, deadlines manquées, reporting manuel
-- **Besoins :** Vue globale des projets, alertes proactives, génération auto de plans
-- **Willingness to Pay :** 29€/mois Plan Pro
-- **Déclencheur d'achat :** "J'ai essayé la génération de plan IA en Free et ça a sauvé ma semaine"
+### Persona 1 — Théo, Runner Voyageur (utilisateur principal)
+- **Profil :** 29 ans, consultant en IT, voyage 2-3 semaines/mois pour le travail
+- **Problèmes :** Perd sa routine sportive en déplacement, ne connaît pas les quartiers sûrs pour courir, mange mal lors des voyages
+- **Besoins :** Trouver des parcours de course adaptés à la ville, suivre sa nutrition, avoir un coach disponible 24h/24
+- **Willingness to Pay :** 19€/mois Pass Voyageur
+- **Déclencheur d'achat :** "L'IA m'a généré un parcours de 10km à Tokyo en 30 secondes"
 
-### Persona 2 — Marc, Développeur Lead (utilisateur secondaire)
-- **Profil :** 28 ans, Tech Lead, utilise Jira mais le trouve trop complexe
-- **Problèmes :** Tâches mal définies, priorisation difficile, trop de réunions
-- **Besoins :** Interface simple, intégration GitHub, génération de tâches depuis des descriptions
-- **Willingness to Pay :** Plan inclus par l'employeur (Pro ou Enterprise)
-- **Déclencheur :** "Mon chef de projet m'a invité sur SmartProject"
+### Persona 2 — Camille, Sportive Amateur (utilisatrice secondaire)
+- **Profil :** 34 ans, infirmière, court 3x/semaine, veut progresser en semi-marathon
+- **Problèmes :** Pas de coach abordable, mange sans tracker ses macros, manque de motivation
+- **Besoins :** Analyse de ses performances hebdomadaires, conseils nutritionnels, encouragements IA
+- **Willingness to Pay :** 12€/mois Premium Coach
+- **Déclencheur :** "Le coach IA a analysé mes 8 dernières semaines et m'a donné un plan concret"
 
-### Persona 3 — Isabelle, DSI / Admin (acheteur Enterprise)
-- **Profil :** 45 ans, DSI d'une PME de 200 personnes
-- **Problèmes :** Pas de visibilité sur les projets IT, outils fragmentés
-- **Besoins :** SSO, audit logs, SLA, facturation centralisée
-- **Willingness to Pay :** 99€/mois Plan Enterprise
-- **Déclencheur :** "Notre équipe utilisait déjà le Plan Pro, on a upgradé pour le SSO"
+### Persona 3 — Lucas, Athlète Confirmé (utilisateur Free)
+- **Profil :** 24 ans, étudiant en STAPS, fait de la compétition en triathlon
+- **Problèmes :** Outils trop chers, veut centraliser ses données d'entraînement
+- **Besoins :** CRUD workouts, stats semaine, historique nutrition
+- **Willingness to Pay :** Plan Free (pourra upgrader pour le coach IA)
+- **Déclencheur :** "C'est gratuit et le dashboard est propre"
 
 ---
 
 ## 4. User Stories (MVP)
 
 ### Authentification
-- **US-01 :** En tant qu'utilisateur, je peux me connecter avec Google ou GitHub en 1 clic
-- **US-02 :** En tant qu'utilisateur, mon session reste active grâce au refresh token automatique
+- **US-01 :** En tant qu'utilisateur, je peux me connecter avec Google, GitHub ou Microsoft en 1 clic
+- **US-02 :** En tant qu'utilisateur, ma session reste active grâce au refresh token automatique (7 jours)
 - **US-03 :** En tant qu'admin, je peux voir et gérer tous les utilisateurs
 
-### Gestion de Projets
-- **US-04 :** En tant qu'utilisateur, je peux créer un projet avec nom, description, couleur et dates
-- **US-05 :** En tant qu'utilisateur, je peux inviter des membres dans mon projet avec des rôles
-- **US-06 :** En tant qu'utilisateur, je vois tous mes projets dans une vue grille avec leur statut
-- **US-07 :** En tant qu'admin/owner, je peux archiver ou supprimer un projet
+### Workouts & Fitness
+- **US-04 :** En tant qu'utilisateur, je peux enregistrer un workout avec distance, durée, calories, fréquence cardiaque
+- **US-05 :** En tant qu'utilisateur, je vois mes stats hebdomadaires sur 8 semaines avec graphiques
+- **US-06 :** En tant qu'utilisateur, je peux consulter, modifier et supprimer mes workouts
+- **US-07 :** En tant qu'utilisateur, mon dashboard affiche mes KPIs de la semaine (km, calories, temps, sessions)
 
-### Gestion de Tâches
-- **US-08 :** En tant qu'utilisateur, je peux créer des tâches avec titre, priorité, deadline, assigné
-- **US-09 :** En tant qu'utilisateur, je vois un tableau Kanban de mes tâches par statut
-- **US-10 :** En tant qu'utilisateur, je peux créer des sous-tâches
-- **US-11 :** En tant qu'utilisateur, je peux filtrer mes tâches par statut, priorité, assigné
+### Nutrition
+- **US-08 :** En tant qu'utilisateur, je peux logger un repas avec nom, calories, protéines, glucides, lipides
+- **US-09 :** En tant qu'utilisateur, je vois mon récap nutritionnel journalier (calories totales, macros, objectifs)
+- **US-10 :** En tant qu'utilisateur Premium, l'IA me recommande des restaurants adaptés à mes objectifs
 
-### Intelligence Artificielle
-- **US-12 :** En tant qu'utilisateur Pro, l'IA génère un plan de projet complet en JSON
-- **US-13 :** En tant qu'utilisateur Pro, l'IA identifie les risques de mon projet
-- **US-14 :** En tant qu'utilisateur Pro, l'IA génère 5-15 tâches depuis une description
-- **US-15 :** En tant qu'utilisateur Free, je peux utiliser le chat IA (5/jour)
-- **US-16 :** En tant qu'utilisateur Pro, le chat IA est illimité avec contexte de projet
+### Coach IA
+- **US-11 :** En tant qu'utilisateur, je peux chatter avec le coach IA fitness/voyage en streaming SSE
+- **US-12 :** En tant qu'utilisateur Premium, l'IA génère un parcours de course/vélo dans ma ville actuelle
+- **US-13 :** En tant qu'utilisateur Premium, l'IA analyse mes 8 dernières semaines et identifie mes points d'amélioration
+- **US-14 :** En tant qu'utilisateur, je peux retrouver l'historique de mes conversations avec le coach
 
 ### Notifications
-- **US-17 :** Je reçois un email de bienvenue à l'inscription
-- **US-18 :** Je reçois un SMS/email 24h avant la deadline d'une tâche assignée
-- **US-19 :** Je reçois un email quand mon abonnement est renouvelé ou échoue
+- **US-15 :** Je reçois un email de bienvenue à l'inscription (SendGrid)
+- **US-16 :** Je reçois un SMS de rappel avant ma séance de course (Twilio)
+- **US-17 :** Je reçois un récap hebdomadaire par email avec mes stats
+- **US-18 :** Je vois mes notifications in-app et peux les marquer comme lues
 
 ### Billing
-- **US-20 :** Je peux passer au Plan Pro via Stripe Checkout en 3 clics
-- **US-21 :** Je peux gérer mon abonnement (annuler, changer) depuis le Customer Portal
-- **US-22 :** Mon plan est downgrade en Free si le paiement échoue
+- **US-19 :** Je peux passer au plan Premium via Stripe Checkout en 3 clics avec 14 jours d'essai
+- **US-20 :** Je peux gérer mon abonnement (annuler, changer) depuis le Customer Portal Stripe
+- **US-21 :** Mon plan est downgrade en Free si le paiement échoue (webhook Stripe)
 
 ### Métriques & Admin
-- **US-23 :** En tant qu'admin, je vois les métriques business (users, projets, tâches, MRR)
-- **US-24 :** En tant que DevOps, je peux scraper `/metrics` avec Prometheus
-- **US-25 :** En tant qu'admin, je peux activer/désactiver un utilisateur
+- **US-22 :** En tant que DevOps, je peux scraper `/metrics` avec Prometheus
+- **US-23 :** En tant qu'admin, je peux voir les métriques business (users, workouts, abonnements actifs)
 
 ---
 
-## 5. Roadmap Produit
+## 5. Plans & Pricing
+
+| Feature | Free | Premium Coach (12€/mois) | Pass Voyageur (19€/mois) |
+|---------|------|--------------------------|--------------------------|
+| Workouts CRUD | ✅ Illimité | ✅ | ✅ |
+| Nutrition logging | ✅ | ✅ | ✅ |
+| Dashboard KPIs | ✅ | ✅ | ✅ |
+| Chat IA coach | ✅ 5/jour | ✅ Illimité | ✅ Illimité |
+| Analyse performance IA | ❌ | ✅ | ✅ |
+| Recommandations restaurants | ❌ | ✅ | ✅ |
+| Génération parcours IA | ❌ | ❌ | ✅ |
+| Accès Explorer community | ✅ | ✅ | ✅ |
+| Rappels SMS | ❌ | ✅ | ✅ |
+
+---
+
+## 6. Roadmap Produit
 
 ### MVP v1.0 (Semaines 1-8)
-**Objectif :** Produit fonctionnel prêt à être lancé en beta
 
 | Feature | Priorité | Statut |
 |---------|----------|--------|
-| Auth OAuth2 (Google + GitHub) | P0 | ✅ Done |
-| CRUD Projets + Tâches | P0 | ✅ Done |
-| Kanban Board | P0 | ✅ Done |
-| Chat IA (basique) | P0 | ✅ Done |
-| Stripe Billing (Free/Pro) | P0 | ✅ Done |
-| Notifications email | P1 | ✅ Done |
-| Dashboard KPI | P1 | ✅ Done |
-| Métriques Prometheus | P1 | ✅ Done |
+| Auth OAuth2 (Google + GitHub + Microsoft) | P0 | ✅ Done |
+| Workouts CRUD + stats | P0 | ✅ Done |
+| Nutrition CRUD + macros | P0 | ✅ Done |
+| Chat IA streaming (SSE) | P0 | ✅ Done |
+| Stripe Billing (Free/Premium/Voyageur) | P0 | ✅ Done |
+| Génération parcours IA | P1 | ✅ Done |
+| Recommandations restaurants IA | P1 | ✅ Done |
+| Analyse performance IA | P1 | ✅ Done |
+| Notifications email (SendGrid) | P1 | ✅ Done |
+| Notifications SMS (Twilio) | P1 | ✅ Done |
+| Dashboard KPI + graphiques | P1 | ✅ Done |
+| Métriques Prometheus | P2 | ✅ Done |
 
-### V1.1 (Semaines 9-12)
-**Objectif :** Enrichissement features IA et collaboration
-
-| Feature | Priorité | Description |
-|---------|----------|-------------|
-| IA : Génération de plan | P0 | Plan JSON structuré |
-| IA : Analyse risques | P0 | Risk scoring |
-| IA : Auto-tasks | P1 | Tasks depuis description |
-| Invitations membres par email | P1 | Onboarding équipe |
-| Commentaires sur tâches | P1 | Collaboration |
-| Rappels SMS Twilio | P2 | Deadline reminders |
-
-### V2.0 (Q3 2026)
-**Objectif :** Enterprise et intégrations
+### V1.1 (Q2 2026)
 
 | Feature | Description |
 |---------|-------------|
-| SSO / SAML | Enterprise auth |
-| GitHub/Jira sync | Import/export issues |
-| Webhooks outbound | Intégrations custom |
-| Time tracking | Suivi du temps par tâche |
-| AI Standup auto | Rapport automatique quotidien |
-| Mobile app (React Native) | iOS + Android |
-| White-label | Entreprises |
+| Mode hors-ligne | Cache local des parcours générés |
+| Intégration Garmin / Strava | Import workouts automatique |
+| Défis communautaires | Challenges entre utilisateurs |
+| Partage de parcours | Explorer public des routes |
+| Plan d'entraînement IA | Programme sur 4-12 semaines |
 
----
+### V2.0 (Q4 2026)
 
-## 6. MVP vs V2 — Tableau Comparatif
-
-| Fonctionnalité | MVP | V2 |
-|---------------|-----|-----|
-| Auth OAuth | ✅ Google + GitHub | + SSO/SAML |
-| Projets | ✅ CRUD basique | + Templates |
-| Tâches | ✅ Kanban | + Time tracking + Gantt |
-| IA Chat | ✅ GPT-4o | + Agents autonomes |
-| IA Plan | ✅ JSON plan | + PERT/Critical path |
-| Billing | ✅ Free/Pro | + Enterprise + Usage-based |
-| Notifications | ✅ Email + SMS | + Slack + Teams |
-| Métriques | ✅ Prometheus | + Custom dashboards |
-| Équipes | ✅ 10 membres | + Illimité + Org tree |
-| API | REST | + GraphQL + Webhooks |
+| Feature | Description |
+|---------|-------------|
+| App mobile React Native | iOS + Android |
+| Wearables | Apple Watch, Fitbit, Polar |
+| Live tracking | Suivi GPS en temps réel |
+| Coach vocal | TTS + reconnaissance vocale |
+| Multi-langue | EN, ES, DE, PT |
 
 ---
 
@@ -166,8 +163,9 @@
 
 | Risque | Probabilité | Impact | Mitigation |
 |--------|------------|--------|------------|
-| Concurrence Notion/ClickUp | HAUTE | MOYEN | Différenciation par IA native |
-| Coût OpenAI élevé | MOYENNE | HAUTE | Rate limiting + cache responses |
-| Churn élevé plan Free | HAUTE | FAIBLE | Convertir via IA features |
-| Stripe webhook failure | FAIBLE | HAUTE | Retry + alerting |
-| RGPD non-conformité | FAIBLE | HAUTE | Data residency EU + DPA |
+| Coût OpenAI élevé | HAUTE | HAUTE | Rate limiting par plan, cache réponses IA |
+| Concurrence Strava/Nike Run | HAUTE | MOYENNE | Différenciation par IA + nutrition + voyage |
+| Qualité parcours générés | MOYENNE | HAUTE | Validation + fallback mock data |
+| Stripe webhook failure | FAIBLE | HAUTE | Retry + alerting Prometheus |
+| RGPD données GPS/santé | MOYENNE | CRITIQUE | Consentement explicite, data residency EU |
+| Twilio SMS cost dépassé | FAIBLE | FAIBLE | Rate limit 1 SMS/user/jour |
