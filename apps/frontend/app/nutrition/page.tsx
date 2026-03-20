@@ -315,7 +315,7 @@ export default function NutritionPage() {
                     <p style={{ margin: 0, fontSize: '14px', fontWeight: 700, color: '#1C1917', fontFamily: '"Montserrat",sans-serif' }}>{log.mealName}</p>
                     <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
                       {[['P', log.proteinG, '#0E7490'], ['G', log.carbsG, '#EA580C'], ['L', log.fatG, '#047857']].map(([l, v, c]) => (
-                        v > 0 ? <span key={String(l)} style={{ fontSize: '11px', padding: '1px 6px', borderRadius: '5px', background: `${c}10`, color: String(c), fontWeight: 700 }}>{l}: {v}g</span> : null
+                        Number(v) > 0 ? <span key={String(l)} style={{ fontSize: '11px', padding: '1px 6px', borderRadius: '5px', background: `${c}10`, color: String(c), fontWeight: 700 }}>{l}: {v}g</span> : null
                       ))}
                     </div>
                   </div>
