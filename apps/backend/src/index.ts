@@ -20,6 +20,7 @@ import billingRoutes from "./routes/billing.routes";
 import notificationRoutes from "./routes/notifications.routes";
 import metricsRoutes from "./routes/metrics.routes";
 import adminRoutes from "./routes/admin.routes";
+import nutritionRoutes from "./routes/nutrition.routes";
 
 // Passport config
 import "./config/passport";
@@ -68,6 +69,7 @@ app.use("/billing", billingRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/metrics", metricsRoutes);
 app.use("/admin", adminRoutes);
+app.use("/api/nutrition", nutritionRoutes);
 
 // ─── 404 Handler ──────────────────────────────────────────────────────────────
 app.use((_req, res) => {
