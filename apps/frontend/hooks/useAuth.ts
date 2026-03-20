@@ -9,6 +9,11 @@ export function useAuth() {
 
   useEffect(() => {
     if (store.accessToken && !store.user) {
+      // Token démo : pas d'appel réseau
+      if (store.accessToken === "demo-access-token") {
+        store.setLoading(false);
+        return;
+      }
       store.setLoading(true);
       api
         .get("/auth/me")

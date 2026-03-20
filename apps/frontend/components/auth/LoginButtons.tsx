@@ -1,11 +1,14 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/auth.store";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 export function LoginButtons() {
   const params = useSearchParams();
+  const router = useRouter();
+  const store = useAuthStore();
   const error = params.get("error");
 
   const loginWithGoogle = () => {
@@ -21,7 +24,21 @@ export function LoginButtons() {
   };
 
   const loginWithDemo = () => {
-    window.location.href = `${API_URL}/auth/demo`;
+    // Connexion démo côté client — fonctionne sans backend
+    store.setTokens("demo-access-token", "demo-refresh-token");
+    store.setUser({
+      id: "demo-user-001",
+      email: "demo@elan.app",
+      name: "Charles Démo",
+      role: "USER",
+      avatarUrl: undefined,
+      subscription: { plan: "PASS_VOYAGEUR", status: "ACTIVE", currentPeriodEnd: "2026-12-31" },
+      fitnessGoal: "Courir un marathon",
+      weeklyTargetKm: 50,
+      currentCity: "Paris",
+      currentCountry: "France",
+    });
+    router.replace("/dashboard");
   };
 
   return (

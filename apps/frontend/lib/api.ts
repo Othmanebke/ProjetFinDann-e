@@ -41,6 +41,12 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Ne jamais tenter de refresh en mode démo
+    const currentToken = useAuthStore.getState().accessToken;
+    if (currentToken === "demo-access-token") {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
